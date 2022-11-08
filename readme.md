@@ -67,14 +67,30 @@ Here is an example of the expected output while making a commit to the repositor
    * [Express](http://localhost:81)
    * The address of `mariadb` can be found by running
 
-   ```bash
-   docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb
-   ```
+     ```bash
+     docker inspect -f \
+     '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb
+     ```
 
-   You can then connect to `mariadb` by running (change ip number accordingly):
+     You can then connect to `mariadb` by running (change ip number accordingly):
 
-   ```bash
-   mysql -h 172.21.0.5 -P 3306 --user=user --password
-   ```
+     ```bash
+     mysql -h 172.21.0.5 -P 3306 --user=user --password
+     ```
 
-   The password for the user `user` is specified in `docker-compose.yml`
+     The password for the user `user` is specified in `docker-compose.yml`
+
+   * The address of `mongodb` can be found by running
+
+     ```bash
+     docker inspect -f \
+     '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mongodb
+     ```
+
+     You can then connect to `mongodb` by running (change ip number accordingly):
+
+     ```bash
+     mongosh --host 172.21.0.3 --username root --password
+     ```
+
+     The password for the user `root` is specified in `docker-compose.yml`
