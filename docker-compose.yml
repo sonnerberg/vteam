@@ -1,0 +1,27 @@
+version: "3.4"
+
+services:
+
+  express:
+    container_name: express
+    build: ./express
+    working_dir: /code/app
+    command: /code/node_modules/.bin/nodemon /code/app/index.js
+    volumes:
+      - ./express/app:/code/app
+    ports:
+      - 81:3000
+    restart: on-failure
+
+  fastapi:
+    container_name: fastapi
+    build: ./fastapi
+    working_dir: /code/app
+    command: uvicorn main:app --host 0.0.0.0 --reload
+    environment:
+      DEBUG: 1
+    volumes:
+      - ./fastapi/app:/code/app
+    ports:
+      - 80:8000
+    restart: on-failure
