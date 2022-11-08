@@ -30,5 +30,5 @@ pip install --upgrade pip
 
 ```bash
 (.venv) ❱
-pip install pre-commit gitlint
+pip install pre-commit gitlint pymarkdown
 ```
