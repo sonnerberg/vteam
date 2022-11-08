@@ -36,3 +36,17 @@
   ```bash
   pre-commit install
   ```
+
+1. From now on the pre-commit hooks will run after a commit. You do not have to
+have the virtual environment activated as the path to python in the virtual
+environment has been saved in the pre-commit hook in the `.git` folder.
+Here is an example of the expected output while making a commit to the repository:
+
+  ```bash
+  (.venv) ❱ git commit -m "Add final instruction"
+  trim trailing whitespace.................................................Passed
+  fix end of files.........................................................Passed
+  check yaml...........................................(no files to check)Skipped
+  check for added large files..............................................Passed
+  PyMarkdown...............................................................Passed
+  ```
