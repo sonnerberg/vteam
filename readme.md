@@ -74,5 +74,7 @@ Here is an example of the expected output while making a commit to the repositor
    You can then connect to `mariadb` by running (change ip number accordingly):
 
    ```bash
-   mysql -h 172.21.0.5 -P 3306 --user=user
+   mysql -h 172.21.0.5 -P 3306 --user=user --password
    ```
+
+   The password for the user `user` is specified in `docker-compose.yml`
