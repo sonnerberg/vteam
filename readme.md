@@ -94,3 +94,18 @@ Here is an example of the expected output while making a commit to the repositor
      ```
 
      The password for the user `root` is specified in `docker-compose.yml`
+
+   * The address of `postgres` can be found by running
+
+     ```bash
+     docker inspect -f \
+     '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres
+     ```
+
+     You can then connect to `postgres` by running (change ip number accordingly):
+
+     ```bash
+     psql -h 172.21.0.4 -p 5432 -U postgres
+     ```
+
+     The password for the user `postgres` is specified in `docker-compose.yml`

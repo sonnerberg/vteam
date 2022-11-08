@@ -28,7 +28,7 @@ services:
 
   mariadb:
     container_name: mariadb
-    image: mariadb
+    image: mariadb:latest
     restart: always
     ports:
       - 3306:3306
@@ -46,3 +46,10 @@ services:
       - 27017:27017
     environment:
       - MONGODB_ROOT_PASSWORD=root123
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
