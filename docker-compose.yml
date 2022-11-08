@@ -53,3 +53,14 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: example
+
+  react:
+    container_name: react
+    build: ./react
+    working_dir: /code/app
+    command: npm start --prefix /code/app
+    volumes:
+      - ./react/app:/code/app
+    ports:
+      - 82:3000
+    restart: on-failure

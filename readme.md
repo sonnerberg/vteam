@@ -65,6 +65,7 @@ Here is an example of the expected output while making a commit to the repositor
 
    * [FastAPI](http://localhost:80)
    * [Express](http://localhost:81)
+   * [React](http://localhost:82)
    * The address of `mariadb` can be found by running
 
      ```bash
