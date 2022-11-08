@@ -1,29 +1,34 @@
 # How to get started
 
-Check your python version
-```
-python --version
-Python 3.7.3
+1. Check your python version (you need 3.8 or higher)
+
+```bash
+python3.9 --version
+Python 3.9.2
 ```
 
-Create a virtual environment for python
-```
-python -m venv .venv
+1. Create a virtual environment for python
+
+```bash
+python3.9 -m venv .venv
 ```
 
-Activate the virtual environment
-```
+1. Activate the virtual environment
+
+```bash
 source .venv/bin/activate
 ```
 
-Upgrade pip in the virtual environment
-```
+1. Upgrade pip in the virtual environment
+
+```bash
 (.venv) ❱
 pip install --upgrade pip
 ```
 
-Install pre-commit dependencies
-```
+1. Install pre-commit dependencies
+
+```bash
 (.venv) ❱
 pip install pre-commit gitlint
 ```
