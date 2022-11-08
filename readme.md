@@ -22,13 +22,17 @@
 1. Upgrade pip in the virtual environment
 
   ```bash
-  (.venv) ❱
   pip install --upgrade pip
   ```
 
-1. Install pre-commit dependencies
+1. Install pre-commit dependencies (with the virtual environment activated)
 
   ```bash
-  (.venv) ❱
   pip install pre-commit gitlint pymarkdown
+  ```
+
+1. Install pre-commit hooks (with the virtual environment activated)
+
+  ```bash
+  pre-commit install
   ```
