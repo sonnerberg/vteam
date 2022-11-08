@@ -18,5 +18,12 @@ source .venv/bin/activate
 
 Upgrade pip in the virtual environment
 ```
+(.venv) ❱
 pip install --upgrade pip
+```
+
+Install pre-commit dependencies
+```
+(.venv) ❱
+pip install pre-commit gitlint
 ```
