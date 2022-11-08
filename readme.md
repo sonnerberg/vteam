@@ -1,4 +1,6 @@
-# How to get started
+# How to use this repository
+
+## How to get started with pre-commit
 
 1. Check your python version (you need 3.8 or higher)
 
@@ -50,3 +52,27 @@ Here is an example of the expected output while making a commit to the repositor
     check for added large files..............................................Passed
     PyMarkdown...............................................................Passed
     ```
+
+## Getting started with docker images
+
+1. Start the docker images
+
+    ```bash
+    docker-compose up --build
+    ```
+
+1. With the images running they are access by:
+
+   * [FastAPI](http://localhost:80)
+   * [Express](http://localhost:81)
+   * The address of `mariadb` can be found by running
+
+   ```bash
+   docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb
+   ```
+
+   You can then connect to `mariadb` by running (change ip number accordingly):
+
+   ```bash
+   mysql -h 172.21.0.5 -P 3306 --user=user
+   ```
