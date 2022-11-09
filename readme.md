@@ -5,6 +5,7 @@
 - [ ] Fix networking between containers
 - [ ] Add redis container
 - [ ] Add react native container
+- [ ] Login to mongo using a user other than root
 
 ## How to get started with pre-commit
 
@@ -67,11 +68,11 @@ Here is an example of the expected output while making a commit to the repositor
     docker-compose up --build
     ```
 
-1. With the images running they are access by:
+1. With the images running they are accessed by:
 
-   - [FastAPI](http://localhost:80)
-   - [Express](http://localhost:81)
-   - [React](http://localhost:82)
+   - [FastAPI](http://localhost:8082)
+   - [Express](http://localhost:8081)
+   - [React](http://localhost:8083)
    - The address of `mariadb` can be found by running
 
      ```bash
