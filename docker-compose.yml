@@ -30,7 +30,7 @@ services:
     container_name: react
     build: ./react
     working_dir: /code/app
-    command: npm start --prefix /code/app
+    command: npm start
     volumes:
       - ./react/app:/code/app
     ports:
