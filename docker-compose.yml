@@ -10,7 +10,7 @@ services:
     volumes:
       - ./express/app:/code/app
     ports:
-      - 81:3000
+      - 8081:3000
     restart: on-failure
 
   fastapi:
@@ -23,7 +23,18 @@ services:
     volumes:
       - ./fastapi/app:/code/app
     ports:
-      - 80:8000
+      - 8082:8000
+    restart: on-failure
+
+  react:
+    container_name: react
+    build: ./react
+    working_dir: /code/app
+    command: npm start --prefix /code/app
+    volumes:
+      - ./react/app:/code/app
+    ports:
+      - 8083:3000
     restart: on-failure
 
   mariadb:
@@ -31,7 +42,7 @@ services:
     image: mariadb:latest
     restart: always
     ports:
-      - 3306:3306
+      - 8084:3306
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: mydb
@@ -43,7 +54,7 @@ services:
     image: 'bitnami/mongodb:latest'
     restart: always
     ports:
-      - 27017:27017
+      - 8084:27017
     environment:
       - MONGODB_ROOT_PASSWORD=root123
 
@@ -51,16 +62,7 @@ services:
     container_name: postgres
     image: postgres:latest
     restart: always
+    ports:
+      - 8085:5432
     environment:
       POSTGRES_PASSWORD: example
-
-  react:
-    container_name: react
-    build: ./react
-    working_dir: /code/app
-    command: npm start --prefix /code/app
-    volumes:
-      - ./react/app:/code/app
-    ports:
-      - 82:3000
-    restart: on-failure
