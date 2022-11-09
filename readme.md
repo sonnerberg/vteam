@@ -1,5 +1,11 @@
 # How to use this repository
 
+## TODO
+
+- [ ] Fix networking between containers
+- [ ] Add redis container
+- [ ] Add react native container
+
 ## How to get started with pre-commit
 
 1. Check your python version (you need 3.8 or higher)
@@ -63,10 +69,10 @@ Here is an example of the expected output while making a commit to the repositor
 
 1. With the images running they are access by:
 
-   * [FastAPI](http://localhost:80)
-   * [Express](http://localhost:81)
-   * [React](http://localhost:82)
-   * The address of `mariadb` can be found by running
+   - [FastAPI](http://localhost:80)
+   - [Express](http://localhost:81)
+   - [React](http://localhost:82)
+   - The address of `mariadb` can be found by running
 
      ```bash
      docker inspect -f \
@@ -81,7 +87,7 @@ Here is an example of the expected output while making a commit to the repositor
 
      The password for the user `user` is specified in `docker-compose.yml`
 
-   * The address of `mongodb` can be found by running
+   - The address of `mongodb` can be found by running
 
      ```bash
      docker inspect -f \
@@ -96,7 +102,7 @@ Here is an example of the expected output while making a commit to the repositor
 
      The password for the user `root` is specified in `docker-compose.yml`
 
-   * The address of `postgres` can be found by running
+   - The address of `postgres` can be found by running
 
      ```bash
      docker inspect -f \
