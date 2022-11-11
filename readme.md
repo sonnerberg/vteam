@@ -1,64 +1,52 @@
-# How to use this repository
+# Databas tester
 
-## TODO
+Mongodb, mariadb samt Postgres används som databas för att spara positionsdata
+och ett id, som motsvarar en elsparkcykels nuvarande possition.
+- Tiden för en hel request-cykel och antal requests/sek mäts med [oha](https://lib.rs/crates/oha)
+    - applikation -> server -> databas -> server -> applikation
+- Resterande värden mäts från respektive route som motsvarar databasen som testas.
 
-- [ ] Fix networking between containers
-- [ ] Add redis container
-- [ ] Add react native container
-- [ ] Login to mongo using a user other than root
+## FastAPI vs Express (Python vs Node)
 
-## How to get started with pre-commit
+Tester mot respektive servers "/" route visar att en Express server hanterar
+ca 8 ggr fler requests/sek än FastAPI.
 
-1. Check your python version (you need 3.8 or higher)
+Mätningar mot "/" utan databas där servern returnerar en statisk sträng
+- ~ 9000 requests/sek för Express
+    - `oha -n 10000 http://localhost:8081`
+- ~ 1100 requests/sek för FastAPI
+    - `oha -n 10000 http://localhost:8082`
 
-    ```bash
-    python3.9 --version
-    Python 3.9.2
-    ```
+Med anledning av det kommer resterande tester att enbart använda Express.
 
-1. Create a virtual environment for python
+## Grundvärde
 
-    ```bash
-    python3.9 -m venv .venv
-    ```
+För att få ett grundvärde att utgå ifrån används en route som uppdaterar ett object.
 
-1. Activate the virtual environment
+Varje gång "/object" besöks så uppdateras ett object med ett:
+- id slumpas som ett heltal mellan 0-99 (simulerar 100 aktiva elsparkcyklar)
+- latitud och longitud slumpas som en float mellan 0 < 1
 
-    ```bash
-    source .venv/bin/activate
-    ```
+```javascript
+{
+0: {
+    latitud: 0.5445154,
+    longitud: 0.2258447
+    },
+...
+99: {
+    latitud: 0.2654488,
+    longitud: 0.8258843
+    }
+}
+```
+- hela objectet retureras som en respons till applikationen
 
-1. Upgrade pip in the virtual environment
+Mätningar mot "/object" utan databas.
+- ~ 6000 requests/sek
+    - `oha -n 10000 http://localhost:8081/object`
 
-    ```bash
-    pip install --upgrade pip
-    ```
 
-1. Install pre-commit dependencies (with the virtual environment activated)
-
-    ```bash
-    pip install pre-commit gitlint pymarkdown
-    ```
-
-1. Install pre-commit hooks (with the virtual environment activated)
-
-    ```bash
-    pre-commit install
-    ```
-
-1. From now on the pre-commit hooks will run after a commit. You do not have to
-have the virtual environment activated as the path to python in the virtual
-environment has been saved in the pre-commit hook in the `.git` folder.
-Here is an example of the expected output while making a commit to the repository:
-
-    ```bash
-    (.venv) ❱ git commit -m "Add final instruction"
-    trim trailing whitespace.................................................Passed
-    fix end of files.........................................................Passed
-    check yaml...........................................(no files to check)Skipped
-    check for added large files..............................................Passed
-    PyMarkdown...............................................................Passed
-    ```
 
 ## Getting started with docker images
 
