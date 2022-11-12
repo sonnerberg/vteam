@@ -9,10 +9,10 @@ och ett id, som motsvarar en elsparkcykels nuvarande possition.
 ## FastAPI vs Express (Python vs Node)
 
 Tester mot respektive servers "/" route visar att en Express server hanterar
-ca 8 ggr fler requests/sek än FastAPI.
+ca 9 ggr fler requests/sek än FastAPI.
 
 Mätningar mot "/" utan databas där servern returnerar en statisk sträng
-- ~ 9000 requests/sek för Express
+- ~ 10000 requests/sek för Express
     - `oha -n 10000 http://localhost:8081`
 - ~ 1100 requests/sek för FastAPI
     - `oha -n 10000 http://localhost:8082`
@@ -40,13 +40,25 @@ Varje gång "/object" besöks så uppdateras ett object med ett:
     }
 }
 ```
-- hela objectet retureras som en respons till applikationen
 
 Mätningar mot "/object" utan databas.
-- ~ 6000 requests/sek
+- ~ 9000 requests/sek
     - `oha -n 10000 http://localhost:8081/object`
 
+## Storlek på respons
 
+För att se eventuell skillnad i requests/sek när storleken på responsen ökar
+jämförs en route som svarar med position för 100 elsparkcyklar, mot en som 
+svarar med 1000 elsparkcyklar.
+
+Mätningar mot "/smalldata" utan databas där servern returnerar ett statiskt objekt
+med 100 elsparkcyklar
+- ~ 6000 requests/sek för Express
+    - `oha -n 10000 http://localhost:8081/smalldata`
+Mätningar mot "/bigdata" utan databas där servern returnerar ett statiskt objekt
+med 1000 elsparkcyklar
+- ~ 1500 requests/sek för Express
+    - `oha -n 10000 http://localhost:8081/bigdata`
 
 ## Getting started with docker images
 

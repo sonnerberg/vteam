@@ -2,11 +2,31 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const positionData = {}
+// nr of scooters
+const smallNumber = 100
+const bigNumber = 1000
+
+const smallData = {}
+const bigData = {}
+
+const populateSmallData = () => {
+    for (let i = 0; i < smallNumber; i++) {
+        const {latitude, longitude} = randomPosition()
+        smallData[i] = {latitude, longitude}
+    }
+
+}
+
+const populateBigData = () => {
+    for (let i = 0; i < bigNumber; i++) {
+        const {latitude, longitude} = randomPosition()
+        bigData[i] = {latitude, longitude}
+    }
+}
 
 const randomPosition = () => {
-    // random id between 0-99
-    const id = Math.floor(Math.random() * 100)
+    // random id between 0-(smallNumber - 1 )
+    const id = Math.floor(Math.random() * smallNumber)
     const latitude = Math.random()
     const longitude = Math.random()
 
@@ -15,23 +35,41 @@ const randomPosition = () => {
         latitude: latitude,
         longitude: longitude
     }
-
 }
 
 const objectTest = () => {
-    // updates one bike
+    // updates one scooter
     const {id, latitude, longitude} = randomPosition()
-    positionData[id] = {latitude, longitude}
+    smallData[id] = {latitude, longitude}
 
-    return positionData
 }
+
+const getSmallData = () => {
+    return smallData
+}
+
+const getBigData = () => {
+    return bigData
+}
+
+populateSmallData()
+populateBigData()
 
 app.get('/', (req, res) => {
     res.send('Hello World from express and nodemon!')
 })
 
 app.get('/object', (req, res) => {
-    res.status(200).json(objectTest())
+    objectTest()
+    res.send('Hello World from express and nodemon!')
+})
+
+app.get('/smalldata', (req, res) => {
+    res.status(200).json(getSmallData())
+})
+
+app.get('/bigdata', (req, res) => {
+    res.status(200).json(getBigData())
 })
 
 app.listen(port, () => {
