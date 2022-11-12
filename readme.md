@@ -134,21 +134,21 @@ läggs till i collection. Om "id" redan finns så uppdateras bara latitud och lo
 
 "/mongodb" hämtar hela tabellen och returnerar den som JSON
 
-tabell med 100 rader
+collection med 100 rader
 - ~ 200 requests/sek
     - `oha -n 10000 http://localhost:8081/mongodb`
 
-tabell med 1000 rader
+collection med 1000 rader
 - ~ 200 requests/sek
     - `oha -n 10000 http://localhost:8081/mongodb`
 
 "/mariadb/one" slumpar ett id och hämtar raden från tabellen. Returneras som JSON.
 
-tabell med 100 rader
+collection med 100 rader
 - ~ 300 requests/sek
     - `oha -n 10000 http://localhost:8081/mongodb/one`
 
-tabell med 1000 rader
+collection med 1000 rader
 - ~ 300 requests/sek
     - `oha -n 10000 http://localhost:8081/mongodb/one`
 
@@ -156,7 +156,7 @@ tabell med 1000 rader
 
 MongoDb bettedde sig inte alls som jag förväntat mig, både seg och stora skillnader
 i tid mellan samma test. Jag hade förväntat mig mer av MongoDb och antingen
-stämmer siffrorna, eller så har jag byggt containern felaktigt.
+stämmer siffrorna, eller så är implementationen/containern felaktig.
 
 ## Prova själv
 
