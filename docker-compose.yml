@@ -26,23 +26,12 @@ services:
       - 8082:8000
     restart: on-failure
 
-  react:
-    container_name: react
-    build: ./react
-    working_dir: /code/app
-    command: npm start
-    volumes:
-      - ./react/app:/code/app
-    ports:
-      - 8083:3000
-    restart: on-failure
-
   mariadb:
-    container_name: mariadb
+    container_name: maria
     image: mariadb:latest
     restart: always
-    ports:
-      - 8084:3306
+    volumes:
+      - ./mariadb/sql:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: mydb

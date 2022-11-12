@@ -1,4 +1,5 @@
 const express = require('express')
+const mariadb = require('mariadb');
 const app = express()
 const port = 3000
 
@@ -6,12 +7,59 @@ const port = 3000
 const smallNumber = 100
 const bigNumber = 1000
 
+const pool = mariadb.createPool({
+    host: 'mariadb',
+    user:'user',
+    password: 'user',
+    database: 'mydb',
+    connectionLimit: 5
+});
+
+const getMariaDb = async () => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM data");
+        return rows;
+
+    } catch (err) {
+        // throw err;
+        return "failed";
+    } finally {
+        if (conn) {
+            conn.end();
+        }
+    }
+}
+
+const addMariaDb = async () => {
+    const {id, latitude, longitude} = randomPosition(smallNumber)
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        await conn.query(`
+            INSERT INTO data
+            VALUE(${id}, ${latitude}, ${longitude})
+            ON DUPLICATE KEY UPDATE latitude=${latitude}, longitude=${longitude}
+            `);
+        return "sucess";
+
+    } catch (err) {
+        // throw err;
+        return "failed";
+    } finally {
+        if (conn) {
+            conn.end();
+        }
+    }
+}
+
 const smallData = {}
 const bigData = {}
 
 const populateSmallData = () => {
     for (let i = 0; i < smallNumber; i++) {
-        const {latitude, longitude} = randomPosition()
+        const {latitude, longitude} = randomPosition(smallNumber)
         smallData[i] = {latitude, longitude}
     }
 
@@ -19,14 +67,14 @@ const populateSmallData = () => {
 
 const populateBigData = () => {
     for (let i = 0; i < bigNumber; i++) {
-        const {latitude, longitude} = randomPosition()
+        const {latitude, longitude} = randomPosition(bigNumber)
         bigData[i] = {latitude, longitude}
     }
 }
 
-const randomPosition = () => {
-    // random id between 0-(smallNumber - 1 )
-    const id = Math.floor(Math.random() * smallNumber)
+const randomPosition = (nrOfScooters) => {
+    // random id between 0-( nrOfScooters - 1 )
+    const id = Math.floor(Math.random() * nrOfScooters)
     const latitude = Math.random()
     const longitude = Math.random()
 
@@ -39,7 +87,7 @@ const randomPosition = () => {
 
 const objectTest = () => {
     // updates one scooter
-    const {id, latitude, longitude} = randomPosition()
+    const {id, latitude, longitude} = randomPosition(smallNumber)
     smallData[id] = {latitude, longitude}
 
 }
@@ -70,6 +118,16 @@ app.get('/smalldata', (req, res) => {
 
 app.get('/bigdata', (req, res) => {
     res.status(200).json(getBigData())
+})
+
+app.get('/mariadb', async (req, res) => {
+    const rows = await getMariaDb();
+    res.status(200).json(rows);
+})
+
+app.get('/mariadb/add', async (req, res) => {
+    const result = await addMariaDb();
+    res.status(200).json(result);
 })
 
 app.listen(port, () => {

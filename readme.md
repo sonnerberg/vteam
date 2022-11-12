@@ -53,12 +53,30 @@ svarar med 1000 elsparkcyklar.
 
 Mätningar mot "/smalldata" utan databas där servern returnerar ett statiskt objekt
 med 100 elsparkcyklar
-- ~ 6000 requests/sek för Express
-    - `oha -n 10000 http://localhost:8081/smalldata`
+- ~ 6000 requests/sek
+    - `oha -n 10000 http://localhost:8081/smalldata` 
 Mätningar mot "/bigdata" utan databas där servern returnerar ett statiskt objekt
 med 1000 elsparkcyklar
-- ~ 1500 requests/sek för Express
+- ~ 1500 requests/sek
     - `oha -n 10000 http://localhost:8081/bigdata`
+
+## Mariadb
+
+Mariadb startas med en helt tom tabell
+
+- "id" int
+- "latitud" int
+- "longitud" int
+
+Varje gång "/mariadbadd" besöks så slumpas ett id och position som därefter
+läggs till i tabellen. Om "id" redan finns så uppdateras bara latitud och longitud.
+
+100 unika "id"
+- ~ 1200 requests/sek
+    - `oha -n 10000 http://localhost:8081/mariadb/add`
+1000 unika "id"
+- ~ 1200 requests/sek
+    - `oha -n 10000 http://localhost:8081/mariadb/add`
 
 ## Getting started with docker images
 
