@@ -15,11 +15,12 @@ const pool = mariadb.createPool({
     connectionLimit: 5
 });
 
-const getMariaDb = async () => {
+const getMariaDb = async (sql) => {
     let conn;
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM data");
+        // const rows = await conn.query("SELECT * FROM data");
+        const rows = await conn.query(sql);
         return rows;
 
     } catch (err) {
@@ -32,8 +33,8 @@ const getMariaDb = async () => {
     }
 }
 
-const addMariaDb = async () => {
-    const {id, latitude, longitude} = randomPosition(smallNumber)
+const addMariaDb = async (nrOfScooters) => {
+    const {id, latitude, longitude} = randomPosition(nrOfScooters)
     let conn;
     try {
         conn = await pool.getConnection();
@@ -121,12 +122,25 @@ app.get('/bigdata', (req, res) => {
 })
 
 app.get('/mariadb', async (req, res) => {
-    const rows = await getMariaDb();
+    const sql = "SELECT * FROM data"
+    const rows = await getMariaDb(sql);
     res.status(200).json(rows);
 })
 
-app.get('/mariadb/add', async (req, res) => {
-    const result = await addMariaDb();
+app.get('/mariadb/one', async (req, res) => {
+    const id = Math.floor(Math.random() * smallNumber)
+    const sql = `SELECT * FROM data WHERE id=${id}`
+    const rows = await getMariaDb(sql);
+    res.status(200).json(rows);
+})
+
+app.get('/mariadb/addsmall', async (req, res) => {
+    const result = await addMariaDb(smallNumber);
+    res.status(200).json(result);
+})
+
+app.get('/mariadb/addbig', async (req, res) => {
+    const result = await addMariaDb(bigNumber);
     res.status(200).json(result);
 })
 
