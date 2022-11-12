@@ -105,28 +105,63 @@ tabell med 100 rader
 
 tabell med 1000 rader
 - ~ 6100 requests/sek
-    - `oha -n 10000 http://localhost:8081/mariadb`
+    - `oha -n 10000 http://localhost:8081/mariadb/one`
 
+## MongoDb
 
+MongoDb startas med en helt tom collection där varje sparkcykel kommer
+att representeras som:
 
+- "_id" autogenererad id
+- "id" int
+- "latitud" int
+- "longitud" int
 
+### INSERT
 
+Varje gång "/mongodb/addX" besöks så slumpas ett id och position som därefter
+läggs till i collection. Om "id" redan finns så uppdateras bara latitud och longitud.
 
+100 unika "id"
+- ~ 550 requests/sek
+    - `oha -n 10000 http://localhost:8081/mongodb/addsmall`
 
+1000 unika "id"
+- ~ 550 requests/sek
+    - `oha -n 10000 http://localhost:8081/mongodb/addbig`
 
+### SELECT
 
+"/mongodb" hämtar hela tabellen och returnerar den som JSON
 
+tabell med 100 rader
+- ~ 200 requests/sek
+    - `oha -n 10000 http://localhost:8081/mongodb`
 
+tabell med 1000 rader
+- ~ 200 requests/sek
+    - `oha -n 10000 http://localhost:8081/mongodb`
 
+"/mariadb/one" slumpar ett id och hämtar raden från tabellen. Returneras som JSON.
 
+tabell med 100 rader
+- ~ 300 requests/sek
+    - `oha -n 10000 http://localhost:8081/mongodb/one`
 
+tabell med 1000 rader
+- ~ 300 requests/sek
+    - `oha -n 10000 http://localhost:8081/mongodb/one`
 
+## Brasklapp!
 
+MongoDb bettedde sig inte alls som jag förväntat mig, både seg och stora skillnader
+i tid mellan samma test. Jag hade förväntat mig mer av MongoDb och antingen
+stämmer siffrorna, eller så har jag byggt containern felaktigt.
 
-## TODO
+## Prova själv
 
-[Oha](https://lib.rs/crates/oha) är en trevlig liten applikation som behövs för
-att göra egna tester. Sen är det bara att starta alla images med:
+[Oha](https://lib.rs/crates/oha) är en trevlig liten applikation som behöver finnas
+lokalt för att göra egna tester. Sen är det bara att starta alla images med:
 
 ```bash
 docker compose up -d --build
@@ -137,35 +172,3 @@ och starta upp igen.
 
 Express snurrar med Nodemon i containern så ändringar lokalt i index.js uppdateras
 utan att behöva starta om.
-
-
-
-   - The address of `mongodb` can be found by running
-
-     ```bash
-     docker inspect -f \
-     '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mongodb
-     ```
-
-     You can then connect to `mongodb` by running (change ip number accordingly):
-
-     ```bash
-     mongosh --host 172.21.0.3 --username root --password
-     ```
-
-     The password for the user `root` is specified in `docker-compose.yml`
-
-   - The address of `postgres` can be found by running
-
-     ```bash
-     docker inspect -f \
-     '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres
-     ```
-
-     You can then connect to `postgres` by running (change ip number accordingly):
-
-     ```bash
-     psql -h 172.21.0.4 -p 5432 -U postgres
-     ```
-
-     The password for the user `postgres` is specified in `docker-compose.yml`

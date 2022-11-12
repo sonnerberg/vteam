@@ -40,9 +40,11 @@ services:
 
   mongodb:
     container_name: mongodb
-    image: 'bitnami/mongodb:latest'
+    image: 'mongo:latest'
     restart: always
+    volumes:
+      - ./mongodb/init.js:/docker-entrypoint-initdb.d/init.js:ro
     ports:
-      - 8085:27017
+      - 27017:27017
     environment:
-      - MONGODB_ROOT_PASSWORD=root123
+      - MONGO_INITDB_DATABASE=mydb
