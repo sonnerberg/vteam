@@ -33,9 +33,12 @@ const getMongoDb = async (query) => {
 }
 
 const addMongoDb = async (nrOfScooters) => {
-    const newPosition = randomPosition(nrOfScooters);
-    const query = { id: newPosition.id };
-    const update = { $set: newPosition };
+    // const newPosition = randomPosition(nrOfScooters);
+    const { id: _id, latitude, longitude } = randomPosition(nrOfScooters);
+    // const query = { id: newPosition.id };
+    const query = { _id: _id };
+    // const update = { $set: newPosition };
+    const update = { $set: { _id: _id, latitude: latitude, longitude: longitude }};
     const options = { upsert: true };
     const dsn = "mongodb://mongodb:27017/mydb";
     const collection = "scooter";

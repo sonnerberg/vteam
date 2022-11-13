@@ -112,8 +112,7 @@ tabell med 1000 rader
 MongoDb startas med en helt tom collection där varje sparkcykel kommer
 att representeras som:
 
-- "_id" autogenererad id
-- "id" int
+- "_id" int
 - "latitud" int
 - "longitud" int
 
@@ -135,11 +134,11 @@ läggs till i collection. Om "id" redan finns så uppdateras bara latitud och lo
 "/mongodb" hämtar hela tabellen och returnerar den som JSON
 
 collection med 100 rader
-- ~ 200 requests/sek
+- ~ 300 requests/sek
     - `oha -n 10000 http://localhost:8081/mongodb`
 
 collection med 1000 rader
-- ~ 200 requests/sek
+- ~ 250 requests/sek
     - `oha -n 10000 http://localhost:8081/mongodb`
 
 "/mariadb/one" slumpar ett id och hämtar raden från tabellen. Returneras som JSON.
