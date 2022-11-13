@@ -166,7 +166,7 @@ lokalt för att göra egna tester. Sen är det bara att starta alla images med:
 docker compose up -d --build
 ```
 
-Samma tabell används till alla tester så för att nollställa den stäng alla containers
+Samma tabell/collection används till alla tester så för att nollställa den stäng alla containers
 och starta upp igen.
 
 Express snurrar med Nodemon i containern så ändringar lokalt i index.js uppdateras
