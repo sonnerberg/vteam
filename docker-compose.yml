@@ -2,67 +2,67 @@ version: "3.4"
 
 services:
 
-  express:
-    container_name: express
-    build: ./express
-    working_dir: /code/app
-    command: /code/node_modules/.bin/nodemon /code/app/index.js
-    volumes:
-      - ./express/app:/code/app
-    ports:
-      - 8081:3000
-    restart: on-failure
+   express:
+     container_name: express
+     build: ./express
+     working_dir: /code/app
+     command: /code/node_modules/.bin/nodemon /code/app/index.js
+     volumes:
+       - ./express/app:/code/app
+     ports:
+       - 8081:3000
+     restart: on-failure
 
-  fastapi:
-    container_name: fastapi
-    build: ./fastapi
-    working_dir: /code/app
-    command: uvicorn main:app --host 0.0.0.0 --reload
-    environment:
-      DEBUG: 1
-    volumes:
-      - ./fastapi/app:/code/app
-    ports:
-      - 8082:8000
-    restart: on-failure
+   fastapi:
+     container_name: fastapi
+     build: ./fastapi
+     working_dir: /code/app
+     command: uvicorn main:app --host 0.0.0.0 --reload
+     environment:
+       DEBUG: 1
+     volumes:
+       - ./fastapi/app:/code/app
+     ports:
+       - 8082:8000
+     restart: on-failure
 
-  react:
-    container_name: react
-    build: ./react
-    working_dir: /code/app
-    command: npm start
-    volumes:
-      - ./react/app:/code/app
-    ports:
-      - 8083:3000
-    restart: on-failure
+   react:
+     container_name: react
+     build: ./react
+     working_dir: /code/src
+     command: npm start
+     volumes:
+       - ./react/src:/code/src
+     ports:
+       - 8083:3000
+     restart: on-failure
 
-  mariadb:
-    container_name: mariadb
-    image: mariadb:latest
-    restart: always
-    ports:
-      - 8084:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user
+   mariadb:
+     container_name: mariadb
+     image: mariadb:latest
+     restart: always
+     ports:
+       - 8084:3306
+     environment:
+       MYSQL_ROOT_PASSWORD: example
+       MYSQL_DATABASE: mydb
+       MYSQL_USER: user
+       MYSQL_PASSWORD: user
 
-  mongodb:
-    container_name: mongodb
-    image: 'bitnami/mongodb:latest'
-    restart: always
-    ports:
-      - 8085:27017
-    environment:
-      - MONGODB_ROOT_PASSWORD=root123
+   mongodb:
+     container_name: mongodb
+     image: 'bitnami/mongodb:latest'
+     restart: always
+     ports:
+       - 8085:27017
+     environment:
+       - MONGODB_ROOT_PASSWORD=root123
 
-  postgres:
-    container_name: postgres
-    image: postgres:latest
-    restart: always
-    ports:
-      - 8086:5432
-    environment:
-      POSTGRES_PASSWORD: example
+   postgres:
+     container_name: postgres
+     image: postgres:latest
+     restart: always
+     ports:
+       - 8086:5432
+     environment:
+       POSTGRES_PASSWORD: example

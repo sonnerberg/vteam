@@ -2,7 +2,7 @@
 
 ## TODO
 
-- [ ] Fix networking between containers
+- [x] Fix networking between containers
 - [ ] Add redis container
 - [ ] Add react native container
 - [ ] Login to mongo using a user other than root
