@@ -1,5 +1,7 @@
 FROM node:latest
 
-WORKDIR /code
+WORKDIR /code/app
 
-RUN npm install express nodemon
+COPY ./app/package*.json /
+
+RUN npm install
