@@ -1,30 +1,31 @@
 {
-  "name": "express",
-  "version": "1.0.0",
-  "description": "this is the express application that will serve admin and user clients",
-  "main": "./app/index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "start": "node index.js",
-    "test": "nyc --reporter=html --reporter=text mocha './app/test/**/*.js'",
-    "test:jest": "jest --verbose --runInBand --forceExit --detectOpenHandles",
-    "start:dev": "nodemon index.js",
-    "lint": "eslint ."
-  },
-  "author": "Richard Sönnerberg, Tomas, Patrik, Joel",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.2",
-    "mariadb": "^3.0.2"
-  },
-  "devDependencies": {
-    "eslint": "^8.28.0",
-    "jest": "^29.3.1",
-    "mocha": "^10.1.0",
-    "nodemon": "^2.0.20",
-    "nyc": "^15.1.0",
-    "supertest": "^6.3.1"
-  }
+    "name": "express",
+    "version": "1.0.0",
+    "description": "this is the express application that will serve admin and user clients",
+    "main": "./app/index.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "start": "node index.js",
+        "start:dev": "nodemon index.js",
+        "lint": "eslint .",
+        "test": "nyc --reporter=html --reporter=text mocha './app/test/**/*.js'",
+        "test:jest": "jest --verbose --runInBand --forceExit --detectOpenHandles",
+        "test:all": "npm run test && npm run test:jest && npm run lint"
+    },
+    "author": "Richard Sönnerberg, Tomas, Patrik, Joel",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.18.2",
+        "mariadb": "^3.0.2"
+    },
+    "devDependencies": {
+        "eslint": "^8.28.0",
+        "jest": "^29.3.1",
+        "mocha": "^10.1.0",
+        "nodemon": "^2.0.20",
+        "nyc": "^15.1.0",
+        "supertest": "^6.3.1"
+    }
 }

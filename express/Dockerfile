@@ -2,6 +2,6 @@ FROM node:latest
 
 WORKDIR /code
 
-COPY ./package* .
+COPY ./package* .eslintrc.js ./
 
 RUN npm install
