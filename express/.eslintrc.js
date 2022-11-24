@@ -235,5 +235,5 @@ module.exports = {
     },
     'settings': {
     },
-    'ignorePatterns': []
+    'ignorePatterns': ['*/test/*']
 };
