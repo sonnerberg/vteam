@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "eslint .",
+        "test": "nyc --reporter=html --reporter=text mocha 'test/**/*.js'",
         "start:dev": "nodemon index.js",
         "start": "node index.js",
         "lint": "eslint ."
@@ -17,6 +17,8 @@
     },
     "devDependencies": {
         "eslint": "^8.28.0",
-        "nodemon": "^2.0.20"
+        "mocha": "^10.1.0",
+        "nodemon": "^2.0.20",
+        "nyc": "^15.1.0"
     }
 }
