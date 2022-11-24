@@ -27,8 +27,8 @@ jobs:
           cache: "npm"
           cache-dependency-path: "./express/package-lock.json"
       - run: npm ci
-        working-directory: .express
+        working-directory: ./express
       - run: npm run build --if-present
-        working-directory: .express
+        working-directory: ./express
       - run: npm test:all
-        working-directory: .express
+        working-directory: ./express
