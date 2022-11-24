@@ -2,6 +2,6 @@ FROM node:latest
 
 WORKDIR /code/app
 
-COPY ./app/package*.json /
+COPY ./package* .
 
 RUN npm install
