@@ -1,19 +1,10 @@
-const express = require('express');
-const { queryDatabase } = require('./database/mariadb');
+const app = require('./app'); // the actual Express application
+const http = require('http');
 
-const app = express();
-const port = 3000;
+const server = http.createServer(app);
 
-app.get('/', (req, res) => {
-    res.send('Hello World from express and Nodemon!');
-});
+const PORT = 3000;
 
-app.get('/test', async (req, res) => {
-    const sql = 'SELECT * FROM customer';
-    const data = await queryDatabase(sql);
-    res.status(200).json(data);
-});
-
-app.listen(port, () => {
-    console.log(`Express listening on port ${port}`);
+server.listen(PORT, () => {
+    console.info(`Server running on port ${PORT}`);
 });
