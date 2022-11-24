@@ -1,3 +1,2 @@
 .venv
 fastapi/app/__pycache__
-express/app/node_modules
