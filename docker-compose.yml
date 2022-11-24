@@ -5,8 +5,8 @@ services:
    express:
      container_name: express
      build: ./express
-     working_dir: /code/app
-     command: /code/node_modules/.bin/nodemon /code/app/index.js
+     working_dir: /code
+     command: npm start
      volumes:
        - ./express/app:/code/app
      ports:
