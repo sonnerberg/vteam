@@ -1,6 +1,6 @@
 FROM node:latest
 
-WORKDIR /code
+WORKDIR /code/app
 
 COPY ./package* .
 
