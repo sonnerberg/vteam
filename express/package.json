@@ -10,9 +10,9 @@
         "start": "node index.js",
         "start:dev": "nodemon index.js",
         "lint": "eslint .",
-        "test": "nyc --reporter=html --reporter=text mocha './app/test/**/*.js'",
+        "test:mocha": "nyc --reporter=html --reporter=text mocha './app/test/**/*.js'",
         "test:jest": "jest --verbose --runInBand --forceExit --detectOpenHandles",
-        "test:all": "npm run test && npm run test:jest && npm run lint"
+        "test": "npm run test:mocha && npm run test:jest && npm run lint"
     },
     "author": "Richard Sönnerberg, Tomas, Patrik, Joel",
     "license": "ISC",
