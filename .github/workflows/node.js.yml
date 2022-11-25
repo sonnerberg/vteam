@@ -18,6 +18,7 @@ jobs:
       - name: build containers
         run: docker-compose -f "docker-compose-CI.yml" up -d
       - name: Test
+        shell: 'script -q -e -c "bash {0}"'
         run: docker exec -it express bash -c "npm run test"
 
     # -------
