@@ -16,7 +16,7 @@ services:
    react:
      container_name: react
      build: ./react
-     working_dir: /code/app/src
+     working_dir: /code/app
      command: npm start
      volumes:
        - ./react/app/src:/code/app/src
