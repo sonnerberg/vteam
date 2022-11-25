@@ -35,7 +35,7 @@
             "address": "Gymnastikggatan 55 632 20 Eskilstuna",
             "billing-adress": "Gymnastikggatan 55 632 20 Eskilstuna",
             "username": "john@somemail.com",
-            "password": "hx2034ml+020i1k2l4o1k2410+i+0148941+094",
+            "pass": "",
             "email": "john@somemail.com",
             "balance": 1000,
             "status": "online"
@@ -97,7 +97,7 @@
       {
         "id": 1,
         "username": "admin",
-        "password": "kddslakdsajighyposdhif9023094u23094823jowljsasass",
+        "pass": "",
         "competence": "main administrator"
 
       }
