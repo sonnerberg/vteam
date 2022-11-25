@@ -22,6 +22,8 @@ exports.queryDatabase = async (sql) => {
     } finally {
         if (conn) {
             conn.end();
+            // TODO jest throws error if pool isn't closed. Check why
+            pool.end();
         }
     }
 };
