@@ -16,10 +16,10 @@ services:
    react:
      container_name: react
      build: ./react
-     working_dir: /code/src
+     working_dir: /code/app/src
      command: npm start
      volumes:
-       - ./react/src:/code/src
+       - ./react/app/src:/code/app/src
      ports:
        - 3000:3000
      restart: on-failure
