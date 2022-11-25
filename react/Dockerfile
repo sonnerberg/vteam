@@ -1,5 +1,7 @@
 FROM node:latest
 
-WORKDIR /code
+WORKDIR /code/app
 
-RUN npx create-react-app .
+COPY ./app .
+
+RUN npm install
