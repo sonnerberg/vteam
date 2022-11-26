@@ -22,8 +22,9 @@ exports.queryDatabase = async (sql) => {
     } finally {
         if (conn) {
             conn.end();
-            // TODO jest throws error if pool isn't closed. Check why
-            pool.end();
+            // TODO jest throws error if pool isn't closed. But connection closes
+            // after first request.
+            // pool.end();
         }
     }
 };
