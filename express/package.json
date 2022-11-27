@@ -10,7 +10,7 @@
         "start": "node index.js",
         "start:dev": "nodemon index.js",
         "lint": "eslint .",
-        "test:mocha": "nyc --reporter=html --reporter=text mocha './app/test/**/*.js'",
+        "test:mocha": "nyc --reporter=clover --reporter=html --reporter=text mocha './app/test/**/*.js'",
         "test:jest": "jest --coverage --verbose --runInBand --forceExit --detectOpenHandles",
         "test": "npm run test:mocha && npm run test:jest && npm run lint"
     },
