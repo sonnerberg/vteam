@@ -23,7 +23,7 @@ jobs:
       - name: Create coverage folder
         run: mkdir -v ./coverage
       - name: Get lcov.info
-        run: docker exec express bash -c "cat /code/coverage/lcov.info" > .coverage/lcov.info
+        run: docker exec express bash -c "cat /code/coverage/lcov.info" > ./coverage/lcov.info
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
