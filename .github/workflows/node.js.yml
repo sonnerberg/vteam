@@ -20,9 +20,10 @@ jobs:
       - name: Test
         shell: 'script -q -e -c "bash {0}"'
         run: docker exec -it express bash -c "npm run test"
+      - name: Get lcov.info
+        run: docker exec -it express bash -c "cat /code/coverage/lcov.info" > ./coverage/lcov.info
       - name: Coveralls
         uses: coverallsapp/github-action@master
-        path-to-lcov: /code/coverage/lcov.info
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
