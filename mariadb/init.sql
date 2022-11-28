@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS `customer`;
+DROP TABLE IF EXISTS `scooter`;
 
 CREATE TABLE IF NOT EXISTS `customer` (
 `id` INT AUTO_INCREMENT,
@@ -17,6 +18,19 @@ CHARSET utf8
 COLLATE utf8_swedish_ci
 ;
 
+CREATE TABLE IF NOT EXISTS `scooter` (
+`id` INT AUTO_INCREMENT,
+`latitude` FLOAT,
+`longitude` FLOAT,
+`status` VARCHAR(50),
+`health` VARCHAR(50),
+`rented` BOOLEAN,
+`speed` INT,
+PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET utf8
+COLLATE utf8_swedish_ci
+;
 --
 -- Insert some customers.
 --
@@ -30,4 +44,19 @@ LINES
     TERMINATED BY '\n'
 IGNORE 1 LINES
 (surname, lastname, adress, billing_adress, username, password, email, balance, status)
+;
+
+--
+-- Insert some customers.
+--
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/scooters.csv'
+INTO TABLE scooter
+CHARSET utf8
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1 LINES
+(latitude, longitude, status, health, rented, speed)
 ;
