@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `scooter` (
 `id` INT AUTO_INCREMENT,
 -- `latitude` FLOAT,
 -- `longitude` FLOAT,
-`position` GEOMETRY,
+`position` POINT,
 `status` VARCHAR(50),
 `health` VARCHAR(50),
 `rented` BOOLEAN,
