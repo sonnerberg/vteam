@@ -16,4 +16,10 @@ router.get('/scooter', async (req, res) => {
     res.status(200).json(data);
 });
 
+router.get('/zones', async (req, res) => {
+    const sql = 'SELECT * FROM zones';
+    const data = await queryDatabase(sql);
+    res.status(200).json(data);
+});
+
 module.exports = router;
