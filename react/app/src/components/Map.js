@@ -2,13 +2,21 @@ import React, { useEffect, useRef } from "react";
 import L from 'leaflet';
 import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel'
-import getLayers from '../models/getFeatures';
+import getFeatures from '../models/getFeatures';
 import allLayers from '../models/allLayers';
+import markerIcon from "../../node_modules/leaflet/dist/images/marker-icon.png";
 require('../../node_modules/leaflet/dist/leaflet.css')
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css')
 
+//detta är hack som gör så att leaflet hittar sin default-icon. pga react + webpack hittar inte
+//med tanke på att vi rimligtvis gör egna icons sen kommer vi ersätta detta med custom icons
+//ändå men just nu najs ha en marker
+L.Marker.prototype.setIcon(L.icon({
+  iconUrl:markerIcon
+}))
+
 const Map = () => {
-  const backendlayers = {};
+  const dataFromBackend = {};
 
 // Create our map ref:
   const mapRef = useRef(null)
@@ -42,22 +50,39 @@ const Map = () => {
 
 
   useEffect(() => {
-    console.log("allLayers.cities is", allLayers.cities)
-    if (allLayers.cities.getLayers().length > 0) {
-      allLayers.cities.clearLayers()
-    }
-
+    //this useeffect runs to fetch all data from backend
+    //on cleanup we hope that we can use clearLayers to clean away the layers
+    //but a) it is uncertain if this is necessary and b) right now we're only
+    //cleaning the cities-layer
       (async () => {
-        console.log("inne i useeffect")
-        backendlayers.cities = await getLayers.getCities();
-        backendlayers.chargingStations = await getLayers.getChargingStations();
-        backendlayers.parkingLots = await getLayers.getParkingLots();
-        allLayers.cities.addLayer(L.geoJson(backendlayers.cities[0].position))
-        console.log('CHARGINS', backendlayers.chargingStations[0].position)
-        allLayers.chargingStations.addLayer(L.marker(backendlayers.chargingStations[0].position))
-        allLayers.parkingLots.addLayer(L.geoJson(backendlayers.parkingLots[0].position))
+        //vi hämtar data från backend och sparar ner själva DATAT i objektet dataFromBackend
+        dataFromBackend.cities = await getFeatures.getCities();
+        dataFromBackend.chargingStations = await getFeatures.getChargingStations();
+        dataFromBackend.parkingLots = await getFeatures.getParkingLots();
 
-        console.log(backendlayers.cities);
+        //alla FeatureGroups har vi specat i allLayers.js . Framöver tänker jag mig att vi där också
+        //sätter style för de olika featuregroupsen
+        //det vi gör här sen är att vi baserat på data i dataFromBackend lägger till själva DATAT i denna
+        //featuregroup. addLayer lägger alltså till 1 datamängd som i vårt fall nog oftast är 1 punkt
+        //eller 1 polygon. En featuregroup håller alltså många dataobjekt av samma typ här, med gemensamt
+        //gränssnitt för interaktionen med varje ingående objekt (tända/släcka/klicka på)
+        for (const city of dataFromBackend.cities) {
+          allLayers.cities.addLayer(L.geoJson(city.position));
+        }
+
+        for (const charger of dataFromBackend.chargingStations) {
+          //Testa bygga detta med const = och sedan adda attributes på den const
+          //som jag sedan ropar på i allLayers click-funktion
+          //kanske i e.target snarare än i this, får testa!
+          const chargerObject = L.marker(charger.position);
+          chargerObject.backendId = charger.id;
+          console.log("CHARGEROBJ ID ", chargerObject.backendId)
+          allLayers.chargingStations.addLayer(chargerObject)
+        }
+
+        for (const parking of dataFromBackend.parkingLots) {
+          allLayers.parkingLots.addLayer(L.geoJson(parking.position));
+        }
       })();
 
       return () => allLayers.cities.clearLayers()
@@ -71,10 +96,13 @@ const Map = () => {
     mapRef.current =  L.map('map', mapModel.mapParams);
     //add the draw control to our map
     mapRef.current.addControl(drawControl);
+    //SKA VI LÅTA DRAWNITEMS BO I ALLLAYERS OCKSÅ KANSKE?
     drawnItems.addTo(mapRef.current);
-    allLayers.cities.addTo(mapRef.current);
-    allLayers.parkingLots.addTo(mapRef.current);
-    allLayers.chargingStations.addTo(mapRef.current);
+    //Lägg till alla layers i allLayers till kartan
+    for (const layer in allLayers) {
+      allLayers[layer].addTo(mapRef.current);
+    };
+
     console.log("cities", allLayers.cities);
     console.log("drawnitems", drawnItems);
     // Pass a baseLayers object + an overlay object to the layer control.

@@ -3,7 +3,7 @@ import L from 'leaflet';
 
 const baseUrl = 'http://localhost:4000';
 
-const getLayers = {
+const getFeatures = {
     getCities: async function getCities() {
         const response = await fetch(`${baseUrl}/cities`);
         const result = await response.json();
@@ -24,4 +24,4 @@ const getLayers = {
     },
 }
 
-export default getLayers
+export default getFeatures
