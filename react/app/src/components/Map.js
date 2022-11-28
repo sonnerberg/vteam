@@ -2,10 +2,13 @@ import React, { useEffect, useRef } from "react";
 import L from 'leaflet';
 import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel'
+import getLayers from '../models/getFeatures';
+import allLayers from '../models/allLayers';
 require('../../node_modules/leaflet/dist/leaflet.css')
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css')
 
 const Map = () => {
+  const backendlayers = {};
 
 // Create our map ref:
   const mapRef = useRef(null)
@@ -37,6 +40,29 @@ const Map = () => {
 });
 
 
+
+  useEffect(() => {
+    console.log("allLayers.cities is", allLayers.cities)
+    if (allLayers.cities.getLayers().length > 0) {
+      allLayers.cities.clearLayers()
+    }
+
+      (async () => {
+        console.log("inne i useeffect")
+        backendlayers.cities = await getLayers.getCities();
+        backendlayers.chargingStations = await getLayers.getChargingStations();
+        backendlayers.parkingLots = await getLayers.getParkingLots();
+        allLayers.cities.addLayer(L.geoJson(backendlayers.cities[0].position))
+        console.log('CHARGINS', backendlayers.chargingStations[0].position)
+        allLayers.chargingStations.addLayer(L.marker(backendlayers.chargingStations[0].position))
+        allLayers.parkingLots.addLayer(L.geoJson(backendlayers.parkingLots[0].position))
+
+        console.log(backendlayers.cities);
+      })();
+
+      return () => allLayers.cities.clearLayers()
+  }, []);
+
   // This useEffect hook runs when the component is first mounted,
   // empty array in the end means only runs at first load of app
   useEffect(() => {
@@ -46,13 +72,21 @@ const Map = () => {
     //add the draw control to our map
     mapRef.current.addControl(drawControl);
     drawnItems.addTo(mapRef.current);
+    allLayers.cities.addTo(mapRef.current);
+    allLayers.parkingLots.addTo(mapRef.current);
+    allLayers.chargingStations.addTo(mapRef.current);
+    console.log("cities", allLayers.cities);
+    console.log("drawnitems", drawnItems);
     // Pass a baseLayers object + an overlay object to the layer control.
     //If we want to add more baselayers, we do this in the first object
     //If we want to add more overlays, we do this in the second object
     //This can also be handled programmatically later on
     L.control.layers(
       {'OpenStreetMap': tileRef.current},
-      {'DrawnItems': drawnItems}
+      {'DrawnItems': drawnItems,
+      'Cities': allLayers.cities,
+      'Parking stations': allLayers.parkingLots,
+      'Charging stations': allLayers.chargingStations}
     ).addTo(mapRef.current); // Add the control to our map instance
 
     // Create the zoom control:
@@ -68,14 +102,13 @@ const Map = () => {
       drawnItems.addLayer(layer);
 
       alert("ÄR DU NÖJD MED DENNA GEOMETRI?")
-  });
-
-  //at first had problems with "map already instantiated". calling this cleanup function ensures that
-  // the map created in this effect is removed when the component unmounts
-  //but i do not understand why we would need this to display the map at all
-  //maybe build a counter that gets updated for every time this effect runs to understand if the app is recreating
-  //the map many times?
-  return () => mapRef.current.remove();
+    });
+    //at first had problems with "map already instantiated". calling this cleanup function ensures that
+    // the map created in this effect is removed when the component unmounts
+    //but i do not understand why we would need this to display the map at all
+    //maybe build a counter that gets updated for every time this effect runs to understand if the app is recreating
+    //the map many times?
+    return () => mapRef.current.remove();
   }, []);
 
 
