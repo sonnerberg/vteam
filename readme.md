@@ -1,6 +1,7 @@
 # How to use this repository
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/virtuella-team/vteam/badges/quality-score.png?b=backend)](https://scrutinizer-ci.com/g/virtuella-team/vteam/?branch=backend)
+[![Build Status](https://scrutinizer-ci.com/g/virtuella-team/vteam/badges/build.png?b=main)](https://scrutinizer-ci.com/g/virtuella-team/vteam/build-status/main)
 
 ## TODO
 
