@@ -1,3 +1,3 @@
-"latitude","longitude","status","health","rented","speed"
-59.36661,16.5077,"ok","ok",0,0
-59.36,16.5,"ok","ok",1,15
+"position","status","health","rented","speed"
+"POINT(59.36661 16.5077)","ok","ok",0,0
+"POINT(59.36000 16.5000)","ok","ok",1,15
