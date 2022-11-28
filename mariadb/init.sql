@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `scooter`;
 DROP TABLE IF EXISTS `zones`;
+DROP TABLE IF EXISTS `geojson`;
 
 CREATE TABLE IF NOT EXISTS `customer` (
 `id` INT AUTO_INCREMENT,
@@ -35,6 +36,17 @@ COLLATE utf8_swedish_ci
 CREATE TABLE IF NOT EXISTS `zones` (
 `id` INT AUTO_INCREMENT,
 `position` POLYGON,
+`type` VARCHAR(50),
+`speed_limit` INT,
+PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET utf8
+COLLATE utf8_swedish_ci
+;
+
+CREATE TABLE IF NOT EXISTS `geojson` (
+`id` INT AUTO_INCREMENT,
+`position` JSON,
 `type` VARCHAR(50),
 `speed_limit` INT,
 PRIMARY KEY (`id`))
@@ -97,3 +109,9 @@ SET
 `type` = @col2,
 `speed_limit` = @col3
 ;
+
+--
+-- Insert some geodata.
+--
+INSERT INTO geojson (position, type, speed_limit) VALUES
+    ('{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[59.374,16.5025],[59.3731,16.5051],[59.3722,16.5038],[59.3727,16.5008],[59.374,16.5025]]]},"properties":{"prop0":"value0","prop1":{"this":"that"}}}', "limited speed", 15);
