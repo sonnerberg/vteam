@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `scooter`;
+DROP TABLE IF EXISTS `zones`;
 
 CREATE TABLE IF NOT EXISTS `customer` (
 `id` INT AUTO_INCREMENT,
@@ -30,6 +31,18 @@ ENGINE = InnoDB
 CHARSET utf8
 COLLATE utf8_swedish_ci
 ;
+
+CREATE TABLE IF NOT EXISTS `zones` (
+`id` INT AUTO_INCREMENT,
+`position` POLYGON,
+`type` VARCHAR(50),
+`speed_limit` INT,
+PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET utf8
+COLLATE utf8_swedish_ci
+;
+
 --
 -- Insert some customers.
 --
@@ -46,7 +59,7 @@ IGNORE 1 LINES
 ;
 
 --
--- Insert some customers.
+-- Insert some scooters.
 --
 LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/scooters.csv'
 INTO TABLE scooter
@@ -64,4 +77,23 @@ SET
 `health` = @col3,
 `rented` = @col4,
 `speed` = @col5
+;
+
+--
+-- Insert some zones.
+--
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/zones.csv'
+INTO TABLE zones
+CHARSET utf8
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1 LINES
+(@col1, @col2, @col3)
+SET
+`position` = PolygonFromText(@col1),
+`type` = @col2,
+`speed_limit` = @col3
 ;
