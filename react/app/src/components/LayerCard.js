@@ -1,0 +1,47 @@
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
+
+const LayerCard = (props) => {
+    const rows = [];
+
+    for (const property in props.content) {
+        if (property !== "position")
+            rows.push({name: property, value: props.content[property]});
+    }
+
+  return (
+    <Card sx={{ minWidth: 275 }}>
+        <CardContent>
+            <Table sx={{ minWidth: 200 }} aria-label="simple table">
+                <TableBody>
+                {rows.map((row) => (
+                    <TableRow
+                        key={row.name}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                        <TableCell component="th" scope="row">
+                            {row.name}
+                        </TableCell>
+                        <TableCell align="right">{row.value}</TableCell>
+                    </TableRow>
+                ))}
+                </TableBody>
+            </Table>
+
+        </CardContent>
+      <CardActions>
+        <div>{props.button}</div>
+      </CardActions>
+    </Card>
+  );
+}
+
+export default LayerCard;
