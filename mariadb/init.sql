@@ -20,8 +20,6 @@ COLLATE utf8_swedish_ci
 
 CREATE TABLE IF NOT EXISTS `scooter` (
 `id` INT AUTO_INCREMENT,
--- `latitude` FLOAT,
--- `longitude` FLOAT,
 `position` POINT,
 `status` VARCHAR(50),
 `health` VARCHAR(50),
@@ -59,7 +57,6 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1 LINES
--- (latitude, longitude, status, health, rented, speed)
 (@col1, @col2, @col3, @col4, @col5)
 SET
 `position` = PointFromText(@col1),
