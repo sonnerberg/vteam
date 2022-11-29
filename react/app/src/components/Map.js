@@ -74,6 +74,10 @@ const Map = () => {
                 allLayers.cities.addLayer(L.geoJson(city.position))
             }
 
+            for (const zone of dataFromBackend.zones) {
+                allLayers.zones.addLayer(L.geoJson(zone.position))
+            }
+
             for (const charger of dataFromBackend.chargingStations) {
                 //Testa bygga detta med const = och sedan adda attributes på den const
                 //som jag sedan ropar på i allLayers click-funktion
@@ -135,6 +139,7 @@ const Map = () => {
                     'Parking stations': allLayers.parkingLots,
                     'Charging stations': allLayers.chargingStations,
                     'Bikes ': allLayers.bikes,
+                    'Zones ': allLayers.zones,
                 }
             )
             .addTo(mapRef.current) // Add the control to our map instance

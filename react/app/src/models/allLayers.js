@@ -25,10 +25,11 @@ const allLayers = {
         }),
     bikes: L.featureGroup().on('click', function (event) {
         alert(
-            'BIKE NO ' +
-                event.layer.backendId +
-                ' IS IT RENTED? ' +
-                event.layer.rented
+            //event.layer is deprecated....but cant find alternative to simple and fast
+            //retrieval of actual clicked object instead of featuregroup
+            //other than attaching a listner to every object when its inserted
+            //in the featuregroup but that seems insane with 1000 bikes
+            `BIKE NO ${event.layer.backendId} IS IT RENTED? ${event.layer.rented}`
         )
     }),
     workshops: L.featureGroup()

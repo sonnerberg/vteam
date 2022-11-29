@@ -85,23 +85,41 @@
                     "type": "Polygon",
                     "coordinates": [
                         [
-                            [59.374, 16.5025],
-                            [59.3731, 16.5051],
-                            [59.3722, 16.5038],
-                            [59.3727, 16.5008],
-                            [59.374, 16.5025]
+                            [16.5025, 59.374],
+                            [16.5051, 59.3731],
+                            [16.5038, 59.3722],
+                            [16.5008, 59.3727],
+                            [16.5025, 59.374]
                         ]
                     ]
                 },
                 "properties": {
-                    "prop0": "value0",
-                    "prop1": { "this": "that" }
+                    "type": "limited speed",
+                    "speed-limit": 15
                 }
-            },
-
-            "type": "limited speed",
-
-            "speed-limit": 15
+            }
+        },
+        {
+            "id": 2,
+            "position": {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [16.6025, 59.574],
+                            [16.6051, 59.5731],
+                            [16.6038, 59.5722],
+                            [16.6008, 59.5727],
+                            [16.6025, 59.574]
+                        ]
+                    ]
+                },
+                "properties": {
+                    "type": "not allowed",
+                    "speed-limit": 0
+                }
+            }
         }
     ],
 
