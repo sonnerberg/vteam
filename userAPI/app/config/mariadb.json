@@ -1,0 +1,7 @@
+{
+    "host": "mariadb",
+    "user": "user",
+    "password": "user",
+    "database": "mydb",
+    "connectionLimit": 5
+}

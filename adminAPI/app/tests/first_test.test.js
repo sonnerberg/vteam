@@ -11,7 +11,7 @@ test('there is a 200 response', async () => {
 
 test('there is a object response from db', async () => {
     const response = await api.get('/mariadb');
-    expect(response.body).toHaveLength(5);
+    expect(response.body[0]).toHaveProperty('username');
     // .expect('Content-Type', /application\/json/)
 });
 

@@ -1,0 +1,17 @@
+filter:
+  paths: ["adminAPI/*", "userAPI/*", "react/*"]
+
+checks:
+  javascript:
+    no_var: true
+    eqeqeq: true
+    no_else_return: true
+    no_alert: true
+
+build:
+  nodes:
+    analysis:
+      tests:
+        override:
+          - js-scrutinizer-run
+    tests: true

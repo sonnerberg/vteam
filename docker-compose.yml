@@ -2,15 +2,26 @@ version: "3.4"
 
 services:
 
-   express:
-     container_name: express
-     build: ./express
+   admin-api:
+     container_name: admin-api
+     build: ./adminAPI
      working_dir: /code
      command: npm run start:dev
      volumes:
-       - ./express/app:/code/app
+       - ./adminAPI/app:/code/app
      ports:
        - 8081:3000
+     restart: on-failure
+
+   user-api:
+     container_name: user-api
+     build: ./userAPI
+     working_dir: /code
+     command: npm run start:dev
+     volumes:
+       - ./userAPI/app:/code/app
+     ports:
+       - 8082:3000
      restart: on-failure
 
    react:
