@@ -1,11 +1,17 @@
 import ButtonGroup from '@mui/material/ButtonGroup';
-import Button from '@mui/material/Button';
+
+
+/**
+ * A button
+ * @param {object} props - Props for the function
+ * @param {React.ReactElement[]} props.buttons Array with buttons to add to the group
+ * @returns {React.ReactElement} - The buttongroup
+ */
 
 const LayerButtonGroup = (props) => {
-    console.log(props.buttons)
     return (
         <ButtonGroup
-            orientation="horizontal"
+            orientation="vertical"
             aria-label="button group"
         >
             {props.buttons.map((button, index) =>
@@ -16,16 +22,3 @@ const LayerButtonGroup = (props) => {
 }
 
 export default LayerButtonGroup;
-
-/* import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
-
-export default function BasicButtonGroup() {
-  return (
-    <ButtonGroup variant="vertical" aria-label="outlined primary button group">
-      <Button>One</Button>
-      <Button>Two</Button>
-      <Button>Three</Button>
-    </ButtonGroup>
-  );
-} */
