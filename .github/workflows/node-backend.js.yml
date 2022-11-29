@@ -18,8 +18,8 @@ jobs:
       - name: build containers
         run: docker-compose -f "docker-compose-CI-backend.yml" up -d
       - name: Test admin-api
-        shell: 'script -q -e -c "bash {0}"'
-        run: docker exec -it admin-api bash -c "npm run test"
+        # shell: 'script -q -e -c "bash {0}"'
+        run: docker exec admin-api bash -c "npm run test"
       - name: Test user-api
         # shell: 'script -q -e -c "bash {0}"'
         run: docker exec user-api bash -c "npm run test"
