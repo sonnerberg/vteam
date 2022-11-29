@@ -15,8 +15,8 @@
               ]
             },
             "properties": {
-              "prop0": "value0",
-              "prop1": { "this": "that" }
+              "name": "Eskilstuna",
+              "id": 1
             }
           }
         }
