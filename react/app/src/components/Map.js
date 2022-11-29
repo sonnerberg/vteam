@@ -60,6 +60,9 @@ const Map = () => {
             dataFromBackend.chargingStations =
                 await getFeatures.getChargingStations()
             dataFromBackend.parkingLots = await getFeatures.getParkingLots()
+            dataFromBackend.bikes = await getFeatures.getBikes()
+            dataFromBackend.workshops = await getFeatures.getWorkshops()
+            dataFromBackend.zones = await getFeatures.getZones()
 
             //alla FeatureGroups har vi specat i allLayers.js . Framöver tänker jag mig att vi där också
             //sätter style för de olika featuregroupsen
@@ -79,6 +82,20 @@ const Map = () => {
                 chargerObject.backendId = charger.id
                 console.log('CHARGEROBJ ID ', chargerObject.backendId)
                 allLayers.chargingStations.addLayer(chargerObject)
+            }
+
+            for (const bike of dataFromBackend.bikes) {
+                //Testa bygga detta med const = och sedan adda attributes på den const
+                //som jag sedan ropar på i allLayers click-funktion
+                //kanske i e.target snarare än i this, får testa!
+                const bikeObject = L.marker(bike.position)
+                bikeObject.backendId = bike.id
+                bikeObject.rented = bike.rented
+                console.log('bikeObject ID ', bikeObject.backendId)
+                allLayers.bikes.addLayer(bikeObject)
+                /* .on('click', function (event) {
+                        console.log('THIS IS MAPJS ', event.layer)
+                    })*/
             }
 
             for (const parking of dataFromBackend.parkingLots) {
@@ -113,10 +130,11 @@ const Map = () => {
             .layers(
                 { OpenStreetMap: tileRef.current },
                 {
-                    DrawnItems: drawnItems,
-                    Cities: allLayers.cities,
+                    'Drawn Items': drawnItems,
+                    'Cities ': allLayers.cities,
                     'Parking stations': allLayers.parkingLots,
                     'Charging stations': allLayers.chargingStations,
+                    'Bikes ': allLayers.bikes,
                 }
             )
             .addTo(mapRef.current) // Add the control to our map instance
