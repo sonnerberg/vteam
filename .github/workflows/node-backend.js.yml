@@ -16,14 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: build containers
-        run: docker-compose -f "docker-compose-CI.yml" up -d
-      - name: Test
+        run: docker-compose -f "docker-compose-CI-backend.yml" up -d
+      - name: Test admin-api
         shell: 'script -q -e -c "bash {0}"'
-        run: docker exec -it express bash -c "npm run test"
+        run: docker exec -it admin-api bash -c "npm run test"
+      - name: Test user-api
+        # shell: 'script -q -e -c "bash {0}"'
+        run: docker exec -it user-api bash -c "npm run test"
       - name: Create coverage folder
         run: mkdir -v ./coverage
       - name: Get lcov.info
-        run: docker exec express bash -c "cat /code/coverage/lcov.info" > ./coverage/lcov.info
+        run: docker exec admin-api bash -c "cat /code/coverage/lcov.info" > ./coverage/lcov.info
       - name: Check contents lcov.info
         run: cat ./coverage/lcov.info
       - name: Coveralls
