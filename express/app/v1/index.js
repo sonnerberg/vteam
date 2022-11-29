@@ -30,6 +30,7 @@ router.get('/geojson', async (req, res) => {
 
 router.get('/geojson/geometry', async (req, res) => {
     const sql = 'SELECT ST_GeomFromGeoJson(position) FROM geojson';
+    // const sql = 'SELECT position FROM geojson';
     const data = await queryDatabase(sql);
     res.status(200).json(data);
 });
