@@ -15,7 +15,7 @@ import React from 'react';
 const LayerAccordion = (props) => {
     return (
         <div>
-            <Accordion defaultExpanded={props.expanded}>
+            <Accordion expanded={props.expanded}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography>{props.title}</Typography>
                 </AccordionSummary>
