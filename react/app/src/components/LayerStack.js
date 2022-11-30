@@ -1,6 +1,5 @@
 import { Stack } from '@mui/material';
 
-
 /**
  * A stack with React components
  * @param {object} props - Props for the function
@@ -8,15 +7,13 @@ import { Stack } from '@mui/material';
  * @returns {React.ReactElement} - The stack
  */
 const LayerStack = (props) => {
-
     return (
         <Stack direction="column" spacing={0}>
-            {props.components.map((component, index) =>
+            {props.components?.map((component, index) => (
                 <div key={index}>{component}</div>
-            )}
+            ))}
         </Stack>
     );
+};
 
-}
-
-export default LayerStack
+export default LayerStack;
