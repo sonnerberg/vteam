@@ -2,12 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Map from './components/Map';
+import App from './App_layerstack';
+//import App from './App';
+
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Map />
+    {/* <Map /> */}
+    <App />
   </React.StrictMode>
 );
 
