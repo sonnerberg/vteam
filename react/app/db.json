@@ -95,7 +95,7 @@
                 },
                 "properties": {
                     "type": "limited speed",
-                    "speed-limit": 15
+                    "speedLimit": 15
                 }
             }
         },
@@ -117,7 +117,7 @@
                 },
                 "properties": {
                     "type": "not allowed",
-                    "speed-limit": 0
+                    "speedLimit": 0
                 }
             }
         }
@@ -157,8 +157,8 @@
                     ]
                 },
                 "properties": {
-                    "prop0": "value0",
-                    "prop1": { "this": "that" }
+                    "id": 1,
+                    "type": "parking allowed"
                 }
             },
             "type": "parking allowed"
