@@ -53,10 +53,29 @@ const Map = (props) => {
     //function for loading scooters at moveend and zoomend
     //currently clears all POINTS and loads all POINTS bc
     //we dont have 1000 scooters in mock-backend + mock-backend cant handle returning
-    //only points within bounds
+    //only points within bounds so we filter in frontend for now...
     const loadScooters = (bounds) => {
         allLayers.points.clearLayers();
-        console.log('BOUNDS ARE NOW ', bounds);
+
+        for (const point of dataFromBackend.points) {
+            const newPoint = L.geoJson(point, {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(
+                        '<h1>ID FÖR SKOTTER</h1><p>id: ' +
+                            feature.properties.id +
+                            '</p><p>loaded at bounds: ' +
+                            'NE' +
+                            bounds.getNorthEast() +
+                            'SW' +
+                            bounds.getSouthWest() +
+                            '</p>'
+                    );
+                },
+            });
+            if (bounds.contains(newPoint.getBounds()))
+                allLayers.points.addLayer(newPoint);
+        }
+        /*
         allLayers.points.addLayer(
             L.geoJson(dataFromBackend.points, {
                 onEachFeature: function (feature, layer) {
@@ -64,12 +83,15 @@ const Map = (props) => {
                         '<h1>ID FÖR SKOTTER</h1><p>id: ' +
                             feature.properties.id +
                             '</p><p>loaded at bounds: ' +
-                            bounds +
+                            'NE' +
+                            bounds.getNorthEast() +
+                            'SW' +
+                            bounds.getSouthWest() +
                             '</p>'
                     );
                 },
             })
-        );
+        );*/
     };
 
     useEffect(() => {
@@ -108,7 +130,6 @@ const Map = (props) => {
                 //kanske i e.target snarare än i this, får testa!
                 const chargerObject = L.marker(charger.position);
                 chargerObject.backendId = charger.id;
-                console.log('CHARGEROBJ ID ', chargerObject.backendId);
                 allLayers.chargingStations.addLayer(chargerObject);
             }
 
@@ -119,11 +140,7 @@ const Map = (props) => {
                 const bikeObject = L.marker(bike.position);
                 bikeObject.backendId = bike.id;
                 bikeObject.rented = bike.rented;
-                console.log('bikeObject ID ', bikeObject.backendId);
                 allLayers.bikes.addLayer(bikeObject);
-                /* .on('click', function (event) {
-                        console.log('THIS IS MAPJS ', event.layer)
-                    })*/
             }
 
             for (const parking of dataFromBackend.parkingLots) {
@@ -143,12 +160,10 @@ const Map = (props) => {
         //scooterloader function to load
         //only scooters currently visible
         mapRef.current.on('zoomend', () => {
-            console.log('zoomend');
             const bounds = mapRef.current.getBounds();
             loadScooters(bounds);
         });
         mapRef.current.on('moveend', () => {
-            console.log('moveend');
             const bounds = mapRef.current.getBounds();
             loadScooters(bounds);
         });
