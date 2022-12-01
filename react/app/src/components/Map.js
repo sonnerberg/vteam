@@ -54,25 +54,13 @@ const Map = (props) => {
     //we dont have 1000 scooters in mock-backend + mock-backend cant handle returning
     //only points within bounds so we filter in frontend for now...
     const loadScooters = (bounds) => {
-        allLayers.points.clearLayers();
+        allLayers.bikes.clearLayers();
 
         for (const point of dataFromBackend.points) {
-            const newPoint = L.geoJson(point, {
-                onEachFeature: function (feature, layer) {
-                    layer.bindPopup(
-                        '<h1>ID FÖR SKOTTER</h1><p>id: ' +
-                            feature.properties.id +
-                            '</p><p>loaded at bounds: ' +
-                            'NE' +
-                            bounds.getNorthEast() +
-                            'SW' +
-                            bounds.getSouthWest() +
-                            '</p>'
-                    );
-                },
-            });
+            const newPoint = L.geoJson(point);
+
             if (bounds.contains(newPoint.getBounds()))
-                allLayers.points.addLayer(newPoint);
+                allLayers.bikes.addLayer(newPoint);
         }
         /*
         allLayers.points.addLayer(
@@ -139,7 +127,7 @@ const Map = (props) => {
                 chargerObject.backendId = charger.id;
                 allLayers.chargingStations.addLayer(chargerObject);
             }
-
+            /*
             for (const bike of dataFromBackend.bikes) {
                 //Testa bygga detta med const = och sedan adda attributes på den const
                 //som jag sedan ropar på i allLayers click-funktion
@@ -148,7 +136,7 @@ const Map = (props) => {
                 bikeObject.backendId = bike.id;
                 bikeObject.rented = bike.rented;
                 allLayers.bikes.addLayer(bikeObject);
-            }
+            }*/
 
             for (const parking of dataFromBackend.parkingLots) {
                 allLayers.parkingLots.addLayer(L.geoJson(parking.position));
