@@ -35,18 +35,6 @@ services:
        - 3000:3000
      restart: on-failure
 
-  #  auth-react:
-  #    container_name: auth-react
-  #    build: ./authReact
-  #    working_dir: /code/app
-  #   #  command: bash -c "npm install && npm start"
-  #    command: npm run start
-  #    volumes:
-  #      - ./authReact/app:/code/app
-  #    ports:
-  #      - 3000:3000
-  #    restart: on-failure
-
    mariadb:
      container_name: mariadb
      image: mariadb:latest
