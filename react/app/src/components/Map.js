@@ -17,7 +17,7 @@ L.Marker.prototype.setIcon(
     })
 )
 
-const Map = () => {
+const Map = (props) => {
     const dataFromBackend = {}
 
     // Create our map ref:
@@ -160,6 +160,7 @@ const Map = () => {
 
             alert('ÄR DU NÖJD MED DENNA GEOMETRI?')
         })
+
         //at first had problems with "map already instantiated". calling this cleanup function ensures that
         // the map created in this effect is removed when the component unmounts
         //but i do not understand why we would need this to display the map at all
@@ -167,6 +168,16 @@ const Map = () => {
         //the map many times?
         return () => mapRef.current.remove()
     }, [])
+
+    useEffect(() => {
+
+        props.showCities ? mapRef.current.addLayer(allLayers.cities) : mapRef.current.removeLayer(allLayers.cities);
+        props.showParkings ? mapRef.current.addLayer(allLayers.parkingLots) : mapRef.current.removeLayer(allLayers.parkingLots);
+        props.showChargingStations ? mapRef.current.addLayer(allLayers.chargingStations) : mapRef.current.removeLayer(allLayers.chargingStations);
+        props.showZones ? mapRef.current.addLayer(allLayers.zones) : mapRef.current.removeLayer(allLayers.zones);
+        props.showBikes ? mapRef.current.addLayer(allLayers.bikes) : mapRef.current.removeLayer(allLayers.bikes);
+
+    }, [props.showCities, props.showParkings, props.showChargingStations, props.showZones, props.showBikes])
 
     return (
         <div>
