@@ -1,5 +1,5 @@
-import L from 'leaflet'
-require('../../node_modules/leaflet/dist/leaflet.css')
+import L from 'leaflet';
+require('../../node_modules/leaflet/dist/leaflet.css');
 
 const mapModel = {
     tileLayer: L.tileLayer(
@@ -14,6 +14,7 @@ const mapModel = {
         overflow: 'hidden',
         width: '100%',
         height: '100vh',
+        position: 'fixed',
     },
 
     mapParams: {
@@ -24,6 +25,6 @@ const mapModel = {
         layers: [],
         //drawControl: true
     },
-}
+};
 
-export default mapModel
+export default mapModel;
