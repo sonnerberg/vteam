@@ -18,7 +18,6 @@ L.Marker.prototype.setIcon(
 );
 
 const Map = (props) => {
-    const [boundingBox, setBoundingBox] = useState(null);
     const dataFromBackend = {};
 
     // Create our map ref:
