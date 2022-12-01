@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
@@ -18,6 +18,7 @@ L.Marker.prototype.setIcon(
 );
 
 const Map = (props) => {
+    const [boundingBox, setBoundingBox] = useState(null);
     const dataFromBackend = {};
 
     // Create our map ref:
@@ -49,6 +50,50 @@ const Map = (props) => {
         },
     });
 
+    //function for loading scooters at moveend and zoomend
+    //currently clears all POINTS and loads all POINTS bc
+    //we dont have 1000 scooters in mock-backend + mock-backend cant handle returning
+    //only points within bounds so we filter in frontend for now...
+    const loadScooters = (bounds) => {
+        allLayers.points.clearLayers();
+
+        for (const point of dataFromBackend.points) {
+            const newPoint = L.geoJson(point, {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(
+                        '<h1>ID FÖR SKOTTER</h1><p>id: ' +
+                            feature.properties.id +
+                            '</p><p>loaded at bounds: ' +
+                            'NE' +
+                            bounds.getNorthEast() +
+                            'SW' +
+                            bounds.getSouthWest() +
+                            '</p>'
+                    );
+                },
+            });
+            if (bounds.contains(newPoint.getBounds()))
+                allLayers.points.addLayer(newPoint);
+        }
+        /*
+        allLayers.points.addLayer(
+            L.geoJson(dataFromBackend.points, {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(
+                        '<h1>ID FÖR SKOTTER</h1><p>id: ' +
+                            feature.properties.id +
+                            '</p><p>loaded at bounds: ' +
+                            'NE' +
+                            bounds.getNorthEast() +
+                            'SW' +
+                            bounds.getSouthWest() +
+                            '</p>'
+                    );
+                },
+            })
+        );*/
+    };
+
     useEffect(() => {
         //this useeffect runs to fetch all data from backend
         //on cleanup we hope that we can use clearLayers to clean away the layers
@@ -75,18 +120,6 @@ const Map = (props) => {
                 allLayers.cities.addLayer(L.geoJson(city.position));
             }
 
-            allLayers.points.addLayer(
-                L.geoJson(dataFromBackend.points, {
-                    onEachFeature: function (feature, layer) {
-                        layer.bindPopup(
-                            '<h1>ID FÖR SKOTTER</h1><p>id: ' +
-                                feature.properties.id +
-                                '</p>'
-                        );
-                    },
-                })
-            );
-
             for (const zone of dataFromBackend.zones) {
                 allLayers.zones.addLayer(L.geoJson(zone.position));
             }
@@ -97,7 +130,6 @@ const Map = (props) => {
                 //kanske i e.target snarare än i this, får testa!
                 const chargerObject = L.marker(charger.position);
                 chargerObject.backendId = charger.id;
-                console.log('CHARGEROBJ ID ', chargerObject.backendId);
                 allLayers.chargingStations.addLayer(chargerObject);
             }
 
@@ -108,11 +140,7 @@ const Map = (props) => {
                 const bikeObject = L.marker(bike.position);
                 bikeObject.backendId = bike.id;
                 bikeObject.rented = bike.rented;
-                console.log('bikeObject ID ', bikeObject.backendId);
                 allLayers.bikes.addLayer(bikeObject);
-                /* .on('click', function (event) {
-                        console.log('THIS IS MAPJS ', event.layer)
-                    })*/
             }
 
             for (const parking of dataFromBackend.parkingLots) {
@@ -128,6 +156,17 @@ const Map = (props) => {
     useEffect(() => {
         // Init map and assign the map instance to the mapRef:
         mapRef.current = L.map('map', mapModel.mapParams);
+        //add eventlisteners for zoomend and moveend. pass current bounds to
+        //scooterloader function to load
+        //only scooters currently visible
+        mapRef.current.on('zoomend', () => {
+            const bounds = mapRef.current.getBounds();
+            loadScooters(bounds);
+        });
+        mapRef.current.on('moveend', () => {
+            const bounds = mapRef.current.getBounds();
+            loadScooters(bounds);
+        });
         //add the draw control to our map
         mapRef.current.addControl(drawControl);
         //SKA VI LÅTA DRAWNITEMS BO I ALLLAYERS OCKSÅ KANSKE?
@@ -137,8 +176,6 @@ const Map = (props) => {
             allLayers[layer].addTo(mapRef.current);
         }
 
-        console.log('cities', allLayers.cities);
-        console.log('drawnitems', drawnItems);
         // Pass a baseLayers object + an overlay object to the layer control.
         //If we want to add more baselayers, we do this in the first object
         //If we want to add more overlays, we do this in the second object
