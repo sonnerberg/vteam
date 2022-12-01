@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
@@ -116,7 +116,15 @@ const Map = (props) => {
             //eller 1 polygon. En featuregroup håller alltså många dataobjekt av samma typ här, med gemensamt
             //gränssnitt för interaktionen med varje ingående objekt (tända/släcka/klicka på)
             for (const city of dataFromBackend.cities) {
-                allLayers.cities.addLayer(L.geoJson(city.position));
+                allLayers.cities.addLayer(
+                    L.geoJson(city.position, {
+                        style: {
+                            color: '#ff7800',
+                            weight: 5,
+                            opacity: 0.65,
+                        },
+                    })
+                );
             }
 
             for (const zone of dataFromBackend.zones) {
