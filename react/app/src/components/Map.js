@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
+import mapStyles from '../models/mapStyles';
 import getFeatures from '../models/getFeatures';
 import allLayers from '../models/allLayers';
 import markerIcon from '../../node_modules/leaflet/dist/images/marker-icon.png';
@@ -57,28 +58,15 @@ const Map = (props) => {
         allLayers.bikes.clearLayers();
 
         for (const point of dataFromBackend.points) {
-            const newPoint = L.geoJson(point);
+            const newPoint = L.geoJson(point, {
+                pointToLayer: function (feature, latlng) {
+                    return L.Marker(latlng, mapStyles['scooter']);
+                },
+            });
 
             if (bounds.contains(newPoint.getBounds()))
                 allLayers.bikes.addLayer(newPoint);
         }
-        /*
-        allLayers.points.addLayer(
-            L.geoJson(dataFromBackend.points, {
-                onEachFeature: function (feature, layer) {
-                    layer.bindPopup(
-                        '<h1>ID FÖR SKOTTER</h1><p>id: ' +
-                            feature.properties.id +
-                            '</p><p>loaded at bounds: ' +
-                            'NE' +
-                            bounds.getNorthEast() +
-                            'SW' +
-                            bounds.getSouthWest() +
-                            '</p>'
-                    );
-                },
-            })
-        );*/
     };
 
     useEffect(() => {
@@ -106,17 +94,17 @@ const Map = (props) => {
             for (const city of dataFromBackend.cities) {
                 allLayers.cities.addLayer(
                     L.geoJson(city.position, {
-                        style: {
-                            color: '#ff7800',
-                            weight: 5,
-                            opacity: 0.65,
-                        },
+                        style: mapStyles.city,
                     })
                 );
             }
 
             for (const zone of dataFromBackend.zones) {
-                allLayers.zones.addLayer(L.geoJson(zone.position));
+                allLayers.zones.addLayer(
+                    L.geoJson(zone.position, {
+                        style: mapStyles.zone,
+                    })
+                );
             }
 
             for (const charger of dataFromBackend.chargingStations) {
@@ -139,7 +127,11 @@ const Map = (props) => {
             }*/
 
             for (const parking of dataFromBackend.parkingLots) {
-                allLayers.parkingLots.addLayer(L.geoJson(parking.position));
+                allLayers.parkingLots.addLayer(
+                    L.geoJson(parking.position, {
+                        style: mapStyles.parking,
+                    })
+                );
             }
         })();
 
