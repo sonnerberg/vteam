@@ -174,8 +174,7 @@ const Map = (props) => {
             const bounds = mapRef.current.getBounds();
             loadScooters(bounds);
         });
-        //add the draw control to our map
-        mapRef.current.addControl(drawControl);
+
         //SKA VI LÅTA DRAWNITEMS BO I ALLLAYERS OCKSÅ KANSKE?
         drawnItems.addTo(mapRef.current);
         //Lägg till alla layers i allLayers till kartan
@@ -204,10 +203,11 @@ const Map = (props) => {
         // Create the zoom control:
         L.control
             .zoom({
-                position: 'topright',
+                position: 'topleft',
             })
             .addTo(mapRef.current); // Add the control to our map instance
-
+        //add the draw control to our map
+        mapRef.current.addControl(drawControl);
         //this event handles the pushing of drawn objects into the empty feature group we made earlier
         //the alert serves no purpose
         mapRef.current.on(L.Draw.Event.CREATED, function (event) {
