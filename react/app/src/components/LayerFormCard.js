@@ -33,7 +33,9 @@ const LayerFormCard = (props) => {
                 ))}
             </CardContent>
             <CardActions>
-                <div>{props.button}</div>
+                <div>{props.cancelButton}</div>
+                <div>{props.saveButton}</div>
+                <div>{props.deleteButton}</div>
             </CardActions>
         </Card>
     );
