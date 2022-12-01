@@ -28,9 +28,12 @@ router.get('/failure', (req, res) => {
 });
 
 router.get('/success', isLoggedIn, (req, res) => {
-    res.send(`
-          ${req.user.emails[0].value}
-      You are able to access protected territory!`);
+    // res.send(`
+    //       ${req.user.emails[0].value}
+    //   You are able to access protected territory!`);
+    res.json({
+        data: req.user
+    });
 });
 
 router.get('/test', isLoggedIn, (req, res) => {
@@ -40,7 +43,7 @@ router.get('/test', isLoggedIn, (req, res) => {
 });
 
 router.get('/logout', (req, res, next) => {
-    req.session.destroy();
+    // req.session.destroy();
     req.logout(function (err) {
         if (err) {
             return next(err);

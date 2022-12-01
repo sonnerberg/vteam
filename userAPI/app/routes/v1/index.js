@@ -1,10 +1,17 @@
 const express = require('express');
-const { queryDatabase } = require('../database/mariadb');
-const table = require('../config/tables.json');
+const { queryDatabase } = require('../../database/mariadb');
+const table = require('../../config/tables.json');
 const router = express.Router();
+
+const isLoggedIn = (req, res, next) => {
+    req.user ? next() : res.sendStatus(401);
+};
+
+router.use(isLoggedIn);
 
 router.get('/', (_, res) => res.send('welcome to v1 @ user-api'));
 
+// router.get('/mariadb', isLoggedIn, async (req, res) => {
 router.get('/mariadb', async (req, res) => {
     const sql = `SELECT * FROM ${table.user}`;
     const data = await queryDatabase(sql);

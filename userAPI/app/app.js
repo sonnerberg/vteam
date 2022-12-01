@@ -1,9 +1,14 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const cors = require('cors');
 
 const passport = require('passport');
-require('./auth/passport');
+require('./routes/auth/passport');
+
+app.use(cors());
+app.options('*', cors());
+app.disable('x-powered-by');
 
 app.use(
     session({
