@@ -169,6 +169,8 @@ const Map = (props) => {
         return () => mapRef.current.remove()
     }, [])
 
+    // This useEffect runs when state for show<Feature> changes (true to false or vice versa)
+    // it adds or removes layers in the map to show them to the user
     useEffect(() => {
 
         props.showCities ? mapRef.current.addLayer(allLayers.cities) : mapRef.current.removeLayer(allLayers.cities);
