@@ -16,8 +16,12 @@
     "author": "Richard Sönnerberg, Tomas, Patrik, Joel",
     "license": "ISC",
     "dependencies": {
+        "dotenv": "^16.0.3",
         "express": "^4.18.2",
-        "mariadb": "^3.0.2"
+        "express-session": "^1.17.3",
+        "mariadb": "^3.0.2",
+        "passport": "^0.6.0",
+        "passport-github2": "^0.1.12"
     },
     "devDependencies": {
         "coveralls": "^3.1.1",

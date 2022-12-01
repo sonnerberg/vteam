@@ -4,9 +4,11 @@ const http = require('http');
 
 const v1 = require('./v1/index.js');
 const v2 = require('./v2/index.js');
+const auth = require('./auth/index.js');
 
 app.use('/v1', v1);
 app.use('/v2', v2);
+app.use('/auth', auth);
 
 // // Print all registered routes
 // app._router.stack.forEach(function (r) {
