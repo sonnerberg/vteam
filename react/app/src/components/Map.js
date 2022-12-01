@@ -17,7 +17,7 @@ L.Marker.prototype.setIcon(
     })
 );
 
-const Map = () => {
+const Map = (props) => {
     const dataFromBackend = {};
 
     // Create our map ref:
@@ -180,6 +180,32 @@ const Map = () => {
         //the map many times?
         return () => mapRef.current.remove();
     }, []);
+
+    // This useEffect runs when state for show<Feature> changes (true to false or vice versa)
+    // it adds or removes layers in the map to show them to the user
+    useEffect(() => {
+        props.showCities
+            ? mapRef.current.addLayer(allLayers.cities)
+            : mapRef.current.removeLayer(allLayers.cities);
+        props.showParkings
+            ? mapRef.current.addLayer(allLayers.parkingLots)
+            : mapRef.current.removeLayer(allLayers.parkingLots);
+        props.showChargingStations
+            ? mapRef.current.addLayer(allLayers.chargingStations)
+            : mapRef.current.removeLayer(allLayers.chargingStations);
+        props.showZones
+            ? mapRef.current.addLayer(allLayers.zones)
+            : mapRef.current.removeLayer(allLayers.zones);
+        props.showBikes
+            ? mapRef.current.addLayer(allLayers.bikes)
+            : mapRef.current.removeLayer(allLayers.bikes);
+    }, [
+        props.showCities,
+        props.showParkings,
+        props.showChargingStations,
+        props.showZones,
+        props.showBikes,
+    ]);
 
     return (
         <div>
