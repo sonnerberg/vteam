@@ -5,19 +5,19 @@ import LayerSwitch from '../components/LayerSwitch';
 import LayerGrid from '../components/LayerGrid';
 
 const layerStackBuilder = (props) => {
-    const cityAccordion = <LayerAccordion title={'Städer'} expanded={false} event={"cityClicked"} />;
+    const cityAccordion = <LayerAccordion title={'Städer'} event={"cityClicked"} />;
 
     const parkingAccordion = (
-        <LayerAccordion title={'Parkeringar'} expanded={false} event={"parkingLotClicked"} />
+        <LayerAccordion title={'Parkeringar'} event={"parkingLotClicked"} />
     );
 
     const chargingAccordion = (
-        <LayerAccordion title={'Laddstationer'} expanded={false} event={"chargingStationClicked"} />
+        <LayerAccordion title={'Laddstationer'} event={"chargingStationClicked"} />
     );
 
-    const zoneAccordion = <LayerAccordion title={'Zoner'} expanded={false} event={"zoneClicked"} />;
+    const zoneAccordion = <LayerAccordion title={'Zoner'} event={"zoneClicked"} />;
 
-    const bikeAccordion = <LayerAccordion title={'Cyklar'} expanded={false} event={"bikeClicked"} />;
+    const bikeAccordion = <LayerAccordion title={'Cyklar'} event={"bikeClicked"} />;
 
     const showCitiesSwitch = (
         <LayerSwitch
