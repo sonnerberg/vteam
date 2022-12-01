@@ -1,4 +1,5 @@
 import { Switch } from '@mui/material';
+import { useRef } from 'react';
 
 
 /**
@@ -10,11 +11,14 @@ import { Switch } from '@mui/material';
  */
 
 const LayerSwitch = (props) => {
+    const showLayer = useRef(props.showLayer);
+
     function setShowLayer () {
-        props.setShowLayer(!props.showLayer);
+        showLayer.current = !showLayer.current;
+        props.setShowLayer(showLayer.current);
     }
     return (
-        <Switch onChange={setShowLayer}></Switch>
+        <Switch onChange={setShowLayer} defaultChecked={true}></Switch>
     );
 }
 
