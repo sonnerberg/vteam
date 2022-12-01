@@ -8,6 +8,7 @@ import { useEffect, useState, useRef } from 'react';
 import LayerCard from './LayerCard';
 import LayerButton from './LayerButton';
 import LayerFormCard from './LayerFormCard';
+import createAccordionUtils from '../models/layerAccordionUtils';
 
 /**
  *
@@ -26,45 +27,28 @@ const LayerAccordion = (props) => {
 
     console.log('showform', showFormCard);
 
+    const utils = createAccordionUtils({
+        setShowFormCard: setShowFormCard,
+    });
+
     const handleChange = () => {
         setExpanded(!expanded);
-    };
-
-    const handleClickChangeButton = () => {
-        console.log('Ändra');
-        console.log('showforminclick', showFormCard);
-        setShowFormCard(true);
-    };
-
-    const handleClickCancelButton = () => {
-        console.log('Cancel');
-        console.log('showformincancel', showFormCard);
-        setShowFormCard(false);
     };
 
     useEffect(() => {
         eventBus.on(props.event, (data) => {
             console.log('data in useeffect', data);
-            const editButton = (
-                <LayerButton
-                    buttonText={'Ändra'}
-                    size={'small'}
-                    width={25}
-                    handleClick={handleClickChangeButton}
-                />
-            );
 
-            const cancelButton = (
-                <LayerButton
-                    buttonText={'Avbryt'}
-                    size={'small'}
-                    width={25}
-                    handleClick={handleClickCancelButton}
-                />
+            const newCard = (
+                <LayerCard content={data} button={utils.editButton} />
             );
-            const newCard = <LayerCard content={data} button={editButton} />;
             const newFormCard = (
-                <LayerFormCard content={data} button={cancelButton} />
+                <LayerFormCard
+                    content={data}
+                    cancelButton={utils.cancelButton}
+                    saveButton={utils.saveButton}
+                    deleteButton={utils.deleteButton}
+                />
             );
             setCard(newCard);
             setFormCard(newFormCard);
