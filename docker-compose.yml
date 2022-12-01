@@ -24,15 +24,16 @@ services:
        - 8082:3000
      restart: on-failure
 
-   react:
-     container_name: react
-     build: ./react
+   auth-react:
+     container_name: auth-react
+     build: ./authReact
      working_dir: /code/src
      command: npm start
      volumes:
-       - ./react/src:/code/src
+       - ./authReact/src:/code/src
      ports:
-       - 8083:3001
+      #  - 8083:3001
+       - 3000:3000
      restart: on-failure
 
    mariadb:
