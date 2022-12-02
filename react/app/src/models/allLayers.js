@@ -36,16 +36,11 @@ const allLayers = {
             });
         }),
     bikes: L.featureGroup().on('click', function (event) {
-        alert(
-            //event.layer is deprecated....but cant find alternative to simple and fast
-            //retrieval of actual clicked object instead of featuregroup
-            //other than attaching a listner to every object when its inserted
-            //in the featuregroup but that seems insane with 1000 bikes
-            `BIKE NO ${event.propagatedFrom.backendId} IS IT RENTED? ${event.propagatedFrom.rented}`
-        );
         eventBus.dispatch('bikeClicked', {
-            id: event.propagatedFrom.backendId,
-            rented: event.propagatedFrom.rented,
+            id: event.propagatedFrom.feature.properties.id,
+            rented: event.propagatedFrom.feature.properties.rented
+                ? event.propagatedFrom.feature.properties.rented
+                : 'WHATEVER',
         });
     }),
     workshops: L.featureGroup()

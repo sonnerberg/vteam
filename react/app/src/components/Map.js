@@ -1,24 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
+import mapStyles from '../models/mapStyles';
 import getFeatures from '../models/getFeatures';
 import allLayers from '../models/allLayers';
-import markerIcon from '../../node_modules/leaflet/dist/images/marker-icon.png';
 require('../../node_modules/leaflet/dist/leaflet.css');
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css');
 
-//detta är hack som gör så att leaflet hittar sin default-icon. pga react + webpack hittar inte
-//med tanke på att vi rimligtvis gör egna icons sen kommer vi ersätta detta med custom icons
-//ändå men just nu najs ha en marker
-L.Marker.prototype.setIcon(
-    L.icon({
-        iconUrl: markerIcon,
-    })
-);
-
 const Map = (props) => {
-    const [boundingBox, setBoundingBox] = useState(null);
     const dataFromBackend = {};
 
     // Create our map ref:
@@ -55,43 +45,18 @@ const Map = (props) => {
     //we dont have 1000 scooters in mock-backend + mock-backend cant handle returning
     //only points within bounds so we filter in frontend for now...
     const loadScooters = (bounds) => {
-        allLayers.points.clearLayers();
+        allLayers.bikes.clearLayers();
 
         for (const point of dataFromBackend.points) {
             const newPoint = L.geoJson(point, {
-                onEachFeature: function (feature, layer) {
-                    layer.bindPopup(
-                        '<h1>ID FÖR SKOTTER</h1><p>id: ' +
-                            feature.properties.id +
-                            '</p><p>loaded at bounds: ' +
-                            'NE' +
-                            bounds.getNorthEast() +
-                            'SW' +
-                            bounds.getSouthWest() +
-                            '</p>'
-                    );
+                pointToLayer: function (feature, latlng) {
+                    return L.marker(latlng, mapStyles['scooter']);
                 },
             });
+
             if (bounds.contains(newPoint.getBounds()))
-                allLayers.points.addLayer(newPoint);
+                allLayers.bikes.addLayer(newPoint);
         }
-        /*
-        allLayers.points.addLayer(
-            L.geoJson(dataFromBackend.points, {
-                onEachFeature: function (feature, layer) {
-                    layer.bindPopup(
-                        '<h1>ID FÖR SKOTTER</h1><p>id: ' +
-                            feature.properties.id +
-                            '</p><p>loaded at bounds: ' +
-                            'NE' +
-                            bounds.getNorthEast() +
-                            'SW' +
-                            bounds.getSouthWest() +
-                            '</p>'
-                    );
-                },
-            })
-        );*/
     };
 
     useEffect(() => {
@@ -117,22 +82,33 @@ const Map = (props) => {
             //eller 1 polygon. En featuregroup håller alltså många dataobjekt av samma typ här, med gemensamt
             //gränssnitt för interaktionen med varje ingående objekt (tända/släcka/klicka på)
             for (const city of dataFromBackend.cities) {
-                allLayers.cities.addLayer(L.geoJson(city.position));
+                allLayers.cities.addLayer(
+                    L.geoJson(city.position, {
+                        style: mapStyles.city,
+                    })
+                );
             }
 
             for (const zone of dataFromBackend.zones) {
-                allLayers.zones.addLayer(L.geoJson(zone.position));
+                allLayers.zones.addLayer(
+                    L.geoJson(zone.position, {
+                        style: mapStyles.zone,
+                    })
+                );
             }
 
             for (const charger of dataFromBackend.chargingStations) {
                 //Testa bygga detta med const = och sedan adda attributes på den const
                 //som jag sedan ropar på i allLayers click-funktion
                 //kanske i e.target snarare än i this, får testa!
-                const chargerObject = L.marker(charger.position);
+                const chargerObject = L.marker(
+                    charger.position,
+                    mapStyles['charger']
+                );
                 chargerObject.backendId = charger.id;
                 allLayers.chargingStations.addLayer(chargerObject);
             }
-
+            /*
             for (const bike of dataFromBackend.bikes) {
                 //Testa bygga detta med const = och sedan adda attributes på den const
                 //som jag sedan ropar på i allLayers click-funktion
@@ -141,10 +117,14 @@ const Map = (props) => {
                 bikeObject.backendId = bike.id;
                 bikeObject.rented = bike.rented;
                 allLayers.bikes.addLayer(bikeObject);
-            }
+            }*/
 
             for (const parking of dataFromBackend.parkingLots) {
-                allLayers.parkingLots.addLayer(L.geoJson(parking.position));
+                allLayers.parkingLots.addLayer(
+                    L.geoJson(parking.position, {
+                        style: mapStyles.parking,
+                    })
+                );
             }
         })();
 
@@ -167,8 +147,7 @@ const Map = (props) => {
             const bounds = mapRef.current.getBounds();
             loadScooters(bounds);
         });
-        //add the draw control to our map
-        mapRef.current.addControl(drawControl);
+
         //SKA VI LÅTA DRAWNITEMS BO I ALLLAYERS OCKSÅ KANSKE?
         drawnItems.addTo(mapRef.current);
         //Lägg till alla layers i allLayers till kartan
@@ -197,10 +176,11 @@ const Map = (props) => {
         // Create the zoom control:
         L.control
             .zoom({
-                position: 'topright',
+                position: 'topleft',
             })
             .addTo(mapRef.current); // Add the control to our map instance
-
+        //add the draw control to our map
+        mapRef.current.addControl(drawControl);
         //this event handles the pushing of drawn objects into the empty feature group we made earlier
         //the alert serves no purpose
         mapRef.current.on(L.Draw.Event.CREATED, function (event) {
