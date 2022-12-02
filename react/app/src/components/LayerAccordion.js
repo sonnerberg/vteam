@@ -36,23 +36,26 @@ const LayerAccordion = (props) => {
     };
 
     useEffect(() => {
+        console.log('Running useEffect in accoridion');
         eventBus.on(props.event, (data) => {
             console.log('data in useeffect', data);
-
-            const newCard = (
-                <LayerCard content={data} button={utils.editButton} />
-            );
-            const newFormCard = (
-                <LayerFormCard
-                    content={data}
-                    cancelButton={utils.cancelButton}
-                    saveButton={utils.saveButton}
-                    deleteButton={utils.deleteButton}
-                />
-            );
-            setCard(newCard);
-            setFormCard(newFormCard);
-            setExpanded(true);
+            if (data) {
+                const newCard = (
+                    <LayerCard content={data} button={utils.editButton} />
+                );
+                const newFormCard = (
+                    <LayerFormCard
+                        content={data}
+                        setShowFormCard={setShowFormCard}
+                        cancelButton={utils.cancelButton}
+                        saveButton={utils.saveButton}
+                        deleteButton={utils.deleteButton}
+                    />
+                );
+                setCard(newCard);
+                setFormCard(newFormCard);
+                setExpanded(true);
+            }
         });
 
         return eventBus.remove(props.event);
