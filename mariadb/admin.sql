@@ -23,3 +23,25 @@ LINES
 IGNORE 1 LINES
 (email, password)
 ;
+
+-- Procedure get_filtered_admin()
+
+DROP PROCEDURE IF EXISTS get_filtered_admin;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_filtered_admin(
+                    `filter` VARCHAR(20)
+)
+ BEGIN
+
+    SELECT email
+        AS 'Email'
+      FROM admin
+     WHERE admin.email = filter;
+
+
+  END
+;;
+
+DELIMITER ;
