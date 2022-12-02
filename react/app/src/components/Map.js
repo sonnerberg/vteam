@@ -5,18 +5,8 @@ import mapModel from '../models/mapModel';
 import mapStyles from '../models/mapStyles';
 import getFeatures from '../models/getFeatures';
 import allLayers from '../models/allLayers';
-import markerIcon from '../../node_modules/leaflet/dist/images/marker-icon.png';
 require('../../node_modules/leaflet/dist/leaflet.css');
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css');
-
-//detta är hack som gör så att leaflet hittar sin default-icon. pga react + webpack hittar inte
-//med tanke på att vi rimligtvis gör egna icons sen kommer vi ersätta detta med custom icons
-//ändå men just nu najs ha en marker
-L.Marker.prototype.setIcon(
-    L.icon({
-        iconUrl: markerIcon,
-    })
-);
 
 const Map = (props) => {
     const dataFromBackend = {};
@@ -60,7 +50,7 @@ const Map = (props) => {
         for (const point of dataFromBackend.points) {
             const newPoint = L.geoJson(point, {
                 pointToLayer: function (feature, latlng) {
-                    return L.Marker(latlng, mapStyles['scooter']);
+                    return L.marker(latlng, mapStyles['scooter']);
                 },
             });
 
@@ -111,7 +101,10 @@ const Map = (props) => {
                 //Testa bygga detta med const = och sedan adda attributes på den const
                 //som jag sedan ropar på i allLayers click-funktion
                 //kanske i e.target snarare än i this, får testa!
-                const chargerObject = L.marker(charger.position);
+                const chargerObject = L.marker(
+                    charger.position,
+                    mapStyles['charger']
+                );
                 chargerObject.backendId = charger.id;
                 allLayers.chargingStations.addLayer(chargerObject);
             }
