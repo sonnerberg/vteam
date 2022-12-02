@@ -8,9 +8,11 @@ const allLayers = {
     cities: L.featureGroup()
         .bindPopup('Hello from city!')
         .on('click', function (event) {
+            console.log('Clicked city', event.propagatedFrom);
+            console.log(event.propagatedFrom);
             eventBus.dispatch('cityClicked', {
                 id: event.propagatedFrom.feature.properties.id,
-                name: event.propagatedFrom.feature.properties.name,
+                position: event.propagatedFrom.feature,
             });
         }),
     chargingStations: L.featureGroup().on('click', function (e) {
@@ -32,7 +34,7 @@ const allLayers = {
             alert('Clicked on a member of the parkinglot group!');
             eventBus.dispatch('parkingLotClicked', {
                 id: event.propagatedFrom.feature.properties.id,
-                type: event.propagatedFrom.feature.properties.type,
+                position: event.propagatedFrom.feature,
             });
         }),
     bikes: L.featureGroup().on('click', function (event) {
@@ -58,8 +60,8 @@ const allLayers = {
         .on('click', function (event) {
             alert('Clicked on a member of the zones group!');
             eventBus.dispatch('zoneClicked', {
-                type: event.propagatedFrom.feature.properties.type,
-                speedLimit: event.propagatedFrom.feature.properties.speedLimit,
+                id: event.propagatedFrom.feature.properties.id,
+                position: event.propagatedFrom.feature,
             });
             console.log(event.propagatedFrom.feature.properties.type);
         }),
