@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import LayerStack from './components/LayerStack';
 import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
+import LayerFormCard from './components/LayerFormCard';
+import { Layer } from 'leaflet';
 
 function App() {
     const [showCities, setShowCities] = useState(true);
@@ -11,8 +13,6 @@ function App() {
     const [showZones, setShowZones] = useState(true);
     const [showBikes, setShowBikes] = useState(true);
     const [containerArray, setContainerArray] = useState(null);
-
-    console.log("Visa städer", showCities);
 
     useEffect(() => {
         const props = {
@@ -31,7 +31,6 @@ function App() {
         const containerArray = layerStackBuilder(props);
 
         setContainerArray(containerArray);
-
     }, []);
 
     return (
@@ -41,7 +40,13 @@ function App() {
                     <LayerStack components={containerArray} />
                 </div>
                 <div className="App-right">
-                    <Map showCities={showCities} showParkings={showParkings} showChargingStations={showChargingStations} showZones={showZones} showBikes={showBikes} />
+                    <Map
+                        showCities={showCities}
+                        showParkings={showParkings}
+                        showChargingStations={showChargingStations}
+                        showZones={showZones}
+                        showBikes={showBikes}
+                    />
                 </div>
             </header>
         </div>

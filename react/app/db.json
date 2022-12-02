@@ -2,7 +2,6 @@
     "cities": [
         {
             "id": 1,
-            "name": "Eskilstuna",
             "position": {
                 "type": "Feature",
                 "geometry": {
@@ -18,13 +17,13 @@
                     ]
                 },
                 "properties": {
+                    "id": 1,
                     "name": "Eskilstuna",
-                    "id": 1
+                    "featureType": "cities"
                 }
             }
         }
     ],
-
     "bikes": [
         {
             "id": 1,
@@ -43,7 +42,6 @@
             "speed": 15
         }
     ],
-
     "users": [
         {
             "id": 1,
@@ -58,24 +56,30 @@
             "status": "online"
         }
     ],
-
     "trips": [
         {
             "id": 1,
-            "startposition": { "latitude": "59.36000", "longitude": "16.5000" },
-            "endposition": { "latitude": "59.35999", "longitude": "16.4998" },
+            "startposition": {
+                "latitude": "59.36000",
+                "longitude": "16.5000"
+            },
+            "endposition": {
+                "latitude": "59.35999",
+                "longitude": "16.4998"
+            },
             "starttime": "Fri Nov 25 2022 12:50:19 GMT+0100 (Central European Standard Time)",
             "endtime": "Fri Nov 25 2022 14:01:19 GMT+0100 (Central European Standard Time)"
         }
     ],
-
     "workshops": [
         {
             "id": 1,
-            "position": { "latitude": "59.35999", "longitude": "16.4998" }
+            "position": {
+                "latitude": "59.35999",
+                "longitude": "16.4998"
+            }
         }
     ],
-
     "zones": [
         {
             "id": 1,
@@ -94,8 +98,10 @@
                     ]
                 },
                 "properties": {
+                    "id": 1,
                     "type": "limited speed",
-                    "speedLimit": 15
+                    "speedLimit": "30",
+                    "featureType": "zones"
                 }
             }
         },
@@ -115,21 +121,22 @@
                         ]
                     ]
                 },
+
                 "properties": {
+                    "id": 2,
                     "type": "not allowed",
-                    "speedLimit": 0
+                    "speedLimit": 0,
+                    "featureType": "zones"
                 }
             }
         }
     ],
-
     "charging-stations": [
         {
             "id": 1,
             "position": [59.605, 16.5003]
         }
     ],
-
     "administrators": [
         {
             "id": 1,
@@ -138,7 +145,6 @@
             "competence": "main administrator"
         }
     ],
-
     "parking-lots": [
         {
             "id": 1,
@@ -158,10 +164,10 @@
                 },
                 "properties": {
                     "id": 1,
-                    "type": "parking allowed"
+                    "type": "parking not allowed",
+                    "featureType": "parking-lots"
                 }
-            },
-            "type": "parking allowed"
+            }
         }
     ],
     "points": [
