@@ -98,15 +98,14 @@ const Map = (props) => {
             }
 
             for (const charger of dataFromBackend.chargingStations) {
-                //Testa bygga detta med const = och sedan adda attributes på den const
-                //som jag sedan ropar på i allLayers click-funktion
-                //kanske i e.target snarare än i this, får testa!
-                const chargerObject = L.marker(
-                    charger.position,
-                    mapStyles['charger']
+                console.log('CHARGER ', charger);
+                allLayers.chargingStations.addLayer(
+                    L.geoJson(charger, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, mapStyles['charger']);
+                        },
+                    })
                 );
-                chargerObject.backendId = charger.id;
-                allLayers.chargingStations.addLayer(chargerObject);
             }
             /*
             for (const bike of dataFromBackend.bikes) {
