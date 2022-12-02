@@ -14,8 +14,7 @@ function createAccordionUtils(args) {
     };
 
     const handleClickSaveButton = () => {
-        /* console.log('Cancel');
-        console.log('showformincancel', showFormCard); */
+        //
     };
 
     const handleClickDeleteButton = () => {
