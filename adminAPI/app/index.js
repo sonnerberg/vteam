@@ -1,10 +1,9 @@
 const PORT = 3000;
-const app = require('./app'); // the actual Express application
+const app = require('./app');
 const http = require('http');
 const { queryDatabase } = require('./database/mariadb');
 
 const v1 = require('./v1');
-// const v2 = require('./v2/index.js');
 
 app.get('/', (req, res) => {
     res.send('Hello World from admin and nodemon!');
@@ -17,7 +16,6 @@ app.get('/mariadb', async (req, res) => {
 });
 
 app.use('/v1', v1);
-// app.use('/v2', v2);
 
 // Print all registered routes
 app._router.stack.forEach(function (r) {
@@ -34,13 +32,8 @@ v1.stack.forEach(function (stack) {
     });
 });
 
-// v2.stack.forEach(function (r) {
-//     if (r.route && r.route.path) {
-//         console.log(`/v2${r.route.path}`);
-//     }
-// });
-
 const server = http.createServer(app);
+
 server.listen(PORT, () => {
     console.info(`Server running on port ${PORT}`);
 });
