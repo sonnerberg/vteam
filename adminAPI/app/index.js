@@ -1,29 +1,42 @@
 const PORT = 3000;
 const app = require('./app'); // the actual Express application
 const http = require('http');
+const { queryDatabase } = require('./database/mariadb');
 
-const v1 = require('./v1/index.js');
-const v2 = require('./v2/index.js');
+const v1 = require('./v1');
+// const v2 = require('./v2/index.js');
+
+app.get('/', (req, res) => {
+    res.send('Hello World from admin and nodemon!');
+});
+
+app.get('/mariadb', async (req, res) => {
+    const sql = 'CALL get_filtered_admin("email@example.com")';
+    const data = await queryDatabase(sql);
+    res.status(200).json(data[0]);
+});
 
 app.use('/v1', v1);
-app.use('/v2', v2);
+// app.use('/v2', v2);
 
-// // Print all registered routes
-// app._router.stack.forEach(function (r) {
-//     if (r.route && r.route.path) {
-//         console.log(r.route.path);
-//     }
-// });
+// Print all registered routes
+app._router.stack.forEach(function (r) {
+    if (r.route && r.route.path) {
+        console.log(r.route.path);
+    }
+});
 
-// v1.stack.forEach(function (r) {
-//     if (r.route && r.route.path) {
-//         console.log(r.route.path);
-//     }
-// });
+v1.stack.forEach(function (stack) {
+    stack.handle.stack.forEach((r) => {
+        if (r.route && r.route.path) {
+            console.log(`/v1${r.route.path}`);
+        }
+    });
+});
 
 // v2.stack.forEach(function (r) {
 //     if (r.route && r.route.path) {
-//         console.log(r.route.path);
+//         console.log(`/v2${r.route.path}`);
 //     }
 // });
 
