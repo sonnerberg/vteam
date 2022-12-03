@@ -17,15 +17,22 @@ async function login(req, res) {
     // TODO: this should be properly escaped to prevent sql injection
     const sql = `CALL get_password_of_admin("${email}")`;
     const data = await queryDatabase(sql);
-    const passwordFromDatabase = data[0][0].password;
-    if (password === passwordFromDatabase) {
-        // TODO: Create json web token
-        res.status(200).json({
-            data: 'correct password',
-        });
-    } else {
+    let passwordFromDatabase;
+    try {
+        passwordFromDatabase = data[0][0].password;
+        if (password === passwordFromDatabase) {
+            // TODO: Create json web token
+            res.status(200).json({
+                data: 'correct password',
+            });
+        } else {
+            res.status(400).json({
+                error: 'incorrect password',
+            });
+        }
+    } catch {
         res.status(400).json({
-            error: 'incorrect password',
+            error: 'malformed request',
         });
     }
 }
