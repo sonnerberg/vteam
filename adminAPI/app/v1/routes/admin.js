@@ -1,8 +1,11 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const { queryDatabase } = require('../../database/mariadb');
 
 const router = express.Router();
 const routeName = '/auth';
+
+const SECRET = 'asfdasdfkjlhsaghdsa';
 
 router.post(`${routeName}/register`, register);
 router.post(`${routeName}/login`, login);
@@ -22,8 +25,17 @@ async function login(req, res) {
         passwordFromDatabase = data[0][0].password;
         if (password === passwordFromDatabase) {
             // TODO: Create json web token
+            const token = jwt.sign(
+                {
+                    email,
+                },
+                SECRET
+            );
+            console.log(token);
             res.status(200).json({
-                data: 'correct password',
+                data: {
+                    token,
+                },
             });
         } else {
             res.status(400).json({
