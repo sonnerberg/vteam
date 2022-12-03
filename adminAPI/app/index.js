@@ -1,3 +1,4 @@
+require('dotenv').config();
 const PORT = 3000;
 const app = require('./app');
 const http = require('http');
