@@ -1,5 +1,4 @@
 import { useState } from "react";
-import LoginToGithub from "react-login-github";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -12,7 +11,6 @@ const AskGithubForCode = () => {
     redirect_uri: "http://localhost:3000",
     scope: "user:email",
     state: "http://localhost:3000",
-    // state: from,
   };
 
   const qs = new URLSearchParams(options);
@@ -55,19 +53,10 @@ const SendCodeToServer = () => {
 function App() {
   const [user, setUser] = useState({ data: "no user" });
 
-  // const onSuccess = (response) => setUser(response);
-  // const onSuccess = (response) => setUser("sucess");
-  // const onFailure = (response) => console.error(response);
-
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        {/* <LoginToGithub
-          clientId={process.env.REACT_APP_GITHUB_CLIENT_ID}
-          onSuccess={onSuccess}
-          onFailure={onFailure}
-        /> */}
         <h2>{user.data}</h2>
         <AskGithubForCode />
         <SendCodeToServer />
