@@ -76,14 +76,34 @@ DROP PROCEDURE IF EXISTS check_if_admin_is_super;
 DELIMITER ;;
 
 CREATE PROCEDURE check_if_admin_is_super(
-                    `filter` VARCHAR(100)
+                        `email` VARCHAR(100)
 )
  BEGIN
 
     SELECT super
-        AS 'super'
       FROM admin
-     WHERE admin.email = filter;
+     WHERE admin.email = email;
+
+
+  END
+;;
+
+DELIMITER ;
+
+-- Procedure register_admin()
+
+DROP PROCEDURE IF EXISTS register_admin;
+
+DELIMITER ;;
+
+CREATE PROCEDURE register_admin(
+                    `email` VARCHAR(100),
+                    `password` VARCHAR(255)
+)
+ BEGIN
+
+    INSERT INTO admin (email,password)
+    VALUES (email, password);
 
 
   END
