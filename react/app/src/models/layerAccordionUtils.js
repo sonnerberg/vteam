@@ -12,6 +12,7 @@ function createAccordionUtils(args) {
         /* console.log('Cancel');
         console.log('showformincancel', showFormCard); */
         args.setShowFormCard(false);
+        args.setActivateDraw(false);
     };
 
     const handleClickSaveButton = () => {
