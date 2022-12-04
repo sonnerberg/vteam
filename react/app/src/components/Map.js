@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import { Draw } from 'leaflet-draw';
+//import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
 import mapStyles from '../models/mapStyles';
 import getFeatures from '../models/getFeatures';
@@ -37,6 +37,11 @@ const Map = (props) => {
                 allowIntersection: false,
                 showArea: true,
             },
+            polyline: false,
+            rectangle: false,
+            circle: false,
+            marker: false,
+            circlemarker: false,
         },
     });
 
@@ -153,24 +158,6 @@ const Map = (props) => {
         for (const layer in allLayers) {
             allLayers[layer].addTo(mapRef.current);
         }
-
-        // Pass a baseLayers object + an overlay object to the layer control.
-        //If we want to add more baselayers, we do this in the first object
-        //If we want to add more overlays, we do this in the second object
-        //This can also be handled programmatically later on
-        L.control
-            .layers(
-                { OpenStreetMap: tileRef.current },
-                {
-                    'Drawn Items': drawnItems,
-                    'Cities ': allLayers.cities,
-                    'Parking stations': allLayers.parkingLots,
-                    'Charging stations': allLayers.chargingStations,
-                    'Bikes ': allLayers.bikes,
-                    'Zones ': allLayers.zones,
-                }
-            )
-            .addTo(mapRef.current); // Add the control to our map instance
 
         // Create the zoom control:
         L.control
