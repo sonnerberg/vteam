@@ -35,8 +35,8 @@ const SendCodeToServer = () => {
 
   const getTokenFromServer = async () => {
     const accessToken = await fetch(`${tokenURl}?${qs.toString()}`);
-    setToken(accessToken.error);
-    console.log(token.data);
+    // setToken(accessToken.error);
+    // console.log(token.data);
   };
 
   return (
