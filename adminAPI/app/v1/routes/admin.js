@@ -4,22 +4,16 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const { queryDatabase } = require('../../database/mariadb');
+const { getTokenFrom } = require('../utils');
 
 const router = express.Router();
 const routeName = '/auth';
 
+router.use(`${routeName}/register`, authMiddleware);
 router.post(`${routeName}/register`, register);
 router.post(`${routeName}/login`, login);
 
-const getTokenFrom = (req) => {
-    const authorization = req.get('authorization');
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-        return authorization.substring(7);
-    }
-    return null;
-};
-
-async function register(req, res) {
+function authMiddleware(req, res, next) {
     const token = getTokenFrom(req);
     const decodedToken = jwt.verify(token, process.env.SECRET);
     if (!decodedToken.email) {
@@ -27,6 +21,10 @@ async function register(req, res) {
             error: 'token missing or invalid',
         });
     }
+    next();
+}
+
+async function register(req, res) {
     // TODO: Insert the new admin into the database
     res.json({
         data: {
