@@ -9,16 +9,16 @@ const pool = mariadb.createPool({
     connectionLimit: db.connectionLimit,
 });
 
-exports.queryDatabase = async (sql) => {
+exports.queryDatabase = async (sql, parameters) => {
     // TODO fix better err
     let conn;
 
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query(sql);
+        const rows = await conn.query(sql, parameters);
         return rows;
     } catch (err) {
-        return 'failed';
+        return 'failed', err;
     } finally {
         if (conn) {
             conn.end();

@@ -1,3 +1,5 @@
+const Joi = require('joi');
+
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const { queryDatabase } = require('../../database/mariadb');
@@ -15,14 +17,30 @@ async function register(req, res) {
 
 async function login(req, res) {
     const { email, password } = req.body;
-    // TODO: this should be properly escaped to prevent sql injection
-    const sql = `CALL get_password_of_admin("${email}")`;
-    const data = await queryDatabase(sql);
     let passwordFromDatabase;
+    let validationResult;
+    const userSchema = Joi.object({
+        password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+        email: Joi.string().email({
+            minDomainSegments: 2,
+            tlds: {
+                allow: ['com', 'net'],
+            },
+        }),
+    });
+
+    // TODO: check if any rows are returned
     try {
+        validationResult = userSchema.validate({
+            email,
+            password,
+        });
+        if (validationResult.error) throw 'InvalidEmailOrPassword';
+        const sql = 'CALL get_password_of_admin(?)';
+        const data = await queryDatabase(sql, [email]);
         passwordFromDatabase = data[0][0].password;
+        if (!passwordFromDatabase) throw 'InvalidEmailOrPassword';
         if (password === passwordFromDatabase) {
-            // TODO: Create json web token
             const token = jwt.sign(
                 {
                     email,
@@ -35,13 +53,11 @@ async function login(req, res) {
                 },
             });
         } else {
-            res.status(400).json({
-                error: 'incorrect password',
-            });
+            throw 'InvalidEmailOrPassword';
         }
     } catch {
         res.status(400).json({
-            error: 'malformed request',
+            error: 'incorrect credentials',
         });
     }
 }
