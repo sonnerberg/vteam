@@ -15,6 +15,8 @@ function App() {
     const [containerArray, setContainerArray] = useState(null);
     const [activateDraw, setActivateDraw] = useState(false);
 
+    console.log('activate draw', activateDraw);
+
     useEffect(() => {
         const props = {
             showCities: showCities,
@@ -27,6 +29,7 @@ function App() {
             setShowChargingStations: setShowChargingStations,
             setShowZones: setShowZones,
             setShowBikes: setShowBikes,
+            setActivateDraw: setActivateDraw,
         };
 
         const containerArray = layerStackBuilder(props);
