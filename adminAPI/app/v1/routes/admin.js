@@ -14,7 +14,15 @@ router.post(`${routeName}/login`, login);
 
 function authMiddleware(req, res, next) {
     const token = getTokenFrom(req);
-    const decodedToken = jwt.verify(token, process.env.SECRET);
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, process.env.SECRET);
+    } catch {
+        // TODO: Respond only with correct status code
+        return res.status(401).json({
+            error: 'token missing or invalid',
+        });
+    }
     if (!decodedToken.email) {
         // TODO: Respond only with correct status code
         return res.status(401).json({
