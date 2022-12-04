@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
-//import { Draw } from 'leaflet-draw';
+import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
 import mapStyles from '../models/mapStyles';
 import getFeatures from '../models/getFeatures';

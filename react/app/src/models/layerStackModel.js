@@ -5,19 +5,28 @@ import LayerSwitch from '../components/LayerSwitch';
 import LayerGrid from '../components/LayerGrid';
 
 const layerStackBuilder = (props) => {
-    const cityAccordion = <LayerAccordion title={'Städer'} event={"cityClicked"} />;
+    const cityAccordion = (
+        <LayerAccordion title={'Städer'} event={'cityClicked'} />
+    );
 
     const parkingAccordion = (
-        <LayerAccordion title={'Parkeringar'} event={"parkingLotClicked"} />
+        <LayerAccordion title={'Parkeringar'} event={'parkingLotClicked'} />
     );
 
     const chargingAccordion = (
-        <LayerAccordion title={'Laddstationer'} event={"chargingStationClicked"} />
+        <LayerAccordion
+            title={'Laddstationer'}
+            event={'chargingStationClicked'}
+        />
     );
 
-    const zoneAccordion = <LayerAccordion title={'Zoner'} event={"zoneClicked"} />;
+    const zoneAccordion = (
+        <LayerAccordion title={'Zoner'} event={'zoneClicked'} />
+    );
 
-    const bikeAccordion = <LayerAccordion title={'Cyklar'} event={"bikeClicked"} />;
+    const bikeAccordion = (
+        <LayerAccordion title={'Cyklar'} event={'bikeClicked'} />
+    );
 
     const showCitiesSwitch = (
         <LayerSwitch
@@ -60,7 +69,12 @@ const layerStackBuilder = (props) => {
     );
 
     const editButton = (
-        <LayerButton buttonText={'Ny'} size={'small'} width={25} />
+        <LayerButton
+            buttonText={'Ny'}
+            size={'small'}
+            width={25}
+            setActivateDraw={'props.setActivateDraw'}
+        />
     );
 
     const searchButton = (

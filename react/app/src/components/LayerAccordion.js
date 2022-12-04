@@ -29,6 +29,7 @@ const LayerAccordion = (props) => {
 
     const utils = createAccordionUtils({
         setShowFormCard: setShowFormCard,
+        setActivateDraw: props.setActivateDraw,
     });
 
     const handleChange = () => {
