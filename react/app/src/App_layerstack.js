@@ -13,6 +13,7 @@ function App() {
     const [showZones, setShowZones] = useState(true);
     const [showBikes, setShowBikes] = useState(true);
     const [containerArray, setContainerArray] = useState(null);
+    const [activateDraw, setActivateDraw] = useState(false);
 
     useEffect(() => {
         const props = {
@@ -37,7 +38,10 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <div className="App-left">
-                    <LayerStack components={containerArray} />
+                    <LayerStack
+                        components={containerArray}
+                        setActivateDraw={setActivateDraw}
+                    />
                 </div>
                 <div className="App-right">
                     <Map
@@ -46,6 +50,7 @@ function App() {
                         showChargingStations={showChargingStations}
                         showZones={showZones}
                         showBikes={showBikes}
+                        activateDraw={activateDraw}
                     />
                 </div>
             </header>

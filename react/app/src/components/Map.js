@@ -165,7 +165,8 @@ const Map = (props) => {
                 position: 'topleft',
             })
             .addTo(mapRef.current); // Add the control to our map instance
-        //add the draw control to our map
+        //add the draw control to our map. we remove it in the useeffect below....but must have it to
+        //remove it in the useeffect, i.e find prettier way to handle this later :)
         mapRef.current.addControl(drawControl);
         //this event handles the pushing of drawn objects into the empty feature group we made earlier
         //the alert serves no purpose
@@ -183,6 +184,12 @@ const Map = (props) => {
         //the map many times?
         return () => mapRef.current.remove();
     }, []);
+
+    useEffect(() => {
+        props.activateDraw
+            ? mapRef.current.addControl(drawControl)
+            : drawControl.remove();
+    }, [props.activateDraw]);
 
     // This useEffect runs when state for show<Feature> changes (true to false or vice versa)
     // it adds or removes layers in the map to show them to the user
