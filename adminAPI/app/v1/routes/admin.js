@@ -9,28 +9,48 @@ const { getTokenFrom } = require('../utils');
 const router = express.Router();
 const routeName = '/auth';
 
-router.use(`${routeName}/register`, authMiddleware);
-router.post(`${routeName}/register`, register);
+router.post(`${routeName}/register`, authMiddleware, register);
 router.post(`${routeName}/login`, login);
 
 function authMiddleware(req, res, next) {
     const token = getTokenFrom(req);
     const decodedToken = jwt.verify(token, process.env.SECRET);
     if (!decodedToken.email) {
+        // TODO: Respond only with correct status code
         return res.status(401).json({
             error: 'token missing or invalid',
         });
     }
+    req.decodedEmail = decodedToken.email;
     next();
 }
 
 async function register(req, res) {
-    // TODO: Insert the new admin into the database
-    res.json({
-        data: {
-            message: 'register',
-        },
-    });
+    try {
+        const sqlCheckIfSuper = 'CALL check_if_admin_is_super(?)';
+        const {
+            0: {
+                0: { super: superUser },
+                // eslint-disable-next-line object-curly-newline
+            },
+        } = await queryDatabase(sqlCheckIfSuper, [req.decodedEmail]);
+        if (!superUser) throw 'CannotRegister';
+        const { email, password } = req.body;
+        // TODO: Check email and password with joi
+        const saltRounds = 10;
+        const passwordHash = await bcrypt.hash(password, saltRounds);
+
+        const sql = 'CALL register_admin(?,?)';
+        const data = await queryDatabase(sql, [email, passwordHash]);
+        if (data.text) throw 'CannotRegister';
+
+        res.sendStatus(200);
+    } catch {
+        // TODO: Respond only with correct status code
+        res.json({
+            error: 'could not register',
+        });
+    }
 }
 
 async function login(req, res) {
@@ -78,6 +98,7 @@ async function login(req, res) {
             throw 'InvalidEmailOrPassword';
         }
     } catch {
+        // TODO: Respond only with correct status code
         res.status(400).json({
             error: 'incorrect credentials',
         });
