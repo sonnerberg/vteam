@@ -6,26 +6,27 @@ import LayerGrid from '../components/LayerGrid';
 
 const layerStackBuilder = (props) => {
     const cityAccordion = (
-        <LayerAccordion title={'Städer'} event={'cityClicked'} />
+        <LayerAccordion title={'Städer'} event={'cityClicked'} setActivateDraw={props.setActivateDraw} />
     );
 
     const parkingAccordion = (
-        <LayerAccordion title={'Parkeringar'} event={'parkingLotClicked'} />
+        <LayerAccordion title={'Parkeringar'} event={'parkingLotClicked'} setActivateDraw={props.setActivateDraw} />
     );
 
     const chargingAccordion = (
         <LayerAccordion
             title={'Laddstationer'}
             event={'chargingStationClicked'}
+            setActivateDraw={props.setActivateDraw}
         />
     );
 
     const zoneAccordion = (
-        <LayerAccordion title={'Zoner'} event={'zoneClicked'} />
+        <LayerAccordion title={'Zoner'} event={'zoneClicked'} setActivateDraw={props.setActivateDraw}/>
     );
 
     const bikeAccordion = (
-        <LayerAccordion title={'Cyklar'} event={'bikeClicked'} />
+        <LayerAccordion title={'Cyklar'} event={'bikeClicked'} setActivateDraw={props.setActivateDraw}/>
     );
 
     const showCitiesSwitch = (
