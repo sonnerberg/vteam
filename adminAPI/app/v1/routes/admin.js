@@ -18,7 +18,6 @@ async function register(req, res) {
 async function login(req, res) {
     const { email, password } = req.body;
     let passwordFromDatabase;
-    let validationResult;
     const userSchema = Joi.object({
         password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
         email: Joi.string().email({
@@ -29,17 +28,18 @@ async function login(req, res) {
         }),
     });
 
-    // TODO: check if any rows are returned
+    const validationResult = userSchema.validate({
+        email,
+        password,
+    });
+
     try {
-        validationResult = userSchema.validate({
-            email,
-            password,
-        });
         if (validationResult.error) throw 'InvalidEmailOrPassword';
+
         const sql = 'CALL get_password_of_admin(?)';
         const data = await queryDatabase(sql, [email]);
         passwordFromDatabase = data[0][0].password;
-        if (!passwordFromDatabase) throw 'InvalidEmailOrPassword';
+
         if (password === passwordFromDatabase) {
             const token = jwt.sign(
                 {
