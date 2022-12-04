@@ -1,6 +1,10 @@
 const accessTokenURL = 'https://github.com/login/oauth/access_token';
 const userProfileURL = 'https://api.github.com/user';
 
+/*
+Takes an authorization code from github and returns username and email.
+Email is blank if it's set to private in github profile.
+*/
 exports.getGithubProfile = async (code) => {
     const body = {
         client_id: process.env.GITHUB_CLIENT_ID,
@@ -44,7 +48,6 @@ exports.getGithubProfile = async (code) => {
         }
         console.log(result);
         console.log(user);
-        // email needs to be public for access so maybe use login instead?
         return {
             data: {
                 userName: user.login,
