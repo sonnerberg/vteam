@@ -9,4 +9,8 @@ router.get('/github', async (req, res) => {
     res.json(test);
 });
 
+router.post('/login', async (req, res) => {
+    res.json('login with password');
+});
+
 module.exports = router;
