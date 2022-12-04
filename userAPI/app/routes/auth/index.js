@@ -1,3 +1,5 @@
+// const { json } = require('body-parser');
+const { getGithubProfile } = require('../../models/githubLogin');
 const express = require('express');
 const passport = require('passport');
 
@@ -23,16 +25,19 @@ router.get(
     })
 );
 
+router.get('/login', async (req, res) => {
+    const test = await getGithubProfile(req.query.code);
+    console.log(`error or user: ${test.error?.message || test.data.userName}`);
+    res.json(test);
+});
+
 router.get('/failure', (req, res) => {
     res.send('Something went wrong. Please try again');
 });
 
 router.get('/success', isLoggedIn, (req, res) => {
-    // res.send(`
-    //       ${req.user.emails[0].value}
-    //   You are able to access protected territory!`);
     res.json({
-        data: req.user
+        data: req.user || 'no user',
     });
 });
 

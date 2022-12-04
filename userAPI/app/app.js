@@ -1,14 +1,16 @@
 const express = require('express');
-const app = express();
 const session = require('express-session');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
-const passport = require('passport');
-require('./routes/auth/passport');
+const app = express();
 
 app.use(cors());
 app.options('*', cors());
-app.disable('x-powered-by');
+// app.disable('x-powered-by');
+
+const passport = require('passport');
+require('./routes/auth/passport');
 
 app.use(
     session({
@@ -17,6 +19,13 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(
+    bodyParser.urlencoded({
+        extended: false,
+    })
+);
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     res.send('Hello World from express and nodemon!');
