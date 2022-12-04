@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const bcrypt = require('bcrypt');
 
 const express = require('express');
 const jwt = require('jsonwebtoken');
@@ -10,9 +11,28 @@ const routeName = '/auth';
 router.post(`${routeName}/register`, register);
 router.post(`${routeName}/login`, login);
 
+const getTokenFrom = (req) => {
+    const authorization = req.get('authorization');
+    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+        return authorization.substring(7);
+    }
+    return null;
+};
+
 async function register(req, res) {
-    // TODO: Check if the current admin is a super admin
-    res.send('register for admin');
+    const token = getTokenFrom(req);
+    const decodedToken = jwt.verify(token, process.env.SECRET);
+    if (!decodedToken.email) {
+        return res.status(401).json({
+            error: 'token missing or invalid',
+        });
+    }
+    // TODO: Insert the new admin into the database
+    res.json({
+        data: {
+            message: 'register',
+        },
+    });
 }
 
 async function login(req, res) {
@@ -39,8 +59,12 @@ async function login(req, res) {
         const sql = 'CALL get_password_of_admin(?)';
         const data = await queryDatabase(sql, [email]);
         passwordFromDatabase = data[0][0].password;
+        const passwordCorrect = await bcrypt.compare(
+            password,
+            passwordFromDatabase
+        );
 
-        if (password === passwordFromDatabase) {
+        if (passwordCorrect) {
             const token = jwt.sign(
                 {
                     email,
