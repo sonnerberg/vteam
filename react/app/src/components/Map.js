@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
@@ -9,6 +9,7 @@ require('../../node_modules/leaflet/dist/leaflet.css');
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css');
 
 const Map = (props) => {
+    const [points, setPoints] = useState({});
     const dataFromBackend = {};
 
     // Create our map ref:
@@ -51,16 +52,18 @@ const Map = (props) => {
     //only points within bounds so we filter in frontend for now...
     const loadScooters = (bounds) => {
         allLayers.bikes.clearLayers();
+        console.log('DATAAAAA', points);
 
-        for (const point of dataFromBackend.points) {
+        for (const point of points) {
             const newPoint = L.geoJson(point, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, mapStyles['scooter']);
                 },
             });
-
-            if (bounds.contains(newPoint.getBounds()))
-                allLayers.bikes.addLayer(newPoint);
+            console.log('POONT', point);
+            console.log('BOUNDS', bounds);
+            if (bounds.contains(newPoint.getBounds())) console.log('IN BOUNDS');
+            allLayers.bikes.addLayer(newPoint);
         }
     };
 
@@ -78,7 +81,7 @@ const Map = (props) => {
             dataFromBackend.bikes = await getFeatures.getBikes();
             dataFromBackend.workshops = await getFeatures.getWorkshops();
             dataFromBackend.zones = await getFeatures.getZones();
-            dataFromBackend.points = await getFeatures.getPoints();
+            setPoints(await getFeatures.getPoints());
 
             //alla FeatureGroups har vi specat i allLayers.js . Framöver tänker jag mig att vi där också
             //sätter style för de olika featuregroupsen
@@ -168,6 +171,9 @@ const Map = (props) => {
         //add the draw control to our map. we remove it in the useeffect below....but must have it to
         //remove it in the useeffect, i.e find prettier way to handle this later :)
         mapRef.current.addControl(drawControl);
+        props.activateDraw
+            ? mapRef.current.addControl(drawControl)
+            : drawControl.remove();
         //this event handles the pushing of drawn objects into the empty feature group we made earlier
         //the alert serves no purpose
         mapRef.current.on(L.Draw.Event.CREATED, function (event) {
@@ -183,13 +189,13 @@ const Map = (props) => {
         //maybe build a counter that gets updated for every time this effect runs to understand if the app is recreating
         //the map many times?
         return () => mapRef.current.remove();
-    }, []);
-
+    }, [[props.activateDraw]]);
+    /*
     useEffect(() => {
         props.activateDraw
             ? mapRef.current.addControl(drawControl)
             : drawControl.remove();
-    }, [props.activateDraw]);
+    }, [props.activateDraw]);*/
 
     // This useEffect runs when state for show<Feature> changes (true to false or vice versa)
     // it adds or removes layers in the map to show them to the user
