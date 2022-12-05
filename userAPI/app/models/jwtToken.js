@@ -1,14 +1,15 @@
 const jwt = require('jsonwebtoken');
 
 const secret = process.env.JWT_SECRET;
-const expiresIn = '1h';
+const expiresIn = '24h';
 
 // middleware to check token
 exports.validateToken = (req, res, next) => {
     const token = req.headers['x-access-token'];
+    console.log(token);
 
-    // jwt.verify(token, secret, function (err) {
-    jwt.verify(token, secret, function (err, decoded) {
+    jwt.verify(token, secret, function (err) {
+        // jwt.verify(token, secret, function (err, decoded) {
         if (err) {
             return res.status(401).json({
                 errors: {
