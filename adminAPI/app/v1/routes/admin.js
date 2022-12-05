@@ -56,6 +56,7 @@ async function register(req, res) {
 
         res.sendStatus(200);
     } catch {
+        // TODO: Send different statuses due to error thrown
         res.sendStatus(409);
     }
 }
