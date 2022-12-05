@@ -15,13 +15,14 @@ exports.queryDatabase = async (sql, placeholder = []) => {
     try {
         conn = await pool.getConnection();
         const rows = await conn.query(sql, placeholder);
-        console.log(rows);
         return rows;
     } catch (err) {
+        console.log(err.text);
         return {
             error: {
                 status: 500,
-                message: 'Database error',
+                message: err.text,
+                type: 'Database error',
             },
         };
     } finally {

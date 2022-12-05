@@ -1,3 +1,8 @@
+const { queryDatabase } = require('../database/mariadb');
+const table = require('../config/tables.json');
+
+const { createNewToken } = require('./jwtToken');
+
 const accessTokenURL = 'https://github.com/login/oauth/access_token';
 const userProfileURL = 'https://api.github.com/user';
 
@@ -63,4 +68,46 @@ exports.getGithubProfile = async (code) => {
         };
         return error;
     }
+};
+
+// TODO refactor
+exports.loginWithGithubUser = async (githubUser) => {
+    //
+    const user = {
+        ...githubUser,
+    };
+
+    const sql = `SELECT id
+    FROM ${table.user}
+    WHERE username = ?`;
+    const placeholder = [user.userName];
+
+    const result = await queryDatabase(sql, placeholder);
+    if (result.error) {
+        return result;
+    }
+
+    if (!result[0]) {
+        const insertUser = `INSERT INTO ${table.user}
+        (username)
+        VALUES (?)`;
+        const userPlaceholder = [user.userName];
+
+        const result = await queryDatabase(insertUser, userPlaceholder);
+        if (result.error) {
+            return result;
+        }
+        const bigIntInsertId = result.insertId;
+        const insertId = Number(bigIntInsertId);
+        const payload = {
+            userId: insertId,
+            userName: user.userName,
+        };
+        return createNewToken(payload);
+    }
+    const payload = {
+        userId: result[0].id,
+        userName: user.userName,
+    };
+    return createNewToken(payload);
 };
