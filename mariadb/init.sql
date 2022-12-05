@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 `adress` VARCHAR(50),
 `billing_adress` VARCHAR(50),
 `username` VARCHAR(50),
-`password` VARCHAR(50),
+`password` VARCHAR(250),
 `email` VARCHAR(50),
 `balance` INT,
 `status` VARCHAR(50),
