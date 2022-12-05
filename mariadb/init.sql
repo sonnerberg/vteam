@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 `lastname` VARCHAR(50),
 `adress` VARCHAR(50),
 `billing_adress` VARCHAR(50),
-`username` VARCHAR(50),
+`username` VARCHAR(50) NOT NULL UNIQUE,
 `password` VARCHAR(250),
 `email` VARCHAR(50),
 `balance` INT,
