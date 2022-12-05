@@ -4,6 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import { TextField } from '@mui/material';
 import { useState } from 'react';
 import putFeatures from '../models/putFeatures';
+import deleteFeatures from '../models/deleteFeatures';
 import LayerButton from '../components/LayerButton';
 
 /**
@@ -15,7 +16,7 @@ import LayerButton from '../components/LayerButton';
 const LayerFormCard = (props) => {
     const rows = [];
 
-    const [newFeatureObject, setNewFeatureObject] = useState({});
+    const [newFeatureObject, setNewFeatureObject] = useState(props.content);
 
     console.log('formcard props.content', props.content);
 
@@ -39,12 +40,28 @@ const LayerFormCard = (props) => {
         console.log(result);
     };
 
+    const handleClickDeleteButton = async () => {
+        const result = await deleteFeatures.deleteFeatures(newFeatureObject);
+        props.setShowFormCard(false);
+        props.setCard(null);
+        console.log(result);
+    };
+
     const saveButton = (
         <LayerButton
             buttonText={'Spara'}
             size={'small'}
             width={25}
             handleClick={handleClickSaveButton}
+        />
+    );
+
+    const deleteButton = (
+        <LayerButton
+            buttonText={'Ta bort'}
+            size={'small'}
+            width={25}
+            handleClick={handleClickDeleteButton}
         />
     );
 
@@ -76,7 +93,7 @@ const LayerFormCard = (props) => {
             <CardActions>
                 <div>{props.cancelButton}</div>
                 <div>{saveButton}</div>
-                <div>{props.deleteButton}</div>
+                <div>{deleteButton}</div>
             </CardActions>
         </Card>
     );
