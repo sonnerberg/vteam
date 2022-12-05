@@ -14,7 +14,6 @@ router.get('/mariadb', async (req, res) => {
     res.status(200).json(data);
 });
 
-// router.get('/scooter', validateToken, async (req, res) => {
 router.get('/scooter', async (req, res) => {
     const sql = 'SELECT * FROM scooter';
     const data = await queryDatabase(sql);

@@ -8,8 +8,8 @@ exports.validateToken = (req, res, next) => {
     const token = req.headers['x-access-token'];
     console.log(token);
 
+    // jwt.verify(token, secret, function (err, decoded) {
     jwt.verify(token, secret, function (err) {
-        // jwt.verify(token, secret, function (err, decoded) {
         if (err) {
             return res.status(401).json({
                 errors: {
@@ -24,7 +24,14 @@ exports.validateToken = (req, res, next) => {
 };
 
 exports.createNewToken = (payload) => {
-    return jwt.sign(payload, secret, {
+    const token = jwt.sign(payload, secret, {
         expiresIn: expiresIn,
     });
+    return {
+        data: {
+            status: 200,
+            message: 'successful login',
+            token: token,
+        },
+    };
 };

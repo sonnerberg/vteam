@@ -10,7 +10,6 @@ const pool = mariadb.createPool({
 });
 
 exports.queryDatabase = async (sql, placeholder = []) => {
-    // TODO fix better err
     let conn;
 
     try {

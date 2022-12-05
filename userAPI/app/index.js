@@ -10,25 +10,6 @@ app.use('/v1', v1);
 app.use('/v2', v2);
 app.use('/auth', auth);
 
-// // Print all registered routes
-// app._router.stack.forEach(function (r) {
-//     if (r.route && r.route.path) {
-//         console.log(r.route.path);
-//     }
-// });
-
-// v1.stack.forEach(function (r) {
-//     if (r.route && r.route.path) {
-//         console.log(r.route.path);
-//     }
-// });
-
-// v2.stack.forEach(function (r) {
-//     if (r.route && r.route.path) {
-//         console.log(r.route.path);
-//     }
-// });
-
 const server = http.createServer(app);
 server.listen(PORT, () => {
     console.info(`Server running on port ${PORT}`);

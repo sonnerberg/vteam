@@ -20,7 +20,6 @@ exports.getGithubProfile = async (code) => {
         },
         body: JSON.stringify(body),
     };
-    console.log('inne i getGithubProfile');
     try {
         const response = await fetch(accessTokenURL, request);
         const result = await response.json();
