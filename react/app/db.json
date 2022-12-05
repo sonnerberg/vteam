@@ -54,6 +54,19 @@
             "email": "john@somemail.com",
             "balance": 1000,
             "status": "online"
+        },
+
+        {
+            "id": 2,
+            "surname": "Jane",
+            "lastname": "Doe",
+            "address": "Gymnastikggatan 55 632 20 Eskilstuna",
+            "billing-adress": "Gymnastikggatan 55 632 20 Eskilstuna",
+            "username": "jane@somemail.com",
+            "pass": "",
+            "email": "jane@somemail.com",
+            "balance": 1000,
+            "status": "online"
         }
     ],
     "trips": [
@@ -147,6 +160,13 @@
             "username": "admin",
             "pass": "",
             "competence": "main administrator"
+        },
+
+        {
+            "id": 2,
+            "username": "admin",
+            "pass": "",
+            "competence": "administrator"
         }
     ],
     "parking-lots": [
