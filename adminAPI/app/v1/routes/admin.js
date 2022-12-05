@@ -12,22 +12,34 @@ const routeName = '/auth';
 router.post(`${routeName}/register`, authMiddleware, register);
 router.post(`${routeName}/login`, login);
 
+const minPasswordLength = 8;
+const maxPasswordLength = 200;
+
+const userSchema = Joi.object({
+    password: Joi.string().pattern(
+        new RegExp(`^[a-zA-Z0-9]{${minPasswordLength},${maxPasswordLength}}$`)
+    ),
+    email: Joi.string().email({
+        minDomainSegments: 2,
+        tlds: {
+            allow: ['com', 'net'],
+        },
+    }),
+});
+
 function authMiddleware(req, res, next) {
     const token = getTokenFrom(req);
     let decodedToken;
     try {
         decodedToken = jwt.verify(token, process.env.SECRET);
     } catch {
-        // TODO: Respond only with correct status code
-        return res.status(401).json({
-            error: 'token missing or invalid',
-        });
+        // The token is not valid
+        return res.sendStatus(401);
     }
     if (!decodedToken.email) {
-        // TODO: Respond only with correct status code
-        return res.status(401).json({
-            error: 'token missing or invalid',
-        });
+        // The token does not contain the email property.
+        //TODO: Is this if check needed ?
+        return res.sendStatus(401);
     }
     req.decodedEmail = decodedToken.email;
     next();
@@ -35,6 +47,14 @@ function authMiddleware(req, res, next) {
 
 async function register(req, res) {
     try {
+        const { email, password } = req.body;
+        const validationResult = userSchema.validate({
+            email,
+            password,
+        });
+
+        if (validationResult.error) throw 'InvalidEmailOrPassword';
+
         const sqlCheckIfSuper = 'CALL check_if_admin_is_super(?)';
         const {
             0: {
@@ -43,8 +63,6 @@ async function register(req, res) {
             },
         } = await queryDatabase(sqlCheckIfSuper, [req.decodedEmail]);
         if (!superUser) throw 'CannotRegister';
-        const { email, password } = req.body;
-        // TODO: Check email and password with joi
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
@@ -54,25 +72,13 @@ async function register(req, res) {
 
         res.sendStatus(200);
     } catch {
-        // TODO: Respond only with correct status code
-        res.json({
-            error: 'could not register',
-        });
+        res.sendStatus(401);
     }
 }
 
 async function login(req, res) {
     const { email, password } = req.body;
     let passwordFromDatabase;
-    const userSchema = Joi.object({
-        password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-        email: Joi.string().email({
-            minDomainSegments: 2,
-            tlds: {
-                allow: ['com', 'net'],
-            },
-        }),
-    });
 
     const validationResult = userSchema.validate({
         email,
@@ -106,10 +112,7 @@ async function login(req, res) {
             throw 'InvalidEmailOrPassword';
         }
     } catch {
-        // TODO: Respond only with correct status code
-        res.status(400).json({
-            error: 'incorrect credentials',
-        });
+        res.sendStatus(401);
     }
 }
 
