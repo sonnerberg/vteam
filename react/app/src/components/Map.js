@@ -105,7 +105,7 @@ const Map = (props) => {
             for (const charger of dataFromBackend.chargingStations) {
                 console.log('CHARGER ', charger);
                 allLayers.chargingStations.addLayer(
-                    L.geoJson(charger, {
+                    L.geoJson(charger.position, {
                         pointToLayer: function (feature, latlng) {
                             return L.marker(latlng, mapStyles['charger']);
                         },
