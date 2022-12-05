@@ -133,11 +133,14 @@
     ],
     "charging-stations": [
         {
-            "type": "Feature",
-            "properties": { "id": 1 },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [16.5003, 59.605]
+            "id": 1,
+            "position": {
+                "type": "Feature",
+                "properties": { "id": 1, "featureType": "charging-stations" },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [16.5003, 59.605]
+                }
             }
         }
     ],

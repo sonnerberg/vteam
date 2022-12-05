@@ -51,6 +51,7 @@ const LayerAccordion = (props) => {
                         cancelButton={utils.cancelButton}
                         saveButton={utils.saveButton}
                         deleteButton={utils.deleteButton}
+                        setCard={setCard}
                     />
                 );
                 setCard(newCard);
