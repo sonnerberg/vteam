@@ -1,31 +1,15 @@
-const Joi = require('joi');
 const bcrypt = require('bcrypt');
 
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const { queryDatabase } = require('../../database/mariadb');
-const { getTokenFrom } = require('../utils');
+const { getTokenFrom, userSchema } = require('../utils');
 
 const router = express.Router();
 const routeName = '/auth';
 
 router.post(`${routeName}/register`, authMiddleware, register);
 router.post(`${routeName}/login`, login);
-
-const minPasswordLength = 8;
-const maxPasswordLength = 200;
-
-const userSchema = Joi.object({
-    password: Joi.string().pattern(
-        new RegExp(`^[a-zA-Z0-9]{${minPasswordLength},${maxPasswordLength}}$`)
-    ),
-    email: Joi.string().email({
-        minDomainSegments: 2,
-        tlds: {
-            allow: ['com', 'net'],
-        },
-    }),
-});
 
 function authMiddleware(req, res, next) {
     const token = getTokenFrom(req);
@@ -72,7 +56,7 @@ async function register(req, res) {
 
         res.sendStatus(200);
     } catch {
-        res.sendStatus(401);
+        res.sendStatus(409);
     }
 }
 

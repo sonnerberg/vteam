@@ -1,10 +1,6 @@
-const getTokenFrom = (req) => {
-    const authorization = req.get('authorization');
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-        return authorization.substring(7);
-    }
-    return null;
-};
+const { userSchema } = require('./userSchema');
+const { getTokenFrom } = require('./getTokenFrom');
 module.exports = {
     getTokenFrom,
+    userSchema,
 };
