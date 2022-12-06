@@ -3,14 +3,12 @@ import L from 'leaflet';
 import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
 import mapStyles from '../models/mapStyles';
-import getFeatures from '../models/getFeatures';
 import allLayers from '../models/allLayers';
 require('../../node_modules/leaflet/dist/leaflet.css');
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css');
 
 const Map = (props) => {
     const [points, setPoints] = useState({});
-    const dataFromBackend = {};
 
     // Create our map ref:
     const mapRef = useRef(null);
@@ -52,9 +50,8 @@ const Map = (props) => {
     //only points within bounds so we filter in frontend for now...
     const loadScooters = (bounds) => {
         allLayers.bikes.clearLayers();
-        console.log(bounds._northEast.lat);
 
-        for (const point of dataFromBackend.points) {
+        for (const point of props.dataFromBackend.points) {
             const newPoint = L.geoJson(point, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, mapStyles['scooter']);
@@ -64,78 +61,6 @@ const Map = (props) => {
             allLayers.bikes.addLayer(newPoint);
         }
     };
-
-    useEffect(() => {
-        //this useeffect runs to fetch all data from backend
-        //on cleanup we hope that we can use clearLayers to clean away the layers
-        //but a) it is uncertain if this is necessary and b) right now we're only
-        //cleaning the cities-layer
-        (async () => {
-            //vi hämtar data från backend och sparar ner själva DATAT i objektet dataFromBackend
-            dataFromBackend.cities = await getFeatures.getCities();
-            dataFromBackend.chargingStations =
-                await getFeatures.getChargingStations();
-            dataFromBackend.parkingLots = await getFeatures.getParkingLots();
-            dataFromBackend.bikes = await getFeatures.getBikes();
-            dataFromBackend.workshops = await getFeatures.getWorkshops();
-            dataFromBackend.zones = await getFeatures.getZones();
-            dataFromBackend.points = await getFeatures.getPoints();
-            //setPoints(await getFeatures.getPoints());
-
-            //alla FeatureGroups har vi specat i allLayers.js . Framöver tänker jag mig att vi där också
-            //sätter style för de olika featuregroupsen
-            //det vi gör här sen är att vi baserat på data i dataFromBackend lägger till själva DATAT i denna
-            //featuregroup. addLayer lägger alltså till 1 datamängd som i vårt fall nog oftast är 1 punkt
-            //eller 1 polygon. En featuregroup håller alltså många dataobjekt av samma typ här, med gemensamt
-            //gränssnitt för interaktionen med varje ingående objekt (tända/släcka/klicka på)
-            for (const city of dataFromBackend.cities) {
-                allLayers.cities.addLayer(
-                    L.geoJson(city.position, {
-                        style: mapStyles.city,
-                    })
-                );
-            }
-
-            for (const zone of dataFromBackend.zones) {
-                allLayers.zones.addLayer(
-                    L.geoJson(zone.position, {
-                        style: mapStyles.zone,
-                    })
-                );
-            }
-
-            for (const charger of dataFromBackend.chargingStations) {
-                console.log('CHARGER ', charger);
-                allLayers.chargingStations.addLayer(
-                    L.geoJson(charger.position, {
-                        pointToLayer: function (feature, latlng) {
-                            return L.marker(latlng, mapStyles['charger']);
-                        },
-                    })
-                );
-            }
-            /*
-            for (const bike of dataFromBackend.bikes) {
-                //Testa bygga detta med const = och sedan adda attributes på den const
-                //som jag sedan ropar på i allLayers click-funktion
-                //kanske i e.target snarare än i this, får testa!
-                const bikeObject = L.marker(bike.position);
-                bikeObject.backendId = bike.id;
-                bikeObject.rented = bike.rented;
-                allLayers.bikes.addLayer(bikeObject);
-            }*/
-
-            for (const parking of dataFromBackend.parkingLots) {
-                allLayers.parkingLots.addLayer(
-                    L.geoJson(parking.position, {
-                        style: mapStyles.parking,
-                    })
-                );
-            }
-        })();
-
-        return () => allLayers.cities.clearLayers();
-    }, []);
 
     // This useEffect hook runs when the component is first mounted,
     // empty array in the end means only runs at first load of app
