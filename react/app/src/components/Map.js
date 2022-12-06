@@ -24,11 +24,11 @@ const Map = (props) => {
     // we can add the layer normally in the mapParams
     mapModel.mapParams.layers.push(tileRef.current);
     // empty feature grouop to hold stuff we draw in the map
-    const drawnItems = new L.FeatureGroup();
+    // const drawnItems = new L.FeatureGroup();
     // leaflet-draw draw control constructed with rule restricting construction of intersections between polygons
     const drawControl = new L.Control.Draw({
         edit: {
-            featureGroup: drawnItems,
+            featureGroup: props.drawnItems,
             poly: {
                 allowIntersection: false,
             },
@@ -52,7 +52,7 @@ const Map = (props) => {
     //only points within bounds so we filter in frontend for now...
     const loadScooters = (bounds) => {
         allLayers.bikes.clearLayers();
-        console.log('DATAAAAA', points);
+        console.log(bounds._northEast.lat);
 
         for (const point of points) {
             const newPoint = L.geoJson(point, {
@@ -60,9 +60,7 @@ const Map = (props) => {
                     return L.marker(latlng, mapStyles['scooter']);
                 },
             });
-            console.log('POONT', point);
-            console.log('BOUNDS', bounds);
-            if (bounds.contains(newPoint.getBounds())) console.log('IN BOUNDS');
+            if (bounds.contains(newPoint.getBounds()));
             allLayers.bikes.addLayer(newPoint);
         }
     };
@@ -155,8 +153,8 @@ const Map = (props) => {
             loadScooters(bounds);
         });
 
-        //SKA VI LÅTA DRAWNITEMS BO I ALLLAYERS OCKSÅ KANSKE?
-        drawnItems.addTo(mapRef.current);
+        //SKA VI LÅTA props.drawnItems BO I ALLLAYERS OCKSÅ KANSKE?
+        props.drawnItems.addTo(mapRef.current);
         //Lägg till alla layers i allLayers till kartan
         for (const layer in allLayers) {
             allLayers[layer].addTo(mapRef.current);
@@ -179,7 +177,7 @@ const Map = (props) => {
         mapRef.current.on(L.Draw.Event.CREATED, function (event) {
             var layer = event.layer;
 
-            drawnItems.addLayer(layer);
+            props.drawnItems.addLayer(layer);
 
             alert('ÄR DU NÖJD MED DENNA GEOMETRI?');
         });

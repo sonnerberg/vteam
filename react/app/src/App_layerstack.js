@@ -5,6 +5,7 @@ import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
 import LayerFormCard from './components/LayerFormCard';
 import { Layer } from 'leaflet';
+import L from 'leaflet';
 
 function App() {
     const [showCities, setShowCities] = useState(true);
@@ -14,6 +15,7 @@ function App() {
     const [showBikes, setShowBikes] = useState(true);
     const [containerArray, setContainerArray] = useState(null);
     const [activateDraw, setActivateDraw] = useState(false);
+    const drawnItems = new L.FeatureGroup();
 
     console.log('activate draw', activateDraw);
 
@@ -44,6 +46,7 @@ function App() {
                     <LayerStack
                         components={containerArray}
                         setActivateDraw={setActivateDraw}
+                        drawnItems={drawnItems}
                     />
                 </div>
                 <div className="App-right">
@@ -54,6 +57,7 @@ function App() {
                         showZones={showZones}
                         showBikes={showBikes}
                         activateDraw={activateDraw}
+                        drawnItems={drawnItems}
                     />
                 </div>
             </header>
