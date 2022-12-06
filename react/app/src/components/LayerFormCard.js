@@ -7,15 +7,15 @@ import putFeatures from '../models/putFeatures';
 import LayerButton from '../components/LayerButton';
 
 /**
- * A card with content
+ * A form for editing feature properties
  * @param {object} props - Props for the function
  * @param {object} props.content Object with content
- * @returns {React.ReactElement} - The card
+ * @returns {React.ReactElement} - The form
  */
 const LayerFormCard = (props) => {
     const rows = [];
 
-    const [newFeatureObject, setNewFeatureObject] = useState({});
+    const [newFeatureObject, setNewFeatureObject] = useState(props.content);
 
     console.log('formcard props.content', props.content);
 
@@ -49,7 +49,7 @@ const LayerFormCard = (props) => {
     );
 
     function changeHandler(event) {
-        let newObject = { ...props.content };
+        let newObject = { ...newFeatureObject };
 
         console.log(newObject);
         newObject.position.properties[event.target.name] = event.target.value;
