@@ -9,6 +9,7 @@ import LayerCard from './LayerCard';
 import LayerButton from './LayerButton';
 import LayerFormCard from './LayerFormCard';
 import createAccordionUtils from '../models/layerAccordionUtils';
+import L from 'leaflet';
 
 /**
  *
@@ -24,12 +25,15 @@ const LayerAccordion = (props) => {
     const [expanded, setExpanded] = useState(false);
 
     console.log('formcard', formCard);
+    console.log('layer accordion props', props);
 
     console.log('showform', showFormCard);
 
     const utils = createAccordionUtils({
         setShowFormCard: setShowFormCard,
         setActivateDraw: props.setActivateDraw,
+        drawnItems: props.drawnItems,
+        geometry: props,
     });
 
     const handleChange = () => {
@@ -41,8 +45,31 @@ const LayerAccordion = (props) => {
         eventBus.on(props.event, (data) => {
             console.log('data in useeffect', data);
             if (data) {
+                const handleClickChangeButton = () => {
+                    /* console.log('Ändra');
+                    console.log('showforminclick', showFormCard); */
+                    setShowFormCard(true);
+                    props.setActivateDraw(true);
+                    console.log('GEOMETRY IN CLICK', data.position.geometry);
+                    console.log('props.drawnItems', props.drawnItems);
+                    console.log('props.drawnItems before', props.drawnItems);
+
+                    props.drawnItems.addLayer(
+                        L.GeoJSON.geometryToLayer(data.position)
+                    );
+                    console.log('props.drawnItems after', props.drawnItems);
+                };
+
+                const editButton = (
+                    <LayerButton
+                        buttonText={'Ändra'}
+                        size={'small'}
+                        width={25}
+                        handleClick={handleClickChangeButton}
+                    />
+                );
                 const newCard = (
-                    <LayerCard content={data} button={utils.editButton} />
+                    <LayerCard content={data} button={editButton} />
                 );
                 const newFormCard = (
                     <LayerFormCard
@@ -51,7 +78,7 @@ const LayerAccordion = (props) => {
                         cancelButton={utils.cancelButton}
                         saveButton={utils.saveButton}
                         deleteButton={utils.deleteButton}
-                        setCard={setCard}
+                        drawnItems={props.drawnItems}
                     />
                 );
                 setCard(newCard);

@@ -26,7 +26,7 @@ const Map = (props) => {
     // empty feature grouop to hold stuff we draw in the map
     // const drawnItems = new L.FeatureGroup();
     // leaflet-draw draw control constructed with rule restricting construction of intersections between polygons
-    const drawControl = new L.Control.Draw({
+    /*const drawControl = new L.Control.Draw({
         edit: {
             featureGroup: props.drawnItems,
             poly: {
@@ -44,7 +44,7 @@ const Map = (props) => {
             marker: false,
             circlemarker: false,
         },
-    });
+    });*/
 
     //function for loading scooters at moveend and zoomend
     //currently clears all POINTS and loads all POINTS bc
@@ -54,7 +54,7 @@ const Map = (props) => {
         allLayers.bikes.clearLayers();
         console.log(bounds._northEast.lat);
 
-        for (const point of points) {
+        for (const point of dataFromBackend.points) {
             const newPoint = L.geoJson(point, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, mapStyles['scooter']);
@@ -79,7 +79,8 @@ const Map = (props) => {
             dataFromBackend.bikes = await getFeatures.getBikes();
             dataFromBackend.workshops = await getFeatures.getWorkshops();
             dataFromBackend.zones = await getFeatures.getZones();
-            setPoints(await getFeatures.getPoints());
+            dataFromBackend.points = await getFeatures.getPoints();
+            //setPoints(await getFeatures.getPoints());
 
             //alla FeatureGroups har vi specat i allLayers.js . Framöver tänker jag mig att vi där också
             //sätter style för de olika featuregroupsen
@@ -139,6 +140,25 @@ const Map = (props) => {
     // This useEffect hook runs when the component is first mounted,
     // empty array in the end means only runs at first load of app
     useEffect(() => {
+        const drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: props.drawnItems,
+                poly: {
+                    allowIntersection: false,
+                },
+            },
+            draw: {
+                polygon: {
+                    allowIntersection: false,
+                    showArea: true,
+                },
+                polyline: false,
+                rectangle: false,
+                circle: false,
+                marker: false,
+                circlemarker: false,
+            },
+        });
         // Init map and assign the map instance to the mapRef:
         mapRef.current = L.map('map', mapModel.mapParams);
         //add eventlisteners for zoomend and moveend. pass current bounds to
@@ -169,9 +189,9 @@ const Map = (props) => {
         //add the draw control to our map. we remove it in the useeffect below....but must have it to
         //remove it in the useeffect, i.e find prettier way to handle this later :)
         mapRef.current.addControl(drawControl);
-        props.activateDraw
+        /*props.activateDraw
             ? mapRef.current.addControl(drawControl)
-            : drawControl.remove();
+            : drawControl.remove();*/
         //this event handles the pushing of drawn objects into the empty feature group we made earlier
         //the alert serves no purpose
         mapRef.current.on(L.Draw.Event.CREATED, function (event) {
@@ -187,8 +207,8 @@ const Map = (props) => {
         //maybe build a counter that gets updated for every time this effect runs to understand if the app is recreating
         //the map many times?
         return () => mapRef.current.remove();
-    }, [[props.activateDraw]]);
-    /*
+    }, []);
+    /*[props.activateDraw]
     useEffect(() => {
         props.activateDraw
             ? mapRef.current.addControl(drawControl)

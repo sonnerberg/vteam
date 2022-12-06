@@ -1,5 +1,5 @@
 import './App_layerstack.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import LayerStack from './components/LayerStack';
 import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
@@ -32,6 +32,7 @@ function App() {
             setShowZones: setShowZones,
             setShowBikes: setShowBikes,
             setActivateDraw: setActivateDraw,
+            drawnItems: drawnItems,
         };
 
         const containerArray = layerStackBuilder(props);

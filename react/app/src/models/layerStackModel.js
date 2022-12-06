@@ -5,11 +5,13 @@ import LayerSwitch from '../components/LayerSwitch';
 import LayerGrid from '../components/LayerGrid';
 
 const layerStackBuilder = (props) => {
+    console.log('layerstackbuilder props', props);
     const cityAccordion = (
         <LayerAccordion
             title={'Städer'}
             event={'cityClicked'}
             setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
         />
     );
 
@@ -18,6 +20,7 @@ const layerStackBuilder = (props) => {
             title={'Parkeringar'}
             event={'parkingLotClicked'}
             setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
         />
     );
 
@@ -26,6 +29,7 @@ const layerStackBuilder = (props) => {
             title={'Laddstationer'}
             event={'chargingStationClicked'}
             setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
         />
     );
 
@@ -34,6 +38,7 @@ const layerStackBuilder = (props) => {
             title={'Zoner'}
             event={'zoneClicked'}
             setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
         />
     );
 
@@ -42,6 +47,7 @@ const layerStackBuilder = (props) => {
             title={'Cyklar'}
             event={'bikeClicked'}
             setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
         />
     );
 
@@ -91,6 +97,7 @@ const layerStackBuilder = (props) => {
             size={'small'}
             width={25}
             setActivateDraw={'props.setActivateDraw'}
+            drawnItems={'props.drawnItems'}
         />
     );
 

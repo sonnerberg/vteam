@@ -6,6 +6,7 @@ function createAccordionUtils(args) {
         console.log('showforminclick', showFormCard); */
         args.setShowFormCard(true);
         args.setActivateDraw(true);
+        console.log('ARGS IN CREATEACCORDIONUTILS', args);
     };
 
     const handleClickCancelButton = () => {
