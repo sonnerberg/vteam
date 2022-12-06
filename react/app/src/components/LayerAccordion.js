@@ -79,6 +79,8 @@ const LayerAccordion = (props) => {
                         saveButton={utils.saveButton}
                         deleteButton={utils.deleteButton}
                         drawnItems={props.drawnItems}
+                        triggerRedraw={props.triggerRedraw}
+                        setTriggerRedraw={props.setTriggerRedraw}
                     />
                 );
                 setCard(newCard);

@@ -53,6 +53,7 @@ const LayerFormCard = (props) => {
             },
         });
         props.setShowFormCard(false);
+        props.setTriggerRedraw(true);
         props.drawnItems.clearLayers();
         console.log(result);
     };

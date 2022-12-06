@@ -22,6 +22,10 @@ function App() {
     const [activateDraw, setActivateDraw] = useState(false);
     const drawnItems = new L.FeatureGroup();
     const dataFromBackend = {};
+    const [triggerCityRedraw, setTriggerCityRedraw] = useState(false);
+    const [triggerParkingRedraw, setTriggerParkingRedraw] = useState(false);
+    const [triggerZoneRedraw, setTriggerZoneRedraw] = useState(false);
+    const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
 
     console.log('activate draw', activateDraw);
 
@@ -39,6 +43,8 @@ function App() {
             setShowBikes: setShowBikes,
             setActivateDraw: setActivateDraw,
             drawnItems: drawnItems,
+            triggerCityRedraw: triggerCityRedraw,
+            setTriggerCityRedraw: setTriggerCityRedraw,
         };
 
         const containerArray = layerStackBuilder(props);
@@ -59,8 +65,10 @@ function App() {
             }
         })();
 
+        setTriggerCityRedraw(false);
+
         return () => allLayers.cities.clearLayers();
-    }, []);
+    }, [triggerCityRedraw]);
     useEffect(() => {
         (async () => {
             dataFromBackend.chargingStations =
@@ -77,9 +85,10 @@ function App() {
                 );
             }
         })();
+        setTriggerChargeRedraw(false);
 
         return () => allLayers.chargingStations.clearLayers();
-    }, []);
+    }, [triggerChargeRedraw]);
     useEffect(() => {
         (async () => {
             dataFromBackend.parkingLots = await getFeatures.getParkingLots();
@@ -92,9 +101,10 @@ function App() {
                 );
             }
         })();
+        setTriggerParkingRedraw(false);
 
         return () => allLayers.parkingLots.clearLayers();
-    }, []);
+    }, [triggerParkingRedraw]);
     useEffect(() => {
         (async () => {
             dataFromBackend.bikes = await getFeatures.getBikes();
@@ -117,9 +127,10 @@ function App() {
                 );
             }
         })();
+        setTriggerZoneRedraw(false);
 
         return () => allLayers.zones.clearLayers();
-    }, []);
+    }, [triggerZoneRedraw]);
     useEffect(() => {
         (async () => {
             dataFromBackend.points = await getFeatures.getPoints();
@@ -134,6 +145,8 @@ function App() {
                         components={containerArray}
                         setActivateDraw={setActivateDraw}
                         drawnItems={drawnItems}
+                        triggerCityRedraw={triggerCityRedraw}
+                        setTriggerCityRedraw={setTriggerCityRedraw}
                     />
                 </div>
                 <div className="App-right">

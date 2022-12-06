@@ -12,6 +12,8 @@ const layerStackBuilder = (props) => {
             event={'cityClicked'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
+            triggerRedraw={props.triggerCityRedraw}
+            setTriggerRedraw={props.setTriggerCityRedraw}
         />
     );
 
