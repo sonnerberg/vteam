@@ -7,7 +7,6 @@ import { Switch } from '@mui/material';
 import UserCard from './UserCard';
 import LayerButton from './LayerButton';
 import UserForm from './UserForm';
-import { useEffect } from 'react';
 import putUsers from '../models/putUsers';
 import postUsers from '../models/postUsers';
 import getCustomerData from '../models/getCustomerData';
