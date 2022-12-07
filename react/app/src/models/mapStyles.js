@@ -6,7 +6,7 @@ const scooterIcon = new L.Icon({
     iconUrl: scooterIconUrl,
     iconSize: [20, 20],
     //FATTA ICONANCHOR BÄTTRE!! DENNA SÄTTER EN OFFSET
-    iconAnchor: [22, 94],
+    iconAnchor: [10, 10],
     popupAnchor: [-3, -76],
     //shadowUrl: 'my-icon-shadow.png',
     //shadowSize: [68, 95],
@@ -17,7 +17,7 @@ const chargerIcon = new L.Icon({
     iconUrl: chargerIconUrl,
     iconSize: [20, 20],
     //FATTA ICONANCHOR BÄTTRE!! DENNA SÄTTER EN OFFSET
-    iconAnchor: [22, 94],
+    iconAnchor: [10, 10],
     popupAnchor: [-3, -76],
     //shadowUrl: 'my-icon-shadow.png',
     //shadowSize: [68, 95],

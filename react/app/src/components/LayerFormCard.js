@@ -4,6 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import { TextField } from '@mui/material';
 import { useState } from 'react';
 import putFeatures from '../models/putFeatures';
+import deleteFeatures from '../models/deleteFeatures';
 import LayerButton from '../components/LayerButton';
 
 /**
@@ -18,6 +19,7 @@ const LayerFormCard = (props) => {
     const [newFeatureObject, setNewFeatureObject] = useState(props.content);
 
     console.log('formcard props.content', props.content);
+    console.log('formcard props', props);
 
     // If not using optional chaining here, there is an
     // error Uncaught TypeError: props.content.position is undefined
@@ -34,8 +36,32 @@ const LayerFormCard = (props) => {
     }
 
     const handleClickSaveButton = async () => {
-        const result = await putFeatures.putFeatures(newFeatureObject);
+        const layer = props.drawnItems.getLayers([0]);
+        const newGeoJson = props.drawnItems.toGeoJSON().features[0].geometry;
+        console.log({
+            ...newFeatureObject,
+            position: {
+                ...newFeatureObject.position,
+                geometry: newGeoJson,
+            },
+        });
+        const result = await putFeatures.putFeatures({
+            ...newFeatureObject,
+            position: {
+                ...newFeatureObject.position,
+                geometry: newGeoJson,
+            },
+        });
         props.setShowFormCard(false);
+        props.setTriggerRedraw(true);
+        props.drawnItems.clearLayers();
+        console.log(result);
+    };
+
+    const handleClickDeleteButton = async () => {
+        const result = await deleteFeatures.deleteFeatures(newFeatureObject);
+        props.setShowFormCard(false);
+        props.setCard(null);
         console.log(result);
     };
 
@@ -48,10 +74,19 @@ const LayerFormCard = (props) => {
         />
     );
 
+    const deleteButton = (
+        <LayerButton
+            buttonText={'Ta bort'}
+            size={'small'}
+            width={25}
+            handleClick={handleClickDeleteButton}
+        />
+    );
+
     function changeHandler(event) {
         let newObject = { ...newFeatureObject };
 
-        console.log(newObject);
+        console.log('THIS IS NEW OBJECT', newObject);
         newObject.position.properties[event.target.name] = event.target.value;
 
         setNewFeatureObject({ ...newFeatureObject, ...newObject });
@@ -76,7 +111,7 @@ const LayerFormCard = (props) => {
             <CardActions>
                 <div>{props.cancelButton}</div>
                 <div>{saveButton}</div>
-                <div>{props.deleteButton}</div>
+                <div>{deleteButton}</div>
             </CardActions>
         </Card>
     );
