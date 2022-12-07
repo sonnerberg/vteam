@@ -4,3 +4,4 @@ fastapi/app/__pycache__
 node_modules
 express/.nyc_output
 express/coverage
+.env

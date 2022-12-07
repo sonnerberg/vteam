@@ -3,22 +3,22 @@ const db = require('../config/mariadb.json');
 
 const pool = mariadb.createPool({
     host: db.host,
-    user: db.user,
-    password: db.password,
-    database: db.database,
-    connectionLimit: 5,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+    connectionLimit: db.connectionLimit,
 });
 
-exports.queryDatabase = async (sql) => {
+exports.queryDatabase = async (sql, parameters) => {
     // TODO fix better err
     let conn;
 
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query(sql);
+        const rows = await conn.query(sql, parameters);
         return rows;
     } catch (err) {
-        return 'failed';
+        return 'failed', err;
     } finally {
         if (conn) {
             conn.end();
