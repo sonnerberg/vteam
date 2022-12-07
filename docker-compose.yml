@@ -29,16 +29,16 @@ services:
        - 8082:3000
      restart: on-failure
 
-   auth-react:
-     image: node:latest
-     container_name: auth-react
-     working_dir: /code/app
-     command: bash -c "npm install && npm start"
-     volumes:
-       - ./authFrontend/app:/code/app
-     ports:
-       - 3000:3000
-     restart: on-failure
+  #  auth-react:
+  #    image: node:latest
+  #    container_name: auth-react
+  #    working_dir: /code/app
+  #    command: bash -c "npm install && npm start"
+  #    volumes:
+  #      - ./authFrontend/app:/code/app
+  #    ports:
+  #      - 3000:3000
+  #    restart: on-failure
 
    mariadb:
      container_name: mariadb
