@@ -8,10 +8,10 @@ import deleteFeatures from '../models/deleteFeatures';
 import LayerButton from '../components/LayerButton';
 
 /**
- * A card with content
+ * A form for editing feature properties
  * @param {object} props - Props for the function
  * @param {object} props.content Object with content
- * @returns {React.ReactElement} - The card
+ * @returns {React.ReactElement} - The form
  */
 const LayerFormCard = (props) => {
     const rows = [];
@@ -84,7 +84,7 @@ const LayerFormCard = (props) => {
     );
 
     function changeHandler(event) {
-        let newObject = { ...props.content };
+        let newObject = { ...newFeatureObject };
 
         console.log('THIS IS NEW OBJECT', newObject);
         newObject.position.properties[event.target.name] = event.target.value;

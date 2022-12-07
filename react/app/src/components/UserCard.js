@@ -12,15 +12,13 @@ import TableRow from '@mui/material/TableRow';
  * @param {object} props.content Object with content
  * @returns {React.ReactElement} - The card
  */
-const LayerCard = (props) => {
+const UserCard = (props) => {
     const rows = [];
 
-    console.log('card props.content', props.content);
-
-    for (const property in props.content.position.properties) {
+    for (const property in props.content) {
         rows.push({
             name: property,
-            value: props.content.position.properties[property],
+            value: props.content[property],
         });
     }
 
@@ -48,10 +46,10 @@ const LayerCard = (props) => {
                 </Table>
             </CardContent>
             <CardActions>
-                <div>{props.button}</div>
+                <div>{props.editButton}</div>
             </CardActions>
         </Card>
     );
 };
 
-export default LayerCard;
+export default UserCard;
