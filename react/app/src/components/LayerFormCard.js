@@ -36,7 +36,7 @@ const LayerFormCard = (props) => {
     }
 
     const handleClickSaveButton = async () => {
-        const layer = props.drawnItems.getLayers([0]);
+        //const layer = props.drawnItems.getLayers([0]);
         const newGeoJson = props.drawnItems.toGeoJSON().features[0].geometry;
         console.log({
             ...newFeatureObject,
