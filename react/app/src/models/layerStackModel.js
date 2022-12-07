@@ -7,11 +7,7 @@ import LayerGrid from '../components/LayerGrid';
 const layerStackBuilder = (props) => {
     console.log('layerstackbuilder props', props);
     const handleNewButtonClick = () => {
-        props.setTriggerNewObject((prev) => {
-            console.log('TriggerNewObject INSIDE', props.triggerNewObject);
-
-            return !prev;
-        });
+        props.setTriggerNewObject(true);
     };
     const cityAccordion = (
         <LayerAccordion
@@ -22,6 +18,7 @@ const layerStackBuilder = (props) => {
             triggerRedraw={props.triggerCityRedraw}
             setTriggerRedraw={props.setTriggerCityRedraw}
             triggerNewObject={props.triggerNewObject}
+            setTriggerNewObject={props.setTriggerNewObject}
         />
     );
 
@@ -34,6 +31,7 @@ const layerStackBuilder = (props) => {
             triggerRedraw={props.triggerParkingRedraw}
             setTriggerRedraw={props.setTriggerParkingRedraw}
             triggerNewObject={props.triggerNewObject}
+            setTriggerNewObject={props.setTriggerNewObject}
         />
     );
 
@@ -46,6 +44,7 @@ const layerStackBuilder = (props) => {
             triggerRedraw={props.triggerChargeRedraw}
             setTriggerRedraw={props.setTriggerChargeRedraw}
             triggerNewObject={props.triggerNewObject}
+            setTriggerNewObject={props.setTriggerNewObject}
         />
     );
 
@@ -58,6 +57,7 @@ const layerStackBuilder = (props) => {
             triggerRedraw={props.triggerZoneRedraw}
             setTriggerRedraw={props.setTriggerZoneRedraw}
             triggerNewObject={props.triggerNewObject}
+            setTriggerNewObject={props.setTriggerNewObject}
         />
     );
 
@@ -68,6 +68,7 @@ const layerStackBuilder = (props) => {
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
             triggerNewObject={props.triggerNewObject}
+            setTriggerNewObject={props.setTriggerNewObject}
         />
     );
 

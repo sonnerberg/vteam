@@ -41,11 +41,28 @@ const LayerAccordion = (props) => {
     };
     useEffect(() => {
         //alert('NEW OBJECT');
-        console.log(
-            'NEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEW',
-            props.triggerNewObject
-        );
-        setExpanded(true);
+        if (props.triggerNewObject) {
+            const dataNew = { data: '', position: { properties: 'bajs' } };
+            const newCard2 = <LayerCard content={dataNew} />;
+            const newFormCard = (
+                <LayerFormCard
+                    content={dataNew}
+                    setShowFormCard={setShowFormCard}
+                    cancelButton={utils.cancelButton}
+                    saveButton={utils.saveButton}
+                    deleteButton={utils.deleteButton}
+                    drawnItems={props.drawnItems}
+                    triggerRedraw={props.triggerRedraw}
+                    setTriggerRedraw={props.setTriggerRedraw}
+                />
+            );
+            setCard(newFormCard);
+
+            setFormCard(newFormCard);
+
+            setExpanded(true);
+            props.setTriggerNewObject(false);
+        }
     }, [props.triggerNewObject]);
 
     useEffect(() => {

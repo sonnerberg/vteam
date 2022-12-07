@@ -26,7 +26,7 @@ function App() {
     const [triggerParkingRedraw, setTriggerParkingRedraw] = useState(false);
     const [triggerZoneRedraw, setTriggerZoneRedraw] = useState(false);
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
-    const [triggerNewObject, setTriggerNewObject] = useState('banan');
+    const [triggerNewObject, setTriggerNewObject] = useState(false);
 
     console.log('triggerNewObject', triggerNewObject);
 
@@ -59,7 +59,7 @@ function App() {
         const containerArray = layerStackBuilder(props);
 
         setContainerArray(containerArray);
-    }, []);
+    }, [triggerNewObject]);
 
     useEffect(() => {
         //alert('NEW OBJECT');
