@@ -1,0 +1,56 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Express CI
+
+on:
+  push:
+    branches: ["backend"]
+  pull_request:
+    branches: ["backend"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: build containers
+        run: docker-compose -f "docker-compose-CI-backend.yml" up -d
+      - name: Test admin-api
+        # shell: 'script -q -e -c "bash {0}"'
+        run: docker exec admin-api bash -c "npm run test"
+      - name: Test user-api
+        # shell: 'script -q -e -c "bash {0}"'
+        run: docker exec user-api bash -c "npm run test"
+      - name: Create coverage folder
+        run: mkdir -v ./coverage
+      - name: Get lcov.info
+        run: docker exec admin-api bash -c "cat /code/coverage/lcov.info" > ./coverage/lcov.info
+      - name: Check contents lcov.info
+        run: cat ./coverage/lcov.info
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    # -------
+    # strategy:
+    #   matrix:
+    #     node-version: [14.x, 16.x, 18.x]
+    #     # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    # steps:
+    #   - uses: actions/checkout@v3
+    #   - name: Use Node.js ${{ matrix.node-version }}
+    #     uses: actions/setup-node@v3
+    #     with:
+    #       node-version: ${{ matrix.node-version }}
+    #       cache: "npm"
+    #       cache-dependency-path: "./express/package-lock.json"
+    #   - run: npm ci
+    #     working-directory: ./express
+    #   - run: npm run build --if-present
+    #     working-directory: ./express
+    #   - run: npm test
+    #     working-directory: ./express
