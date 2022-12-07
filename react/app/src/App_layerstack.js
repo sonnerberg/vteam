@@ -45,6 +45,12 @@ function App() {
             drawnItems: drawnItems,
             triggerCityRedraw: triggerCityRedraw,
             setTriggerCityRedraw: setTriggerCityRedraw,
+            setTriggerParkingRedraw: setTriggerParkingRedraw,
+            triggerParkingRedraw: triggerParkingRedraw,
+            setTriggerZoneRedraw: setTriggerZoneRedraw,
+            triggerZoneRedraw: triggerZoneRedraw,
+            setTriggerChargeRedraw: setTriggerChargeRedraw,
+            triggerChargeRedraw: triggerChargeRedraw,
         };
 
         const containerArray = layerStackBuilder(props);

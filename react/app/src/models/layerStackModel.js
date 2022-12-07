@@ -23,6 +23,8 @@ const layerStackBuilder = (props) => {
             event={'parkingLotClicked'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
+            triggerRedraw={props.triggerParkingRedraw}
+            setTriggerRedraw={props.setTriggerParkingRedraw}
         />
     );
 
@@ -32,6 +34,8 @@ const layerStackBuilder = (props) => {
             event={'chargingStationClicked'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
+            triggerRedraw={props.triggerChargeRedraw}
+            setTriggerRedraw={props.setTriggerChargeRedraw}
         />
     );
 
@@ -41,6 +45,8 @@ const layerStackBuilder = (props) => {
             event={'zoneClicked'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
+            triggerRedraw={props.triggerZoneRedraw}
+            setTriggerRedraw={props.setTriggerZoneRedraw}
         />
     );
 
