@@ -39,6 +39,14 @@ const LayerAccordion = (props) => {
     const handleChange = () => {
         setExpanded(!expanded);
     };
+    useEffect(() => {
+        //alert('NEW OBJECT');
+        console.log(
+            'NEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEW',
+            props.triggerNewObject
+        );
+        setExpanded(true);
+    }, [props.triggerNewObject]);
 
     useEffect(() => {
         console.log('Running useEffect in accoridion');

@@ -26,8 +26,9 @@ function App() {
     const [triggerParkingRedraw, setTriggerParkingRedraw] = useState(false);
     const [triggerZoneRedraw, setTriggerZoneRedraw] = useState(false);
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
+    const [triggerNewObject, setTriggerNewObject] = useState('banan');
 
-    console.log('activate draw', activateDraw);
+    console.log('triggerNewObject', triggerNewObject);
 
     useEffect(() => {
         const props = {
@@ -51,12 +52,23 @@ function App() {
             triggerZoneRedraw: triggerZoneRedraw,
             setTriggerChargeRedraw: setTriggerChargeRedraw,
             triggerChargeRedraw: triggerChargeRedraw,
+            triggerNewObject: triggerNewObject,
+            setTriggerNewObject: setTriggerNewObject,
         };
 
         const containerArray = layerStackBuilder(props);
 
         setContainerArray(containerArray);
     }, []);
+
+    useEffect(() => {
+        //alert('NEW OBJECT');
+        console.log(
+            'LAYHERSTACK USEFFECT GDFNKGDFKJKDGFJKGFJDKJGDFKJSDGDKJSGDKJSDKJFSDKJSDJDKSG',
+            triggerNewObject
+        );
+        //setExpanded(true);
+    }, [triggerNewObject]);
 
     useEffect(() => {
         (async () => {

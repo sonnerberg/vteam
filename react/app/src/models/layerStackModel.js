@@ -6,6 +6,13 @@ import LayerGrid from '../components/LayerGrid';
 
 const layerStackBuilder = (props) => {
     console.log('layerstackbuilder props', props);
+    const handleNewButtonClick = () => {
+        props.setTriggerNewObject((prev) => {
+            console.log('TriggerNewObject INSIDE', props.triggerNewObject);
+
+            return !prev;
+        });
+    };
     const cityAccordion = (
         <LayerAccordion
             title={'Städer'}
@@ -14,6 +21,7 @@ const layerStackBuilder = (props) => {
             drawnItems={props.drawnItems}
             triggerRedraw={props.triggerCityRedraw}
             setTriggerRedraw={props.setTriggerCityRedraw}
+            triggerNewObject={props.triggerNewObject}
         />
     );
 
@@ -25,6 +33,7 @@ const layerStackBuilder = (props) => {
             drawnItems={props.drawnItems}
             triggerRedraw={props.triggerParkingRedraw}
             setTriggerRedraw={props.setTriggerParkingRedraw}
+            triggerNewObject={props.triggerNewObject}
         />
     );
 
@@ -36,6 +45,7 @@ const layerStackBuilder = (props) => {
             drawnItems={props.drawnItems}
             triggerRedraw={props.triggerChargeRedraw}
             setTriggerRedraw={props.setTriggerChargeRedraw}
+            triggerNewObject={props.triggerNewObject}
         />
     );
 
@@ -47,6 +57,7 @@ const layerStackBuilder = (props) => {
             drawnItems={props.drawnItems}
             triggerRedraw={props.triggerZoneRedraw}
             setTriggerRedraw={props.setTriggerZoneRedraw}
+            triggerNewObject={props.triggerNewObject}
         />
     );
 
@@ -56,6 +67,7 @@ const layerStackBuilder = (props) => {
             event={'bikeClicked'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
+            triggerNewObject={props.triggerNewObject}
         />
     );
 
@@ -104,8 +116,9 @@ const layerStackBuilder = (props) => {
             buttonText={'Ny'}
             size={'small'}
             width={25}
-            setActivateDraw={'props.setActivateDraw'}
-            drawnItems={'props.drawnItems'}
+            setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
+            handleClick={handleNewButtonClick}
         />
     );
 
