@@ -21,14 +21,21 @@ const TripCard = (props) => {
 
     for (const property in props.content) {
         console.log('trip property', property);
-        if (property !== 'startposition') {
-            if (property !== 'endposition') {
-                rows.push({
-                    name: property,
-                    value: props.content[property],
-                });
-            }
-        }
+        if (property === 'startposition') {
+            rows.push({
+                name: property,
+                value: `${props.content.startposition.longitude}Longitude: ${props.content.startposition.longitude} Latitude: ${props.content.startposition.latitude} `,
+            });
+        } else if (property === 'endposition') {
+            rows.push({
+                name: property,
+                value: `${props.content.startposition.longitude}Longitude: ${props.content.endposition.longitude} Latitude: ${props.content.endposition.latitude} `,
+            });
+        } else
+            rows.push({
+                name: property,
+                value: props.content[property],
+            });
     }
 
     return (
