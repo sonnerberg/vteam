@@ -1,0 +1,4 @@
+{
+    "host": "mariadb",
+    "connectionLimit": 5
+}
