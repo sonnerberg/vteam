@@ -3,10 +3,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import { TextField } from '@mui/material';
 import { useState } from 'react';
-import putUsers from '../models/putUsers';
 import LayerButton from '../components/LayerButton';
-import UserCard from './UserCard';
-import UserForm from './UserForm';
 
 /**
  * A form for editing user information

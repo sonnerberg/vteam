@@ -4,9 +4,8 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography';
 import eventBus from '../models/eventBus';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import LayerCard from './LayerCard';
-import LayerButton from './LayerButton';
 import LayerFormCard from './LayerFormCard';
 import createAccordionUtils from '../models/layerAccordionUtils';
 
