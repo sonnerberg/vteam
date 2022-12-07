@@ -21,17 +21,21 @@ function renderRow(props) {
         } else {
             data.setUserTrips(null);
         }
+
+        data.setUserFormCard(null);
+        data.setShowUserFormCard(null);
+
         const handleClickSaveButton = async (newUserObject) => {
             const result = await putUsers.putUsers(
                 newUserObject,
                 data.userType
             );
 
-            data.setDetailCard(
-                <UserCard
-                    content={newUserObject} /* editButton={editButton} */
-                />
-            );
+            /* data.setDetailCard(<UserCard content={newUserObject} />); */
+
+            data.setDetailCard(null);
+
+            data.setUserTrips(null);
 
             //data.setUserFormCard(null);
             data.setShowUserFormCard(false);
@@ -138,14 +142,17 @@ function UserList(props) {
 
     const onSwitchChange = () => {
         setShowAdmins(!showAdmins);
+        props.setDetailCard(null);
+        props.setUserTrips(null);
     };
 
     const handleClickSaveNewButton = async (newUserObject) => {
         const result = await postUsers.postUsers(newUserObject, data.userType);
 
-        data.setDetailCard(
-            <UserCard content={newUserObject} /* editButton={editButton} */ />
-        );
+        data.setDetailCard(null);
+        /*  data.setDetailCard(
+            <UserCard content={newUserObject} />
+        ); */
 
         //data.setUserFormCard(null);
         data.setShowUserFormCard(false);
@@ -179,6 +186,8 @@ function UserList(props) {
 
         props.setUserFormCard(userFormCard);
         props.setShowUserFormCard(true);
+        props.setDetailCard(null);
+        props.setUserTrips(null);
     };
 
     return (
