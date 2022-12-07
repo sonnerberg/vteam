@@ -12,16 +12,28 @@ import TableRow from '@mui/material/TableRow';
  * @param {object} props.content Object with content
  * @returns {React.ReactElement} - The card
  */
-const LayerCard = (props) => {
+const TripCard = (props) => {
     const rows = [];
 
-    console.log('card props.content', props.content);
+    console.log(props.content);
 
-    for (const property in props.content.position.properties) {
-        rows.push({
-            name: property,
-            value: props.content.position.properties[property],
-        });
+    for (const property in props.content) {
+        console.log('trip property', property);
+        if (property === 'startposition') {
+            rows.push({
+                name: property,
+                value: `${props.content.startposition.longitude}Longitude: ${props.content.startposition.longitude} Latitude: ${props.content.startposition.latitude} `,
+            });
+        } else if (property === 'endposition') {
+            rows.push({
+                name: property,
+                value: `${props.content.startposition.longitude}Longitude: ${props.content.endposition.longitude} Latitude: ${props.content.endposition.latitude} `,
+            });
+        } else
+            rows.push({
+                name: property,
+                value: props.content[property],
+            });
     }
 
     return (
@@ -48,10 +60,10 @@ const LayerCard = (props) => {
                 </Table>
             </CardContent>
             <CardActions>
-                <div>{props.button}</div>
+                <div>{props.editButton}</div>
             </CardActions>
         </Card>
     );
 };
 
-export default LayerCard;
+export default TripCard;

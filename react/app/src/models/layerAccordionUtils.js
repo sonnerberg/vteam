@@ -5,12 +5,15 @@ function createAccordionUtils(args) {
         /* console.log('Ändra');
         console.log('showforminclick', showFormCard); */
         args.setShowFormCard(true);
+        args.setActivateDraw(true);
+        console.log('ARGS IN CREATEACCORDIONUTILS', args);
     };
 
     const handleClickCancelButton = () => {
         /* console.log('Cancel');
         console.log('showformincancel', showFormCard); */
         args.setShowFormCard(false);
+        args.setActivateDraw(false);
     };
 
     const handleClickSaveButton = () => {

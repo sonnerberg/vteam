@@ -5,19 +5,59 @@ import LayerSwitch from '../components/LayerSwitch';
 import LayerGrid from '../components/LayerGrid';
 
 const layerStackBuilder = (props) => {
-    const cityAccordion = <LayerAccordion title={'Städer'} event={"cityClicked"} />;
+    console.log('layerstackbuilder props', props);
+    const cityAccordion = (
+        <LayerAccordion
+            title={'Städer'}
+            event={'cityClicked'}
+            setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
+            triggerRedraw={props.triggerCityRedraw}
+            setTriggerRedraw={props.setTriggerCityRedraw}
+        />
+    );
 
     const parkingAccordion = (
-        <LayerAccordion title={'Parkeringar'} event={"parkingLotClicked"} />
+        <LayerAccordion
+            title={'Parkeringar'}
+            event={'parkingLotClicked'}
+            setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
+            triggerRedraw={props.triggerParkingRedraw}
+            setTriggerRedraw={props.setTriggerParkingRedraw}
+        />
     );
 
     const chargingAccordion = (
-        <LayerAccordion title={'Laddstationer'} event={"chargingStationClicked"} />
+        <LayerAccordion
+            title={'Laddstationer'}
+            event={'chargingStationClicked'}
+            setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
+            triggerRedraw={props.triggerChargeRedraw}
+            setTriggerRedraw={props.setTriggerChargeRedraw}
+        />
     );
 
-    const zoneAccordion = <LayerAccordion title={'Zoner'} event={"zoneClicked"} />;
+    const zoneAccordion = (
+        <LayerAccordion
+            title={'Zoner'}
+            event={'zoneClicked'}
+            setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
+            triggerRedraw={props.triggerZoneRedraw}
+            setTriggerRedraw={props.setTriggerZoneRedraw}
+        />
+    );
 
-    const bikeAccordion = <LayerAccordion title={'Cyklar'} event={"bikeClicked"} />;
+    const bikeAccordion = (
+        <LayerAccordion
+            title={'Cyklar'}
+            event={'bikeClicked'}
+            setActivateDraw={props.setActivateDraw}
+            drawnItems={props.drawnItems}
+        />
+    );
 
     const showCitiesSwitch = (
         <LayerSwitch
@@ -60,7 +100,13 @@ const layerStackBuilder = (props) => {
     );
 
     const editButton = (
-        <LayerButton buttonText={'Ny'} size={'small'} width={25} />
+        <LayerButton
+            buttonText={'Ny'}
+            size={'small'}
+            width={25}
+            setActivateDraw={'props.setActivateDraw'}
+            drawnItems={'props.drawnItems'}
+        />
     );
 
     const searchButton = (
