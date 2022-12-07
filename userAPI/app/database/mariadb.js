@@ -9,16 +9,22 @@ const pool = mariadb.createPool({
     connectionLimit: 5,
 });
 
-exports.queryDatabase = async (sql) => {
-    // TODO fix better err
+exports.queryDatabase = async (sql, placeholder = []) => {
     let conn;
 
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query(sql);
+        const rows = await conn.query(sql, placeholder);
         return rows;
     } catch (err) {
-        return 'failed';
+        console.log(err.text);
+        return {
+            error: {
+                status: 500,
+                message: err.text,
+                type: 'Database error',
+            },
+        };
     } finally {
         if (conn) {
             conn.end();
