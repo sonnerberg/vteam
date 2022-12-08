@@ -6,7 +6,7 @@ import TripContainer from './components/TripContainer';
 
 import { useEffect, useState } from 'react';
 
-function App() {
+function AppUser() {
     const [userData, setUserData] = useState(null);
     const [detailCard, setDetailCard] = useState(null);
     const [userFormCard, setUserFormCard] = useState(null);
@@ -62,4 +62,4 @@ function App() {
     );
 }
 
-export default App;
+export default AppUser;
