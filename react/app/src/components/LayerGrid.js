@@ -13,7 +13,7 @@ const LayerGrid = (props) => {
     console.log(props);
     return (
         <div>
-            <Grid container spacing={1} direction="row">
+            <Grid container spacing={1} id={props.id} direction="row">
                 <Grid item xs={1} margin={1}>
                     <div>{props.switch}</div>
                 </Grid>

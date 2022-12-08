@@ -67,7 +67,7 @@ const Map = (props) => {
     useEffect(() => {
         const drawControl = new L.Control.Draw({
             edit: {
-                featureGroup: props.drawnItems,
+                featureGroup: props.drawnItems.current,
                 poly: {
                     allowIntersection: false,
                 },
@@ -99,7 +99,7 @@ const Map = (props) => {
         });
 
         //SKA VI LÅTA props.drawnItems BO I ALLLAYERS OCKSÅ KANSKE?
-        props.drawnItems.addTo(mapRef.current);
+        props.drawnItems.current.addTo(mapRef.current);
         //Lägg till alla layers i allLayers till kartan
         for (const layer in allLayers) {
             allLayers[layer].addTo(mapRef.current);
@@ -122,7 +122,9 @@ const Map = (props) => {
         mapRef.current.on(L.Draw.Event.CREATED, function (event) {
             var layer = event.layer;
 
-            props.drawnItems.addLayer(layer);
+            props.drawnItems.current.addLayer(layer);
+            console.log('DRAWNITEMS', props.drawnItems.current);
+            //props.setTriggerNewObject(true);
 
             alert('ÄR DU NÖJD MED DENNA GEOMETRI?');
         });

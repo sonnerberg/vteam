@@ -1,6 +1,5 @@
 import { Button } from '@mui/material';
 
-
 /**
  * A button
  * @param {object} props - Props for the function
@@ -10,10 +9,15 @@ import { Button } from '@mui/material';
  * @returns {React.ReactElement} - The button
  */
 const LayerButton = (props) => {
-
     return (
-        <Button onClick={props.handleClick} size={props.size} sx={{ width: props.width }}>{props.buttonText}</Button>
+        <Button
+            onClick={props.handleClick}
+            size={props.size}
+            sx={{ width: props.width }}
+        >
+            {props.buttonText}
+        </Button>
     );
-}
+};
 
 export default LayerButton;

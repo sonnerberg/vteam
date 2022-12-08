@@ -3,7 +3,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import { TextField } from '@mui/material';
 import { useState } from 'react';
-import putFeatures from '../models/putFeatures';
+import postFeatures from '../models/postFeatures';
 import deleteFeatures from '../models/deleteFeatures';
 import LayerButton from '../components/LayerButton';
 
@@ -13,13 +13,13 @@ import LayerButton from '../components/LayerButton';
  * @param {object} props.content Object with content
  * @returns {React.ReactElement} - The form
  */
-const LayerFormCard = (props) => {
+const LayerNewFormCard = (props) => {
     const rows = [];
 
     const [newFeatureObject, setNewFeatureObject] = useState(props.content);
 
-    console.log('formcard props.content', props.content);
-    console.log('formcard props', props);
+    console.log('NEWFORMCARDcontent', props.content);
+    console.log('NEEEEEEEEEEEEEEEEEEEEEEEEEEEEWFORMCARD props', props);
 
     // If not using optional chaining here, there is an
     // error Uncaught TypeError: props.content.position is undefined
@@ -37,10 +37,9 @@ const LayerFormCard = (props) => {
 
     const handleClickSaveButton = async () => {
         //const layer = props.drawnItems.getLayers([0]);
-
+        console.log('PROPS IN LAYERNEWWWWWWWWWWWWWWWWWWWBUTTON', props);
         const newGeoJson =
             props.drawnItems.current.toGeoJSON().features[0].geometry;
-
         console.log({
             ...newFeatureObject,
             position: {
@@ -48,7 +47,7 @@ const LayerFormCard = (props) => {
                 geometry: newGeoJson,
             },
         });
-        const result = await putFeatures.putFeatures({
+        const result = await postFeatures.postFeatures({
             ...newFeatureObject,
             position: {
                 ...newFeatureObject.position,
@@ -62,10 +61,17 @@ const LayerFormCard = (props) => {
     };
 
     const handleClickDeleteButton = async () => {
-        const result = await deleteFeatures.deleteFeatures(newFeatureObject);
+        //const result = await deleteFeatures.deleteFeatures(newFeatureObject);
         props.setShowFormCard(false);
         props.setCard(null);
-        console.log(result);
+        //console.log(result);
+    };
+
+    const handleClickCancelButton = () => {
+        /* console.log('Cancel');
+        console.log('showformincancel', showFormCard); */
+        props.setCard(false);
+        // props.setActivateDraw(false);
     };
 
     const saveButton = (
@@ -83,6 +89,15 @@ const LayerFormCard = (props) => {
             size={'small'}
             width={25}
             handleClick={handleClickDeleteButton}
+        />
+    );
+
+    const cancelButton = (
+        <LayerButton
+            buttonText={'Avbryt'}
+            size={'small'}
+            width={25}
+            handleClick={handleClickCancelButton}
         />
     );
 
@@ -112,7 +127,7 @@ const LayerFormCard = (props) => {
                 ))}
             </CardContent>
             <CardActions>
-                <div>{props.cancelButton}</div>
+                <div>{cancelButton}</div>
                 <div>{saveButton}</div>
                 <div>{deleteButton}</div>
             </CardActions>
@@ -120,4 +135,4 @@ const LayerFormCard = (props) => {
     );
 };
 
-export default LayerFormCard;
+export default LayerNewFormCard;

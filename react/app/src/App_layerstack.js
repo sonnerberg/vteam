@@ -20,14 +20,16 @@ function App() {
     const [showBikes, setShowBikes] = useState(true);
     const [containerArray, setContainerArray] = useState(null);
     const [activateDraw, setActivateDraw] = useState(false);
-    const drawnItems = new L.FeatureGroup();
+    const drawnItems = useRef(new L.FeatureGroup());
     const dataFromBackend = {};
     const [triggerCityRedraw, setTriggerCityRedraw] = useState(false);
     const [triggerParkingRedraw, setTriggerParkingRedraw] = useState(false);
     const [triggerZoneRedraw, setTriggerZoneRedraw] = useState(false);
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
+    const [triggerNewObject, setTriggerNewObject] = useState(false);
+    const [newObjectContainer, setNewObjectContainer] = useState(null);
 
-    console.log('activate draw', activateDraw);
+    console.log('triggerNewObject', triggerNewObject);
 
     useEffect(() => {
         const props = {
@@ -51,12 +53,25 @@ function App() {
             triggerZoneRedraw: triggerZoneRedraw,
             setTriggerChargeRedraw: setTriggerChargeRedraw,
             triggerChargeRedraw: triggerChargeRedraw,
+            triggerNewObject: triggerNewObject,
+            setTriggerNewObject: setTriggerNewObject,
+            newObjectContainer: newObjectContainer,
+            setNewObjectContainer: setNewObjectContainer,
         };
 
         const containerArray = layerStackBuilder(props);
 
         setContainerArray(containerArray);
-    }, []);
+    }, [triggerNewObject]);
+
+    useEffect(() => {
+        //alert('NEW OBJECT');
+        console.log(
+            'LAYHERSTACK USEFFECT GDFNKGDFKJKDGFJKGFJDKJGDFKJSDGDKJSGDKJSDKJFSDKJSDJDKSG',
+            triggerNewObject
+        );
+        //setExpanded(true);
+    }, [triggerNewObject]);
 
     useEffect(() => {
         (async () => {
@@ -165,6 +180,7 @@ function App() {
                         activateDraw={activateDraw}
                         drawnItems={drawnItems}
                         dataFromBackend={dataFromBackend}
+                        setTriggerNewObject={setTriggerNewObject}
                     />
                 </div>
             </header>
