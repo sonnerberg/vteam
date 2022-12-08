@@ -1,40 +1,65 @@
 version: "3.4"
 
 services:
+  admin-api:
+    container_name: admin-api
+    build: ./adminAPI
+    working_dir: /code
+    command: npm run start:dev
+    volumes:
+      - ./adminAPI/app:/code/app
+    ports:
+      - 8081:3000
+    restart: on-failure
+    environment:
+      SECRET: ${SECRET}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
-   express:
-     container_name: express
-     build: ./express
-     working_dir: /code
-     command: npm run start:dev
-     volumes:
-       - ./express/app:/code/app
-     ports:
-       - 8081:3000
-     restart: on-failure
+  user-api:
+    container_name: user-api
+    build: ./userAPI
+    working_dir: /code
+    command: npm run start:dev
+    volumes:
+      - ./userAPI/app:/code/app
+    ports:
+      - 8082:3000
+    restart: on-failure
 
-   react:
-     container_name: react
-     build: ./react
-     working_dir: /code/app
-     command: npm start
-     volumes:
-       - ./react/app/src:/code/app/src
-     ports:
-       - 3000:3000
-     restart: on-failure
+  #  auth-react:
+  #    image: node:latest
+  #    container_name: auth-react
+  #    working_dir: /code/app
+  #    command: bash -c "npm install && npm start"
+  #    volumes:
+  #      - ./authFrontend/app:/code/app
+  #    ports:
+  #      - 3000:3000
+  #    restart: on-failure
 
-   mariadb:
-     container_name: mariadb
-     image: mariadb:latest
-     restart: always
-     volumes:
-      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./mariadb/init_data:/docker-entrypoint-initdb.d/init_data
-     ports:
-       - 8084:3306
-     environment:
-       MYSQL_ROOT_PASSWORD: admin
-       MYSQL_DATABASE: mydb
-       MYSQL_USER: user
-       MYSQL_PASSWORD: user
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    restart: always
+    volumes:
+      - ./mariadb/:/docker-entrypoint-initdb.d/
+    ports:
+      - 8084:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  react:
+    container_name: react
+    build: ./react
+    working_dir: /code/app
+    command: npm start
+    volumes:
+      - ./react/app/src:/code/app/src
+    ports:
+      - 3000:3000
+    restart: on-failure

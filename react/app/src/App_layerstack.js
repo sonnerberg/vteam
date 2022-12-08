@@ -1,10 +1,10 @@
 import './App_layerstack.css';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import LayerStack from './components/LayerStack';
 import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
-import LayerFormCard from './components/LayerFormCard';
-import { Layer } from 'leaflet';
+//import LayerFormCard from './components/LayerFormCard';
+//import { Layer } from 'leaflet';
 import mapStyles from './models/mapStyles';
 
 import allLayers from './models/allLayers';
