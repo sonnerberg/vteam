@@ -57,8 +57,9 @@ const Map = (props) => {
                     return L.marker(latlng, mapStyles['scooter']);
                 },
             });
-            if (bounds.contains(newPoint.getBounds()));
-            allLayers.bikes.addLayer(newPoint);
+            if (bounds.contains(newPoint.getBounds())) {
+                allLayers.bikes.addLayer(newPoint);
+            }
         }
     };
 
