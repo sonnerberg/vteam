@@ -5,30 +5,27 @@ import LayerSwitch from '../components/LayerSwitch';
 import LayerGrid from '../components/LayerGrid';
 
 const layerStackBuilder = (props) => {
-    console.log('layerstackbuilder props', props);
     const handleNewButtonClick = (e) => {
         props.setTriggerNewObject(true);
         const button = e.target;
         const container = button.closest('.MuiGrid-container');
-        console.log('TESTING GGGGGGGGGGGGGGGGGGGGGGGGGGGG', button);
 
-        console.log('TESTING GGGGGGGGGGGGGGGGGGGGGGGGGGGG', container);
-        console.log(
-            'TESTING GGGGGGGGGGGGGGGGGGGGGGGGGGGG',
-            container.getAttribute('id')
-        );
+        props.setNewObjectContainer(container.getAttribute('id'));
     };
 
     const cityAccordion = (
         <LayerAccordion
             title={'Städer'}
             event={'cityClicked'}
+            dad={'stad'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
             triggerRedraw={props.triggerCityRedraw}
             setTriggerRedraw={props.setTriggerCityRedraw}
             triggerNewObject={props.triggerNewObject}
             setTriggerNewObject={props.setTriggerNewObject}
+            newObjectContainer={props.newObjectContainer}
+            setNewObjectContainer={props.setNewObjectContainer}
         />
     );
 
@@ -36,12 +33,15 @@ const layerStackBuilder = (props) => {
         <LayerAccordion
             title={'Parkeringar'}
             event={'parkingLotClicked'}
+            dad={'parkering'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
             triggerRedraw={props.triggerParkingRedraw}
             setTriggerRedraw={props.setTriggerParkingRedraw}
             triggerNewObject={props.triggerNewObject}
             setTriggerNewObject={props.setTriggerNewObject}
+            newObjectContainer={props.newObjectContainer}
+            setNewObjectContainer={props.setNewObjectContainer}
         />
     );
 
@@ -49,12 +49,15 @@ const layerStackBuilder = (props) => {
         <LayerAccordion
             title={'Laddstationer'}
             event={'chargingStationClicked'}
+            dad={'ladd'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
             triggerRedraw={props.triggerChargeRedraw}
             setTriggerRedraw={props.setTriggerChargeRedraw}
             triggerNewObject={props.triggerNewObject}
             setTriggerNewObject={props.setTriggerNewObject}
+            newObjectContainer={props.newObjectContainer}
+            setNewObjectContainer={props.setNewObjectContainer}
         />
     );
 
@@ -62,12 +65,15 @@ const layerStackBuilder = (props) => {
         <LayerAccordion
             title={'Zoner'}
             event={'zoneClicked'}
+            dad={'zone'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
             triggerRedraw={props.triggerZoneRedraw}
             setTriggerRedraw={props.setTriggerZoneRedraw}
             triggerNewObject={props.triggerNewObject}
             setTriggerNewObject={props.setTriggerNewObject}
+            newObjectContainer={props.newObjectContainer}
+            setNewObjectContainer={props.setNewObjectContainer}
         />
     );
 
@@ -75,10 +81,13 @@ const layerStackBuilder = (props) => {
         <LayerAccordion
             title={'Cyklar'}
             event={'bikeClicked'}
+            dad={'scooter'}
             setActivateDraw={props.setActivateDraw}
             drawnItems={props.drawnItems}
             triggerNewObject={props.triggerNewObject}
             setTriggerNewObject={props.setTriggerNewObject}
+            newObjectContainer={props.newObjectContainer}
+            setNewObjectContainer={props.setNewObjectContainer}
         />
     );
 
@@ -174,7 +183,7 @@ const layerStackBuilder = (props) => {
             switch={showZonesSwitch}
             accordion={zoneAccordion}
             buttonGroup={buttonGroup}
-            id="zon"
+            id="zone"
         />
     );
     const container5 = (

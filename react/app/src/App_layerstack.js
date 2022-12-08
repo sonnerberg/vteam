@@ -27,6 +27,7 @@ function App() {
     const [triggerZoneRedraw, setTriggerZoneRedraw] = useState(false);
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
     const [triggerNewObject, setTriggerNewObject] = useState(false);
+    const [newObjectContainer, setNewObjectContainer] = useState(null);
 
     console.log('triggerNewObject', triggerNewObject);
 
@@ -54,6 +55,8 @@ function App() {
             triggerChargeRedraw: triggerChargeRedraw,
             triggerNewObject: triggerNewObject,
             setTriggerNewObject: setTriggerNewObject,
+            newObjectContainer: newObjectContainer,
+            setNewObjectContainer: setNewObjectContainer,
         };
 
         const containerArray = layerStackBuilder(props);

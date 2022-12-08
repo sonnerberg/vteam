@@ -9,6 +9,7 @@ import LayerButton from './LayerButton';
 import LayerCard from './LayerCard';
 import LayerFormCard from './LayerFormCard';
 import createAccordionUtils from '../models/layerAccordionUtils';
+import layerAttributes from '../models/layerAttributes';
 import L from 'leaflet';
 
 /**
@@ -40,27 +41,33 @@ const LayerAccordion = (props) => {
         setExpanded(!expanded);
     };
     useEffect(() => {
-        //alert('NEW OBJECT');
-        if (props.triggerNewObject) {
-            const dataNew = { data: '', position: { properties: 'bajs' } };
-            const newCard2 = <LayerCard content={dataNew} />;
+        //man vill hantera alla eventuellt redan öppande accordions också, om man klickar på flera...
+
+        if (props.triggerNewObject && props.dad === props.newObjectContainer) {
+            setExpanded(true);
+            //attributen är hårdkodade i layerAttributes. ändra där om datamodellen ändras!!
+            const dataNew = {
+                data: '',
+                position: layerAttributes[props.dad].position,
+            };
+            //const newCard2 = <LayerCard content={dataNew} />;
             const newFormCard = (
                 <LayerFormCard
                     content={dataNew}
                     setShowFormCard={setShowFormCard}
-                    cancelButton={utils.cancelButton}
-                    saveButton={utils.saveButton}
-                    deleteButton={utils.deleteButton}
+                    cancelButton={utils.cancelNewObjectButton}
+                    saveButton={utils.saveNewObjectButton}
+                    deleteButton={utils.deleteNewObjectButton}
                     drawnItems={props.drawnItems}
                     triggerRedraw={props.triggerRedraw}
                     setTriggerRedraw={props.setTriggerRedraw}
                 />
             );
             setCard(newFormCard);
+            //har inte riktigt fattat skillnaden mellan card och formcard
+            //eller jo det har jag men tänker det räcker med att setcard här, men trycka in formcard?!
+            //setFormCard(newFormCard);
 
-            setFormCard(newFormCard);
-
-            setExpanded(true);
             props.setTriggerNewObject(false);
         }
     }, [props.triggerNewObject]);
