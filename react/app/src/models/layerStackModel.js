@@ -6,9 +6,19 @@ import LayerGrid from '../components/LayerGrid';
 
 const layerStackBuilder = (props) => {
     console.log('layerstackbuilder props', props);
-    const handleNewButtonClick = () => {
+    const handleNewButtonClick = (e) => {
         props.setTriggerNewObject(true);
+        const button = e.target;
+        const container = button.closest('.MuiGrid-container');
+        console.log('TESTING GGGGGGGGGGGGGGGGGGGGGGGGGGGG', button);
+
+        console.log('TESTING GGGGGGGGGGGGGGGGGGGGGGGGGGGG', container);
+        console.log(
+            'TESTING GGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+            container.getAttribute('id')
+        );
     };
+
     const cityAccordion = (
         <LayerAccordion
             title={'Städer'}
@@ -137,6 +147,7 @@ const layerStackBuilder = (props) => {
             switch={showCitiesSwitch}
             accordion={cityAccordion}
             buttonGroup={buttonGroup}
+            id="stad"
         />
     );
     const container2 = (
@@ -145,6 +156,7 @@ const layerStackBuilder = (props) => {
             switch={showParkingsSwitch}
             accordion={parkingAccordion}
             buttonGroup={buttonGroup}
+            id="parkering"
         />
     );
     const container3 = (
@@ -153,6 +165,7 @@ const layerStackBuilder = (props) => {
             switch={showChargingStationsSwitch}
             accordion={chargingAccordion}
             buttonGroup={buttonGroup}
+            id="ladd"
         />
     );
     const container4 = (
@@ -161,6 +174,7 @@ const layerStackBuilder = (props) => {
             switch={showZonesSwitch}
             accordion={zoneAccordion}
             buttonGroup={buttonGroup}
+            id="zon"
         />
     );
     const container5 = (
@@ -169,6 +183,7 @@ const layerStackBuilder = (props) => {
             switch={showBikesSwitch}
             accordion={bikeAccordion}
             buttonGroup={buttonGroup}
+            id="scooter"
         />
     );
 
