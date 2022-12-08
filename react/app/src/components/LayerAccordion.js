@@ -26,11 +26,6 @@ const LayerAccordion = (props) => {
     const [showFormCard, setShowFormCard] = useState(false);
     const [expanded, setExpanded] = useState(false);
 
-    console.log('formcard', formCard);
-    console.log('layer accordion props', props);
-
-    console.log('showform', showFormCard);
-
     const utils = createAccordionUtils({
         setShowFormCard: setShowFormCard,
         setActivateDraw: props.setActivateDraw,
@@ -73,28 +68,14 @@ const LayerAccordion = (props) => {
     }, [props.triggerNewObject]);
 
     useEffect(() => {
-        console.log('Running useEffect in accoridion');
         eventBus.on(props.event, (data) => {
-            console.log('data in useeffect', data);
             if (data) {
                 const handleClickChangeButton = () => {
-                    /* console.log('Ändra');
-                    console.log('showforminclick', showFormCard); */
                     setShowFormCard(true);
                     props.setActivateDraw(true);
-                    console.log('GEOMETRY IN CLICK', data.position.geometry);
-                    console.log('props.drawnItems', props.drawnItems.current);
-                    console.log(
-                        'props.drawnItems before',
-                        props.drawnItems.current
-                    );
 
                     props.drawnItems.current.addLayer(
                         L.GeoJSON.geometryToLayer(data.position)
-                    );
-                    console.log(
-                        'props.drawnItems after',
-                        props.drawnItems.current
                     );
                 };
 

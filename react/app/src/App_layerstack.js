@@ -1,5 +1,5 @@
 import './App_layerstack.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import LayerStack from './components/LayerStack';
 import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
@@ -28,8 +28,6 @@ function App() {
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
     const [triggerNewObject, setTriggerNewObject] = useState(false);
     const [newObjectContainer, setNewObjectContainer] = useState(null);
-
-    console.log('triggerNewObject', triggerNewObject);
 
     useEffect(() => {
         const props = {
@@ -65,15 +63,6 @@ function App() {
     }, [triggerNewObject]);
 
     useEffect(() => {
-        //alert('NEW OBJECT');
-        console.log(
-            'LAYHERSTACK USEFFECT GDFNKGDFKJKDGFJKGFJDKJGDFKJSDGDKJSGDKJSDKJFSDKJSDJDKSG',
-            triggerNewObject
-        );
-        //setExpanded(true);
-    }, [triggerNewObject]);
-
-    useEffect(() => {
         (async () => {
             dataFromBackend.cities = await getFeatures.getCities();
 
@@ -96,7 +85,6 @@ function App() {
                 await getFeatures.getChargingStations();
 
             for (const charger of dataFromBackend.chargingStations) {
-                console.log('CHARGER ', charger);
                 allLayers.chargingStations.addLayer(
                     L.geoJson(charger.position, {
                         pointToLayer: function (feature, latlng) {
