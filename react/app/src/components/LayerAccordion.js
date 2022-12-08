@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import LayerButton from './LayerButton';
 import LayerCard from './LayerCard';
 import LayerFormCard from './LayerFormCard';
+import LayerNewFormCard from './LayerNewFormCard';
 import createAccordionUtils from '../models/layerAccordionUtils';
 import layerAttributes from '../models/layerAttributes';
 import L from 'leaflet';
@@ -52,12 +53,11 @@ const LayerAccordion = (props) => {
             };
             //const newCard2 = <LayerCard content={dataNew} />;
             const newFormCard = (
-                <LayerFormCard
+                <LayerNewFormCard
                     content={dataNew}
                     setShowFormCard={setShowFormCard}
-                    cancelButton={utils.cancelNewObjectButton}
-                    saveButton={utils.saveNewObjectButton}
-                    deleteButton={utils.deleteNewObjectButton}
+                    setCard={setCard}
+                    cancelButton={utils.cancelButton}
                     drawnItems={props.drawnItems}
                     triggerRedraw={props.triggerRedraw}
                     setTriggerRedraw={props.setTriggerRedraw}
@@ -83,13 +83,19 @@ const LayerAccordion = (props) => {
                     setShowFormCard(true);
                     props.setActivateDraw(true);
                     console.log('GEOMETRY IN CLICK', data.position.geometry);
-                    console.log('props.drawnItems', props.drawnItems);
-                    console.log('props.drawnItems before', props.drawnItems);
+                    console.log('props.drawnItems', props.drawnItems.current);
+                    console.log(
+                        'props.drawnItems before',
+                        props.drawnItems.current
+                    );
 
-                    props.drawnItems.addLayer(
+                    props.drawnItems.current.addLayer(
                         L.GeoJSON.geometryToLayer(data.position)
                     );
-                    console.log('props.drawnItems after', props.drawnItems);
+                    console.log(
+                        'props.drawnItems after',
+                        props.drawnItems.current
+                    );
                 };
 
                 const editButton = (
@@ -107,6 +113,7 @@ const LayerAccordion = (props) => {
                     <LayerFormCard
                         content={data}
                         setShowFormCard={setShowFormCard}
+                        setCard={setCard}
                         cancelButton={utils.cancelButton}
                         saveButton={utils.saveButton}
                         deleteButton={utils.deleteButton}

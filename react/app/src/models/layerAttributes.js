@@ -6,7 +6,7 @@ const layerAttributes = {
             properties: {
                 id: null,
                 name: '',
-                featureType: '',
+                featureType: 'cities',
             },
         },
     },
@@ -42,7 +42,7 @@ const layerAttributes = {
                 id: 1,
                 type: '',
                 speedLimit: '',
-                featureType: '',
+                featureType: 'zone',
             },
         },
     },

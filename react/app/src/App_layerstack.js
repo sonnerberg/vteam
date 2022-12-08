@@ -20,7 +20,7 @@ function App() {
     const [showBikes, setShowBikes] = useState(true);
     const [containerArray, setContainerArray] = useState(null);
     const [activateDraw, setActivateDraw] = useState(false);
-    const drawnItems = new L.FeatureGroup();
+    const drawnItems = useRef(new L.FeatureGroup());
     const dataFromBackend = {};
     const [triggerCityRedraw, setTriggerCityRedraw] = useState(false);
     const [triggerParkingRedraw, setTriggerParkingRedraw] = useState(false);
@@ -180,6 +180,7 @@ function App() {
                         activateDraw={activateDraw}
                         drawnItems={drawnItems}
                         dataFromBackend={dataFromBackend}
+                        setTriggerNewObject={setTriggerNewObject}
                     />
                 </div>
             </header>
