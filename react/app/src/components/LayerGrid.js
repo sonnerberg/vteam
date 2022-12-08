@@ -10,7 +10,6 @@ import React from 'react';
  * @returns {React.ReactElement} - The grid
  */
 const LayerGrid = (props) => {
-    console.log(props);
     return (
         <div>
             <Grid container spacing={1} id={props.id} direction="row">
