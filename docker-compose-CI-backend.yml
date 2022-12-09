@@ -23,13 +23,13 @@ services:
      ports:
        - 8082:3000
      environment:
-        ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET }
-        MYSQL_DATABASE: ${ MYSQL_DATABASE }
-        MYSQL_USER: ${ MYSQL_USER }
-        MYSQL_PASSWORD: ${ MYSQL_PASSWORD }
-        GITHUB_CLIENT_ID: ${ OAUTH_CLIENT_ID }
-        GITHUB_SECRET: ${ GITHUB_SECRET }
-        JWT_USER_SECRET: ${ JWT_USER_SECRET }
+        - ADMIN_JWT_SECRET
+        - MYSQL_DATABASE
+        - MYSQL_USER
+        - MYSQL_PASSWORD
+        - GITHUB_CLIENT_ID
+        - GITHUB_SECRET
+        - JWT_USER_SECRET
      restart: on-failure
 
    mariadb:
