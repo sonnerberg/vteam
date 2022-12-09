@@ -27,6 +27,10 @@ services:
     ports:
       - 8082:3000
     restart: on-failure
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
   #  auth-react:
   #    image: node:latest
