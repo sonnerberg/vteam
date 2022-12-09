@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: isbang/compose-action@v1.4.1
-      - name: build containers
+        # - name: build containers
         with:
           compose-file: "./docker-compose-CI-backend.yml"
         env:
