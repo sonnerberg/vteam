@@ -12,10 +12,10 @@ services:
      ports:
        - 8081:3000
      environment:
+       - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
        - MYSQL_DATABASE=${MYSQL_DATABASE}
        - MYSQL_USER=${MYSQL_USER}
        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-       - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
      restart: on-failure
 
    user-api:
@@ -41,8 +41,9 @@ services:
      image: mariadb:latest
      restart: always
      volumes:
-      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./mariadb/init_data:/docker-entrypoint-initdb.d/init_data
+      - ./mariadb/:/docker-entrypoint-initdb.d/
+      # - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # - ./mariadb/init_data:/docker-entrypoint-initdb.d/init_data
      ports:
       #  - 8084:3306
        - 9091:3306
