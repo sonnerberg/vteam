@@ -24,8 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # - uses: isbang/compose-action@v1.4.1
-      - name: test env
-      - run: echo "user $MYSQL_USER"
       - name: build containers
         # with:
         #   compose-file: "./docker-compose-CI-backend.yml"
