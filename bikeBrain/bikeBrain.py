@@ -31,6 +31,7 @@ class Brain:
         self._session = session
         self._default_report_interval = 10
         self._moving_report_interval = 5
+        self._is_rentable = true
 
         seed(self._id)
 
@@ -193,6 +194,7 @@ class Brain:
         self._status[0] = status
         self._position["geometry"]["properties"]["status"][0] = self.get_rented_status()
 
+    # Consider only have one probability for breaking, dont specify tyres and lamps
     def check_health(self):
         """Check health"""
         if self.get_health_status() == 0:
@@ -201,6 +203,10 @@ class Brain:
             elif self.get_battery_capacity() <= 0:
                 self.set_speed(0)
                 self.set_health_status(1)
+                # lock the bike
+                # set bike as not rentable
+                # check for not rentable when
+                # when trying to unlock bike
             elif randrange(1, 100) <= self._breaking_tyre_probability:
                 self.set_speed(0)
                 self.set_health_status(1)
@@ -242,14 +248,15 @@ class Brain:
 
     def unlock(self, user_id):
         """Unlock"""
-        self.set_is_locked(False)
-        self.set_report_interval(self._moving_report_interval)
-        self.set_log_start_time(time.time())
-        self.set_log_start_position(self.get_position())
-        # Seems not to work -
-        self.set_current_user(user_id)
-        self.set_rented_status(1)
-        # Send post request to backend with info
+        if self._is_rentable:
+            self.set_is_locked(False)
+            self.set_report_interval(self._moving_report_interval)
+            self.set_log_start_time(time.time())
+            self.set_log_start_position(self.get_position())
+            # Seems not to work -
+            self.set_current_user(user_id)
+            self.set_rented_status(1)
+
 
     def lock(self):
         """Lock"""
