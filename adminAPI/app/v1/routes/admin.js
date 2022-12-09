@@ -46,18 +46,31 @@ async function register(req, res) {
                 // eslint-disable-next-line object-curly-newline
             },
         } = await queryDatabase(sqlCheckIfSuper, [req.decodedEmail]);
-        if (!superUser) throw 'CannotRegister';
+        if (!superUser) throw 'NotSuperUser';
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
         const sql = 'CALL register_admin(?,?)';
         const data = await queryDatabase(sql, [email, passwordHash]);
-        if (data.text) throw 'CannotRegister';
+        if (data.text) throw 'DuplicateEntry';
 
         res.sendStatus(200);
-    } catch {
-        // TODO: Send different statuses due to error thrown
-        res.sendStatus(409);
+    } catch (error) {
+        switch (error) {
+        case 'InvalidEmailOrPassword':
+            res.sendStatus(400);
+            break;
+        case 'DuplicateEntry':
+            res.sendStatus(409);
+            break;
+        case 'NotSuperUser':
+            res.sendStatus(401);
+            break;
+
+        default:
+            res.sendStatus(500);
+            break;
+        }
     }
 }
 
