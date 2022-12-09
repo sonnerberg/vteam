@@ -12,22 +12,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
+      GITHUB_SECRET: ${{ secrets.GITHUB_SECRET }}
+      JWT_USER_SECRET: ${{ secrets.JWT_USER_SECRET }}
 
     steps:
       - uses: actions/checkout@v3
-      - uses: isbang/compose-action@v1.4.1
-        # - name: build containers
-        with:
-          compose-file: "./docker-compose-CI-backend.yml"
-        env:
-          ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
-          GITHUB_SECRET: ${{ secrets.GITHUB_SECRET }}
-          JWT_USER_SECRET: ${{ secrets.JWT_USER_SECRET }}
-        # run: docker-compose -f "docker-compose-CI-backend.yml" up -d
+      # - uses: isbang/compose-action@v1.4.1
+      - name: build containers
+        # with:
+        #   compose-file: "./docker-compose-CI-backend.yml"
+        run: docker-compose -f "docker-compose-CI-backend.yml" up -d
       - name: Test user-api
         # shell: 'script -q -e -c "bash {0}"'
         run: docker exec user-api bash -c "npm run test"
