@@ -20,11 +20,11 @@ function authMiddleware(req, res, next) {
         // The token is not valid
         return res.sendStatus(401);
     }
-    if (!decodedToken.email) {
-        // The token does not contain the email property.
-        //TODO: Is this if check needed ?
-        return res.sendStatus(401);
-    }
+    // if (!decodedToken.email) {
+    //     // The token does not contain the email property.
+    //     //TODO: Is this if check needed ?
+    //     return res.sendStatus(401);
+    // }
     req.decodedEmail = decodedToken.email;
     next();
 }
