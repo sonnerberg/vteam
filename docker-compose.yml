@@ -12,7 +12,7 @@ services:
       - 8081:3000
     restart: on-failure
     environment:
-      SECRET: ${SECRET}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
