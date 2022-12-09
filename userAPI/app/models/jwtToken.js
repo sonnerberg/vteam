@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const secret = process.env.JWT_SECRET;
+const secret = process.env.JWT_USER_SECRET;
 const expiresIn = '24h';
 
 // middleware to check token
