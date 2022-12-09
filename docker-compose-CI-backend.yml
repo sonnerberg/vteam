@@ -24,9 +24,9 @@ services:
        - 8082:3000
      environment:
         - ADMIN_JWT_SECRET
-        - MYSQL_DATABASE=${MYSQL_DATABASE}
-        - MYSQL_USER=${MYSQL_USER}
-        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_DATABASE
+        - MYSQL_USER
+        - MYSQL_PASSWORD
         - GITHUB_CLIENT_ID
         - GITHUB_SECRET
         - JWT_USER_SECRET
