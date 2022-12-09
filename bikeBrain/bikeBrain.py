@@ -3,7 +3,8 @@ from random import randrange
 import time
 import requests
 
-class Brain():
+
+class Brain:
     """Class for bike brain"""
 
     def __init__(self, _id, session, start_time, position, battery_capacity, status):
@@ -32,7 +33,6 @@ class Brain():
         self._moving_report_interval = 5
 
         seed(self._id)
-
 
     def get_id(self):
         """Gets _id"""
@@ -97,11 +97,11 @@ class Brain():
     def brake(self):
         """Decrease speed"""
         self.setSpeed(self.get_speed() - self.get_brake_rate)
-    
+
     def stop(self):
         """Full stop"""
         self.set_speed(0)
-    
+
     def get_log_start_position(self):
         """Get start position"""
         return self._log_start_position
@@ -136,14 +136,14 @@ class Brain():
 
     def report_status(self):
         """Reports status"""
-        #print(f"Id: {self.get_id()}, status: {self.get_status()}")
+        # print(f"Id: {self.get_id()}, status: {self.get_status()}")
 
     def set_current_user(self, user_id):
         """Set current user"""
         self._current_user = user_id
         self._position["geometry"]["properties"]["user"] = self.get_current_user()
         print(self.get_current_user())
-        print(self._position["geometry"]["properties"]["user"] )
+        print(self._position["geometry"]["properties"]["user"])
 
     def get_current_user(self):
         """Get current user"""
@@ -180,7 +180,9 @@ class Brain():
     def set_health_status(self, status):
         """Sets status"""
         self._status[1] = status
-        self._position["geometry"]["properties"]["status"][1] = self.get_health_status()[1]
+        self._position["geometry"]["properties"]["status"][
+            1
+        ] = self.get_health_status()[1]
 
     def get_rented_status(self):
         """Gets rented status"""
@@ -193,46 +195,50 @@ class Brain():
 
     def check_health(self):
         """Check health"""
-        if (self.get_health_status() == 0):
-            if (self.get_battery_capacity() < 20):
+        if self.get_health_status() == 0:
+            if self.get_battery_capacity() < 20:
                 self.battery_warning()
-            elif (self.get_battery_capacity() <= 0):
+            elif self.get_battery_capacity() <= 0:
                 self.set_speed(0)
                 self.set_health_status(1)
-            elif (randrange(1, 100) <= self._breaking_tyre_probability):
+            elif randrange(1, 100) <= self._breaking_tyre_probability:
                 self.set_speed(0)
                 self.set_health_status(1)
-            elif (randrange(1, 100) <= self._breaking_lamp_probability):
+            elif randrange(1, 100) <= self._breaking_lamp_probability:
                 self.set_health_status(1)
 
     async def battery_warning(self):
         """Issue warning"""
-        #print("Warning: battery capacity low")
-        payload = {'batterywarning': 1}
-        #async with self._session.put(f"http://server:3000/bikes/{self.get_id()}", json=payload) as resp:
-                #result = await resp.json()
+        # print("Warning: battery capacity low")
+        payload = {"batterywarning": 1}
+        # async with self._session.put(f"http://server:3000/bikes/{self.get_id()}", json=payload) as resp:
+        # result = await resp.json()
 
     def move(self, position):
         """Moves the bike to new position"""
-        if not self.get_is_locked(): 
+        if not self.get_is_locked():
             self.set_position(position)
-            self.set_battery_capacity(self.get_battery_capacity() - self._battery_decrease)
+            self.set_battery_capacity(
+                self.get_battery_capacity() - self._battery_decrease
+            )
             self.check_health()
-        else: 
+        else:
             self.set_report_interval(self._moving_report_interval)
 
     async def report_position(self):
         """Reports position"""
         self.set_current_time(time.time())
         interval = self.get_current_time() - self.get_start_time()
-        if (interval > self.get_report_interval()):
+        if interval > self.get_report_interval():
             self.set_start_time(self.get_current_time())
             position = self.get_position()
-            payload = {'position': position}
-            #r = requests.put(f"http://server:3000/bikes/{self.get_id()}", json=payload)
-            async with self._session.put(f"http://server:3000/bikes/{self.get_id()}", json=payload) as resp:
+            payload = {"position": position}
+            # r = requests.put(f"http://server:3000/bikes/{self.get_id()}", json=payload)
+            async with self._session.put(
+                f"http://server:3000/bikes/{self.get_id()}", json=payload
+            ) as resp:
                 result = await resp.json()
-                #print(result)
+                # print(result)
 
     def unlock(self, user_id):
         """Unlock"""
@@ -240,10 +246,10 @@ class Brain():
         self.set_report_interval(self._moving_report_interval)
         self.set_log_start_time(time.time())
         self.set_log_start_position(self.get_position())
-        # Seems not to work - 
+        # Seems not to work -
         self.set_current_user(user_id)
         self.set_rented_status(1)
-        # Send post request to backend with info 
+        # Send post request to backend with info
 
     def lock(self):
         """Lock"""
@@ -259,17 +265,17 @@ class Brain():
             start time: {self.get_log_start_time()},\
             end time: {self.get_log_end_time()}") """
         _id = self.get_id()
-        
+
         start_position = self.get_log_start_position()
         end_position = self.get_position()
         start_time = self.get_start_time()
         end_time = time.time()
 
         payload = {
-            'startpostion': start_position,
-            'endposition': end_position,
-            'starttime': start_time,
-            'endtime': end_time
-            }
-        #r = requests.post(f"http://server:3000/trips/", json=payload)
+            "startpostion": start_position,
+            "endposition": end_position,
+            "starttime": start_time,
+            "endtime": end_time,
+        }
+        # r = requests.post(f"http://server:3000/trips/", json=payload)
         self.set_current_user(None)

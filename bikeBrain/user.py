@@ -2,8 +2,10 @@ import time
 from random import randrange
 from random import seed
 
-class User():
+
+class User:
     """Class for user"""
+
     def __init__(self, _id, bike, travel_plan):
         """Init"""
         self._id = _id
@@ -29,7 +31,6 @@ class User():
         # Calculate the amount of time to reach next point based on current speed
         # Adjust move_interval
 
-
     def begin_journey(self):
         """Begins journey"""
         self.bike.unlock(self._id)
@@ -41,13 +42,11 @@ class User():
         if self.bike:
             current_time = time.time()
             if current_time - self.get_journey_start_time() > self._move_interval:
-                #print("user moving")
-                if self._travel_plan_index < len(self._travel_plan) :
+                # print("user moving")
+                if self._travel_plan_index < len(self._travel_plan):
                     self.bike.move(self._travel_plan[self._travel_plan_index])
                     self._travel_plan_index = self._travel_plan_index + 1
                     self._journey_start_time = current_time
                 else:
                     self.bike.lock()
                     self.bike = None
-
-
