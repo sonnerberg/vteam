@@ -15,7 +15,7 @@ function authMiddleware(req, res, next) {
     const token = getTokenFrom(req);
     let decodedToken;
     try {
-        decodedToken = jwt.verify(token, process.env.SECRET);
+        decodedToken = jwt.verify(token, process.env.ADMIN_JWT_SECRET);
     } catch {
         // The token is not valid
         return res.sendStatus(401);
@@ -86,7 +86,7 @@ async function login(req, res) {
                 {
                     email,
                 },
-                process.env.SECRET
+                process.env.ADMIN_JWT_SECRET
             );
             res.status(200).json({
                 data: {
