@@ -22,6 +22,14 @@ services:
        - ./userAPI/app:/code/app
      ports:
        - 8082:3000
+     environment:
+        ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+        MYSQL_USER: ${{ secrets.MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
+        GITHUB_SECRET: ${{ secrets.GITHUB_SECRET }}
+        JWT_USER_SECRET: ${{ secrets.JWT_USER_SECRET }}
      restart: on-failure
 
    mariadb:
