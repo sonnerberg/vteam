@@ -13,7 +13,7 @@ const LoginForm = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log('LOGIN');
-        props.logIn();
+        props.logInAdmin();
     };
 
     return (

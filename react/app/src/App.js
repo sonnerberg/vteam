@@ -3,22 +3,42 @@ import AppMap from './App_layerstack';
 import AppUser from './App_user';
 import LoginForm from './components/LoginForm';
 import ToplevelSwitch from './components/ToplevelSwitch';
+import postUsers from './models/postUsers';
+
 import { useState } from 'react';
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [showUser, setShowUser] = useState(false);
-    if (isLoggedIn) {
+    const [showUserUI, setShowUserUI] = useState(false);
+    const [user, setUser] = useState();
+    const [pwd, setPwd] = useState();
+    const [token, setToken] = useState('korv');
+
+    const logInAdmin = async () => {
+        const adminToken = await postUsers.logInAdmin({
+            username: user,
+            password: pwd,
+        });
+        console.log(adminToken);
+        setToken(adminToken);
+    };
+    if (token) {
         return (
             <div>
-                <ToplevelSwitch showUser={showUser} setShowUser={setShowUser} />
-                {showUser ? <AppUser /> : <AppMap />}
+                <ToplevelSwitch
+                    showUser={showUserUI}
+                    setShowUser={setShowUserUI}
+                />
+                {showUserUI ? <AppUser /> : <AppMap />}
             </div>
         );
     } else {
         return (
             <div className="topdiv">
-                <LoginForm />
+                <LoginForm
+                    logInAdmin={logInAdmin}
+                    setPwd={setPwd}
+                    setUser={setUser}
+                />
             </div>
         );
     }
