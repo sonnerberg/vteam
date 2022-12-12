@@ -1,6 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Express CI
 
 on:
@@ -15,14 +12,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: build containers
-        run: docker-compose -f "docker-compose-CI-backend.yml" up -d
-      - name: Test admin-api
-        # shell: 'script -q -e -c "bash {0}"'
-        run: docker exec admin-api bash -c "npm run test"
+      - uses: isbang/compose-action@v1.4.1
+        # - name: build containers
+        with:
+          compose-file: "./docker-compose-CI-backend.yml"
+        env:
+          ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
+          GITHUB_SECRET: ${{ secrets.GITHUB_SECRET }}
+          JWT_USER_SECRET: ${{ secrets.JWT_USER_SECRET }}
       - name: Test user-api
-        # shell: 'script -q -e -c "bash {0}"'
         run: docker exec user-api bash -c "npm run test"
+      - name: Test admin-api
+        run: docker exec admin-api bash -c "npm run test"
       - name: Create coverage folder
         run: mkdir -v ./coverage
       - name: Get lcov.info
