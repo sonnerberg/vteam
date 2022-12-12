@@ -11,8 +11,8 @@ import json
 
 async def main():
     async with aiohttp.ClientSession() as session:
-        nr_of_users = 72
-        nr_of_bikes = 72
+        nr_of_users = 2
+        nr_of_bikes = 2
         report_dict = {}
         users = []
         bikes = []
@@ -114,7 +114,7 @@ async def main():
             try:
                 # Loop through users and move them according to plan (users move in intervals see UserClass.move)
                 for user in users:
-                    user.move()
+                    await user.move()
 
                 ## Loop through bikes and have them report their position (bikes report their position in intervals)
                 for bike in bikes:
