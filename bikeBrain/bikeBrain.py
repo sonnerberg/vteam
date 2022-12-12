@@ -7,13 +7,17 @@ import requests
 class Brain:
     """Class for bike brain"""
 
-    def __init__(self, _id, session, start_time, position, battery_capacity, status):
+    def __init__(self, _id, session, start_time, geojson, battery_capacity):
         """Init"""
         self._position = position
         self._battery_capacity = battery_capacity
         self._speed = 0
-        self._acceleration_rate = 1
-        self._brake_rate = 1
+        # self._acceleration_rate = 1
+        # self._brake_rate = 1
+        self._whole = True
+        self._charging = False
+        self._blocked = False
+        self._rented = False
         self._status = status
         self._id = _id
         self._battery_decrease = 5

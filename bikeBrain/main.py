@@ -13,14 +13,10 @@ async def main():
     async with aiohttp.ClientSession() as session:
         nr_of_users = 72
         nr_of_bikes = 72
-        first_travel_point_index = 0
-        last_travel_point_index = 29
         report_dict = {}
         users = []
         bikes = []
         bikes_start_positions = []
-        user_travel_plans = {}
-        # user_travel_plans = []
         start_time = time.time()
         report_start_time = time.time()
         report_interval = 5
@@ -87,7 +83,7 @@ async def main():
         for i in range(nr_of_bikes):
             bikes.append(
                 bikeBrain.Brain(
-                    i + 1, session, start_time, bikes_start_positions[i], 100, [0, 0]
+                    i + 1, session, start_time, bikes_start_positions[i], 100
                 )
             )
 
