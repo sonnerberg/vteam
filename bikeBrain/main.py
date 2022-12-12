@@ -11,8 +11,8 @@ import json
 
 async def main():
     async with aiohttp.ClientSession() as session:
-        nr_of_users = 2
-        nr_of_bikes = 2
+        nr_of_users = 10
+        nr_of_bikes = 10
         report_dict = {}
         users = []
         bikes = []
