@@ -31,7 +31,9 @@ class Brain:
         self._session = session
         self._default_report_interval = 10
         self._moving_report_interval = 5
-        self._is_rentable = true
+        # Replace with new status [2, 2]
+        # Maybe also a charging status [3, 3]?
+        #self._is_rentable = true
 
         seed(self._id)
 
@@ -63,9 +65,9 @@ class Brain:
         """Gets position"""
         return self._position
 
-    def set_position(self, position):
-        """Sets postion"""
-        self._position = position
+    def set_position(self, coordinates):
+        """Sets position"""
+        self._position["geometry"]["coordinates"] = coordinates
 
     def get_speed(self):
         """Gets speed"""
@@ -183,7 +185,7 @@ class Brain:
         self._status[1] = status
         self._position["geometry"]["properties"]["status"][
             1
-        ] = self.get_health_status()[1]
+        ] = self.get_health_status()
 
     def get_rented_status(self):
         """Gets rented status"""
@@ -220,14 +222,15 @@ class Brain:
         # async with self._session.put(f"http://server:3000/bikes/{self.get_id()}", json=payload) as resp:
         # result = await resp.json()
 
-    def move(self, position):
+    def move(self, coordinates):
         """Moves the bike to new position"""
         if not self.get_is_locked():
-            self.set_position(position)
-            self.set_battery_capacity(
-                self.get_battery_capacity() - self._battery_decrease
-            )
-            self.check_health()
+            if self.get_health_status() == 0:
+                self.set_position(coordinates)
+                self.set_battery_capacity(
+                    self.get_battery_capacity() - self._battery_decrease
+                )
+                self.check_health()
         else:
             self.set_report_interval(self._moving_report_interval)
 
@@ -248,14 +251,14 @@ class Brain:
 
     def unlock(self, user_id):
         """Unlock"""
-        if self._is_rentable:
-            self.set_is_locked(False)
-            self.set_report_interval(self._moving_report_interval)
-            self.set_log_start_time(time.time())
-            self.set_log_start_position(self.get_position())
-            # Seems not to work -
-            self.set_current_user(user_id)
-            self.set_rented_status(1)
+       # if self._is_rentable:
+        self.set_is_locked(False)
+        self.set_report_interval(self._moving_report_interval)
+        self.set_log_start_time(time.time())
+        self.set_log_start_position(self.get_position())
+        # Seems not to work -
+        self.set_current_user(user_id)
+        self.set_rented_status(1)
 
 
     def lock(self):

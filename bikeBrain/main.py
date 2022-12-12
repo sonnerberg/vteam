@@ -6,28 +6,66 @@ import aiohttp
 import asyncio
 import sys
 import errno
+import json
 
 
 async def main():
     async with aiohttp.ClientSession() as session:
-        nr_of_users = 2
-        nr_of_bikes = 2
+        nr_of_users = 72
+        nr_of_bikes = 72
+        first_travel_point_index = 0
+        last_travel_point_index = 29
         report_dict = {}
         users = []
         bikes = []
         bikes_start_positions = []
-        user_travel_plans = []
+        user_travel_plans = {}
+        #user_travel_plans = []
         start_time = time.time()
         report_start_time = time.time()
         report_interval = 5
+        
+        with open("punkter_for_resa.geojson") as file:
+            data = json.load(file)
+
+        features = data["features"]
+        travel_plans = []
+
+        # This makes no presumptions about the
+        # nr of points in a trip but the list
+        # will probably be too long as there is
+        # one "row" for each feature (a trip could be just)
+        # one point
+
+        # Create a list for each feature
+        # in the travel_plans list
+        for i in range(len(features)):
+            travel_plans.append([])
+
+        # Append the coordinates to the
+        # list at the right index in travel_plans
+        for i in range(len(features)):
+            # Check which index should be used based
+            # on the trips id
+            index = int(features[i]["properties"]["id"]) - 1
+
+            # Append the coordinates to the list at the correct
+            # index
+            travel_plans[index].append(features[i]["geometry"]["coordinates"])
+
+        # Remove empty lists from travel_plans
+        travel_plans = list(filter(None, travel_plans))
 
         # Set start positions for bikes, need to be replaced with real coordinates/geojson
         for i in range(nr_of_bikes):
 
             _id = i + 1
 
-            coordinates = [16.31480402957339 + i / 100, 59.41137659373528 + i / 100]
+            # Get the coordinates for the starting point
+            # from the travel_plans list
+            coordinates = travel_plans[i][0]
 
+            # Create the position, add the coordinates
             position = {
                 "type": "Feature",
                 "geometry": {
@@ -60,29 +98,10 @@ async def main():
             payload = {"id": _id, "position": position}
             r = requests.post("http://server:3000/bikes/", json=payload)
 
-        # Set the users travel plans need to be replaced with real coordinates/geojson
+        # Create users and append them to the user list,
+        # users get id:s from 1 -
         for i in range(nr_of_users):
-            position1 = bikes[i].get_position()
-            position2 = position1.copy()
-            position2["geometry"]["coordinates"][0] = (
-                position2["geometry"]["coordinates"][0] + 1
-            )
-            position2["geometry"]["coordinates"][1] = (
-                position2["geometry"]["coordinates"][1] + 1
-            )
-            position3 = position2.copy()
-            position3["geometry"]["coordinates"][0] = (
-                position3["geometry"]["coordinates"][0] + 2
-            )
-            position3["geometry"]["coordinates"][1] = (
-                position3["geometry"]["coordinates"][1] + 2
-            )
-
-            user_travel_plans.append([position1, position2, position3])
-
-        # Create users and append them to the user list
-        for i in range(nr_of_users):
-            users.append(UserClass.User(i, bikes[i], user_travel_plans[i]))
+            users.append(UserClass.User(i + 1, bikes[i], travel_plans[i]))
 
         # Decides if program loop runs
         run = True
