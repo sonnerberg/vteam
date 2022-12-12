@@ -235,29 +235,29 @@ class Brain:
         self._position["geometry"]["properties"]["rented"] = status
 
     # Consider only have one probability for breaking, dont specify tyres and lamps
-    def check_health(self):
+    async def check_health(self):
         """Check health"""
         if self.get_battery_capacity() < 20:
-            self.set_battery_warning(True)
+            self.set_is_warning_battery(True)
         elif self.get_battery_capacity() <= 0:
             self.set_speed(0)
-            self.lock()
             self.set_is_blocked(True)
-            self.set_battery_depleted(True)
+            self.set_is_battery_depleted(True)
+            await self.lock()
 
         if randrange(1, 100) <= self._breaking_tyre_probability:
             self.set_speed(0)
-            self.lock()
             self.set_is_blocked(True)
             self.set_is_whole(False)
+            await self.lock()
 
         if randrange(1, 100) <= self._breaking_lamp_probability:
             self.set_speed(0)
-            self.lock()
             self.set_is_blocked(True)
             self.set_is_whole(False)
+            await self.lock()
 
-    def move(self, coordinates):
+    async def move(self, coordinates):
         """Moves the bike to new position"""
         if not self.get_is_locked():
             if not self.get_is_blocked():
@@ -265,7 +265,7 @@ class Brain:
                 self.set_battery_capacity(
                     self.get_battery_capacity() - self._battery_decrease
                 )
-                self.check_health()
+                await self.check_health()
         else:
             self.set_report_interval(self._moving_report_interval)
 
@@ -282,7 +282,8 @@ class Brain:
                 f"http://server:3000/bikes/{self.get_id()}", json=payload
             ) as resp:
                 result = await resp.json()
-                # handle result
+                # handle result eg. set status to blocked depending on
+                # selfs status or position or likewise set is rented
 
     def unlock(self, user_id):
         """Unlock"""
@@ -292,18 +293,16 @@ class Brain:
             self.set_report_interval(self._moving_report_interval)
             self.set_log_start_time(time.time())
             self.set_log_start_position(self.get_position())
-            # Seems not to work -
             self.set_current_user(user_id)
             self.set_rented(True)
 
-    def lock(self):
+    async def lock(self):
         """Lock"""
         self.set_is_locked(True)
         self.set_rented(False)
         self.set_report_interval(self._default_report_interval)
         self.set_log_end_time(time.time())
         self.set_log_end_position(self.get_position())
-        _id = self.get_id()
         start_position = self.get_log_start_position()
         end_position = self.get_position()
         start_time = self.get_start_time()
@@ -313,10 +312,13 @@ class Brain:
             "endposition": end_position,
             "starttime": start_time,
             "endtime": end_time,
+            "user-id": self.get_current_user(),
+            "bike-id": self.get_id(),
         }
-        #  async with self._session.post(
-        #        f"http://server:3000/trips/{self.get_id()}", json=payload
-        #    ) as resp:
-        #        result = await resp.json()
+        async with self._session.post(
+            f"http://server:3000/trips/", json=payload
+        ) as resp:
+            result = await resp.json()
+            # Handle result if necessary
         self.set_current_user(None)
         print("Travel done")
