@@ -1,10 +1,10 @@
 const express = require('express');
 const { queryDatabase } = require('../../database/mariadb');
-const { validateToken } = require('../../models/jwtToken');
+// const { validateToken } = require('../../models/jwtToken');
 const table = require('../../config/tables.json');
 const router = express.Router();
 
-router.use(validateToken);
+// router.use(validateToken);
 
 router.get('/', (_, res) => res.send('welcome to v1 @ user-api'));
 
