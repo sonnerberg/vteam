@@ -27,14 +27,13 @@ async def main():
         features = data["features"]
         travel_plans = []
 
-        # This makes no presumptions about the
-        # nr of points in a trip but the list
-        # will probably be too long as there is
-        # one "row" for each feature (a trip could be just)
-        # one point
-
         # Create a list for each feature
         # in the travel_plans list
+        # This makes no presumptions about the
+        # nr of points in a journey but the list
+        # will probably be too long as there is
+        # one "row" for each feature (a journey could be just)
+        # one point, therefore this gets cleaned up below
         for i in range(len(features)):
             travel_plans.append([])
 
@@ -42,7 +41,7 @@ async def main():
         # list at the right index in travel_plans
         for i in range(len(features)):
             # Check which index should be used based
-            # on the trips id
+            # on the journeys id
             index = int(features[i]["properties"]["id"]) - 1
 
             # Append the coordinates to the list at the correct
@@ -52,7 +51,7 @@ async def main():
         # Remove empty lists from travel_plans
         travel_plans = list(filter(None, travel_plans))
 
-        # Set start positions for bikes, need to be replaced with real coordinates/geojson
+        # Set start positions (geojson object) for bikes
         for i in range(nr_of_bikes):
 
             _id = i + 1
