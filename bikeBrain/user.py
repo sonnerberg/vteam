@@ -1,5 +1,4 @@
 import time
-from random import randrange
 from random import seed
 
 
@@ -37,16 +36,19 @@ class User:
         self.set_journey_start_time(time.time())
         self.bike.set_speed(15)
 
-    def move(self):
+    async def move(self):
         """Moves to next point in travel plan"""
         if self.bike:
-            current_time = time.time()
-            if current_time - self.get_journey_start_time() > self._move_interval:
-                # print("user moving")
-                if self._travel_plan_index < len(self._travel_plan):
-                    self.bike.move(self._travel_plan[self._travel_plan_index])
-                    self._travel_plan_index = self._travel_plan_index + 1
-                    self._journey_start_time = current_time
-                else:
-                    self.bike.lock()
-                    self.bike = None
+            if not self.bike.get_is_blocked():
+                current_time = time.time()
+                if current_time - self.get_journey_start_time() > self._move_interval:
+                    # print("user moving")
+                    if self._travel_plan_index < len(self._travel_plan):
+                        await self.bike.move(self._travel_plan[self._travel_plan_index])
+                        self._travel_plan_index = self._travel_plan_index + 1
+                        self._journey_start_time = current_time
+                    else:
+                        await self.bike.lock()
+                        self.bike = None
+            else:
+                self.bike = None
