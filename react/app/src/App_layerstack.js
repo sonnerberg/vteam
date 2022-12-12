@@ -147,9 +147,9 @@ function AppMap() {
     }, []);
 
     return (
-        <div className="App">
-            <div className="App-header">
-                <div className="App-left">
+        <div className="AppMap">
+            <div className="App-header-Map">
+                <div className="App-left-Map">
                     <LayerStack
                         components={containerArray}
                         setActivateDraw={setActivateDraw}
@@ -158,7 +158,7 @@ function AppMap() {
                         setTriggerCityRedraw={setTriggerCityRedraw}
                     />
                 </div>
-                <div className="App-right">
+                <div className="App-right-Map">
                     <Map
                         showCities={showCities}
                         showParkings={showParkings}

@@ -1,5 +1,6 @@
-.App {
+.AppMap {
     text-align: center;
+    overflow: hidden;
 }
 
 .App-logo {
@@ -13,11 +14,11 @@
     }
 }
 
-.App-header {
+.App-header-Map {
     /*  background-color: #282c34; */
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+    display: flex;
+    overflow: hidden;
+    align-items: flex-start;
     /* display: flex; */
     /* flex-direction: column;
   align-items: center; */
@@ -26,23 +27,20 @@
     color: white;
 }
 
-.App-left {
+.App-left-Map {
     min-height: 100vh;
-    grid-column: 1;
-    display: flex;
-    flex-direction: column;
+    flex: 30%;
+    overflow: scroll;
     /* align-items: center; */
     /* justify-content: center; */
     font-size: calc(10px + 2vmin);
     color: white;
 }
 
-.App-right {
+.App-right-Map {
     min-height: 100vh;
-    grid-column: 2;
-    display: flex;
-    flex-direction: column;
-    background-color: black;
+    flex: 70%;
+    overflow: hidden;
     /* align-items: center; */
     /* justify-content: center; */
     font-size: calc(10px + 2vmin);
