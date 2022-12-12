@@ -20,11 +20,11 @@ async def main():
         bikes = []
         bikes_start_positions = []
         user_travel_plans = {}
-        #user_travel_plans = []
+        # user_travel_plans = []
         start_time = time.time()
         report_start_time = time.time()
         report_interval = 5
-        
+
         with open("punkter_for_resa.geojson") as file:
             data = json.load(file)
 

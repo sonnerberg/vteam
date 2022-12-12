@@ -36,5 +36,7 @@ def main():
     for i in range(len(travel_plans)):
         print(travel_plans[i][0])
         print(len(travel_plans))
+
+
 if __name__ == "__main__":
     main()

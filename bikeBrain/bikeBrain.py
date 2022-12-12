@@ -33,7 +33,7 @@ class Brain:
         self._moving_report_interval = 5
         # Replace with new status [2, 2]
         # Maybe also a charging status [3, 3]?
-        #self._is_rentable = true
+        # self._is_rentable = true
 
         seed(self._id)
 
@@ -183,9 +183,7 @@ class Brain:
     def set_health_status(self, status):
         """Sets status"""
         self._status[1] = status
-        self._position["geometry"]["properties"]["status"][
-            1
-        ] = self.get_health_status()
+        self._position["geometry"]["properties"]["status"][1] = self.get_health_status()
 
     def get_rented_status(self):
         """Gets rented status"""
@@ -251,7 +249,7 @@ class Brain:
 
     def unlock(self, user_id):
         """Unlock"""
-       # if self._is_rentable:
+        # if self._is_rentable:
         self.set_is_locked(False)
         self.set_report_interval(self._moving_report_interval)
         self.set_log_start_time(time.time())
@@ -259,7 +257,6 @@ class Brain:
         # Seems not to work -
         self.set_current_user(user_id)
         self.set_rented_status(1)
-
 
     def lock(self):
         """Lock"""
