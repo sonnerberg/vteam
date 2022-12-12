@@ -1,13 +1,14 @@
 from random import seed
 from random import randrange
 import time
-import requests
+
+# import requests
 
 
 class Brain:
     """Class for bike brain"""
 
-    def __init__(self, _id, session, start_time, geojson, battery_capacity):
+    def __init__(self, _id, session, start_time, position, battery_capacity):
         """Init"""
         self._position = position
         self._battery_capacity = battery_capacity
@@ -16,9 +17,10 @@ class Brain:
         # self._brake_rate = 1
         self._whole = True
         self._charging = False
-        self._blocked = False
-        self._rented = False
-        self._status = status
+        self._is_blocked = False
+        self._is_rented = False
+        self._is_warning_battery = False
+        self._is_battery_depleted = False
         self._id = _id
         self._battery_decrease = 5
         self._breaking_lamp_probability = 5
@@ -62,7 +64,7 @@ class Brain:
     def get_battery_decrease(self):
         return self._battery_decrease
 
-    def set_battery_decrease(self, _battery_decrease):
+    def set_battery_decrease(self, battery_decrease):
         self._battery_decrease = battery_decrease
 
     def get_position(self):
@@ -148,9 +150,7 @@ class Brain:
     def set_current_user(self, user_id):
         """Set current user"""
         self._current_user = user_id
-        self._position["geometry"]["properties"]["user"] = self.get_current_user()
-        print(self.get_current_user())
-        print(self._position["geometry"]["properties"]["user"])
+        self._position["geometry"]["properties"]["userid"] = user_id
 
     def get_current_user(self):
         """Get current user"""
@@ -180,54 +180,87 @@ class Brain:
         """Sets report interval"""
         self._report_interval = value
 
-    def get_health_status(self):
-        """Gets health status"""
-        return self._status[1]
+    def get_is_whole(self):
+        """Gets is_whole"""
+        return self._is_whole
 
-    def set_health_status(self, status):
-        """Sets status"""
-        self._status[1] = status
-        self._position["geometry"]["properties"]["status"][1] = self.get_health_status()
+    def set_is_whole(self, status):
+        """Sets is_whole"""
+        self._is_whole = status
+        self._position["geometry"]["properties"]["whole"] = status
 
-    def get_rented_status(self):
+    def get_is_charging(self):
+        """Gets is_charging"""
+        return self._is_charging
+
+    def set_is_charging(self, status):
+        """Sets i_charging"""
+        self._is_charging = status
+        self._position["geometry"]["properties"]["charging"] = status
+
+    def get_is_blocked(self):
+        """Gets is_blocked"""
+        return self._is_blocked
+
+    def set_is_blocked(self, status):
+        """Sets is_blocked"""
+        self._is_blocked = status
+        self._position["geometry"]["properties"]["blocked"] = status
+
+    def get_is_warning_battery(self):
+        """Sets _is_warning_battery"""
+        return self._is_warning_battery
+
+    def set_is_warning_battery(self, status):
+        """Sets _is_warning_battery"""
+        self._is_warning_battery = status
+        self._position["geometry"]["properties"]["batterywarning"] = status
+
+    def get_is_battery_depleted(self):
+        """Get _is_battery_depleted"""
+        return self._is_battery_depleted
+
+    def set_is_battery_depleted(self, status):
+        """Sets _is_battery_depleted"""
+        self._is_battery_depleted = status
+        self._position["geometry"]["properties"]["batterydepleted"] = status
+
+    def get_rented(self):
         """Gets rented status"""
-        return self._status[0]
+        return self._is_rented
 
-    def set_rented_status(self, status):
+    def set_rented(self, status):
         """Sets rented status"""
-        self._status[0] = status
-        self._position["geometry"]["properties"]["status"][0] = self.get_rented_status()
+        self._is_rented = status
+        self._position["geometry"]["properties"]["rented"] = status
 
     # Consider only have one probability for breaking, dont specify tyres and lamps
     def check_health(self):
         """Check health"""
-        if self.get_health_status() == 0:
-            if self.get_battery_capacity() < 20:
-                self.battery_warning()
-            elif self.get_battery_capacity() <= 0:
-                self.set_speed(0)
-                self.set_health_status(1)
-                # lock the bike
-                # set bike as not rentable
-                # check for not rentable when
-                # when trying to unlock bike
-            elif randrange(1, 100) <= self._breaking_tyre_probability:
-                self.set_speed(0)
-                self.set_health_status(1)
-            elif randrange(1, 100) <= self._breaking_lamp_probability:
-                self.set_health_status(1)
+        if self.get_battery_capacity() < 20:
+            self.set_battery_warning(True)
+        elif self.get_battery_capacity() <= 0:
+            self.set_speed(0)
+            self.lock()
+            self.set_is_blocked(True)
+            self.set_battery_depleted(True)
 
-    async def battery_warning(self):
-        """Issue warning"""
-        # print("Warning: battery capacity low")
-        payload = {"batterywarning": 1}
-        # async with self._session.put(f"http://server:3000/bikes/{self.get_id()}", json=payload) as resp:
-        # result = await resp.json()
+        if randrange(1, 100) <= self._breaking_tyre_probability:
+            self.set_speed(0)
+            self.lock()
+            self.set_is_blocked(True)
+            self.set_is_whole(False)
+
+        if randrange(1, 100) <= self._breaking_lamp_probability:
+            self.set_speed(0)
+            self.lock()
+            self.set_is_blocked(True)
+            self.set_is_whole(False)
 
     def move(self, coordinates):
         """Moves the bike to new position"""
         if not self.get_is_locked():
-            if self.get_health_status() == 0:
+            if not self.get_is_blocked():
                 self.set_position(coordinates)
                 self.set_battery_capacity(
                     self.get_battery_capacity() - self._battery_decrease
@@ -249,44 +282,41 @@ class Brain:
                 f"http://server:3000/bikes/{self.get_id()}", json=payload
             ) as resp:
                 result = await resp.json()
-                # print(result)
+                # handle result
 
     def unlock(self, user_id):
         """Unlock"""
         # if self._is_rentable:
-        self.set_is_locked(False)
-        self.set_report_interval(self._moving_report_interval)
-        self.set_log_start_time(time.time())
-        self.set_log_start_position(self.get_position())
-        # Seems not to work -
-        self.set_current_user(user_id)
-        self.set_rented_status(1)
+        if not self.get_is_blocked():
+            self.set_is_locked(False)
+            self.set_report_interval(self._moving_report_interval)
+            self.set_log_start_time(time.time())
+            self.set_log_start_position(self.get_position())
+            # Seems not to work -
+            self.set_current_user(user_id)
+            self.set_rented(True)
 
     def lock(self):
         """Lock"""
         self.set_is_locked(True)
-        self.set_rented_status(0)
+        self.set_rented(False)
         self.set_report_interval(self._default_report_interval)
         self.set_log_end_time(time.time())
         self.set_log_end_position(self.get_position())
-        """  print(f"Id: {self.get_id()}, \
-            startposition: {self.get_log_start_position()}\
-            endposition: {self.get_position()},\
-            user: {self.get_current_user()},\
-            start time: {self.get_log_start_time()},\
-            end time: {self.get_log_end_time()}") """
         _id = self.get_id()
-
         start_position = self.get_log_start_position()
         end_position = self.get_position()
         start_time = self.get_start_time()
         end_time = time.time()
-
         payload = {
             "startpostion": start_position,
             "endposition": end_position,
             "starttime": start_time,
             "endtime": end_time,
         }
-        # r = requests.post(f"http://server:3000/trips/", json=payload)
+        #  async with self._session.post(
+        #        f"http://server:3000/trips/{self.get_id()}", json=payload
+        #    ) as resp:
+        #        result = await resp.json()
         self.set_current_user(None)
+        print("Travel done")
