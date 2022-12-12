@@ -42,8 +42,6 @@ services:
      restart: always
      volumes:
       - ./mariadb/:/docker-entrypoint-initdb.d/
-      # - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
-      # - ./mariadb/init_data:/docker-entrypoint-initdb.d/init_data
      ports:
       #  - 8084:3306
        - 9091:3306
@@ -52,7 +50,3 @@ services:
        - MYSQL_USER=${MYSQL_USER}
        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      #  MYSQL_ROOT_PASSWORD: admin
-      #  MYSQL_DATABASE: mydb
-      #  MYSQL_USER: user
-      #  MYSQL_PASSWORD: user
