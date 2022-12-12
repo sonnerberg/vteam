@@ -12,7 +12,7 @@ import getFeatures from './models/getFeatures';
 
 import L from 'leaflet';
 
-function App() {
+function AppMap() {
     const [showCities, setShowCities] = useState(true);
     const [showParkings, setShowParkings] = useState(true);
     const [showChargingStations, setShowChargingStations] = useState(true);
@@ -148,7 +148,7 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
+            <div className="App-header">
                 <div className="App-left">
                     <LayerStack
                         components={containerArray}
@@ -171,9 +171,9 @@ function App() {
                         setTriggerNewObject={setTriggerNewObject}
                     />
                 </div>
-            </header>
+            </div>
         </div>
     );
 }
 
-export default App;
+export default AppMap;
