@@ -57,8 +57,9 @@ const Map = (props) => {
                     return L.marker(latlng, mapStyles['scooter']);
                 },
             });
-            if (bounds.contains(newPoint.getBounds()));
-            allLayers.bikes.addLayer(newPoint);
+            if (bounds.contains(newPoint.getBounds())) {
+                allLayers.bikes.addLayer(newPoint);
+            }
         }
     };
 
@@ -123,10 +124,6 @@ const Map = (props) => {
             var layer = event.layer;
 
             props.drawnItems.current.addLayer(layer);
-            console.log('DRAWNITEMS', props.drawnItems.current);
-            //props.setTriggerNewObject(true);
-
-            alert('ÄR DU NÖJD MED DENNA GEOMETRI?');
         });
         //at first had problems with "map already instantiated". calling this cleanup function ensures that
         // the map created in this effect is removed when the component unmounts

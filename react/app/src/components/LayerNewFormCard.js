@@ -18,9 +18,6 @@ const LayerNewFormCard = (props) => {
 
     const [newFeatureObject, setNewFeatureObject] = useState(props.content);
 
-    console.log('NEWFORMCARDcontent', props.content);
-    console.log('NEEEEEEEEEEEEEEEEEEEEEEEEEEEEWFORMCARD props', props);
-
     // If not using optional chaining here, there is an
     // error Uncaught TypeError: props.content.position is undefined
     // when loading the app and it crashes. When inspecting  props.content
@@ -36,17 +33,9 @@ const LayerNewFormCard = (props) => {
     }
 
     const handleClickSaveButton = async () => {
-        //const layer = props.drawnItems.getLayers([0]);
-        console.log('PROPS IN LAYERNEWWWWWWWWWWWWWWWWWWWBUTTON', props);
         const newGeoJson =
             props.drawnItems.current.toGeoJSON().features[0].geometry;
-        console.log({
-            ...newFeatureObject,
-            position: {
-                ...newFeatureObject.position,
-                geometry: newGeoJson,
-            },
-        });
+
         const result = await postFeatures.postFeatures({
             ...newFeatureObject,
             position: {
@@ -57,21 +46,15 @@ const LayerNewFormCard = (props) => {
         props.setShowFormCard(false);
         props.setTriggerRedraw(true);
         props.drawnItems.current.clearLayers();
-        console.log(result);
     };
 
     const handleClickDeleteButton = async () => {
-        //const result = await deleteFeatures.deleteFeatures(newFeatureObject);
         props.setShowFormCard(false);
         props.setCard(null);
-        //console.log(result);
     };
 
     const handleClickCancelButton = () => {
-        /* console.log('Cancel');
-        console.log('showformincancel', showFormCard); */
         props.setCard(false);
-        // props.setActivateDraw(false);
     };
 
     const saveButton = (
@@ -104,7 +87,6 @@ const LayerNewFormCard = (props) => {
     function changeHandler(event) {
         let newObject = { ...newFeatureObject };
 
-        console.log('THIS IS NEW OBJECT', newObject);
         newObject.position.properties[event.target.name] = event.target.value;
 
         setNewFeatureObject({ ...newFeatureObject, ...newObject });

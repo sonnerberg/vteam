@@ -18,9 +18,6 @@ const LayerFormCard = (props) => {
 
     const [newFeatureObject, setNewFeatureObject] = useState(props.content);
 
-    console.log('formcard props.content', props.content);
-    console.log('formcard props', props);
-
     // If not using optional chaining here, there is an
     // error Uncaught TypeError: props.content.position is undefined
     // when loading the app and it crashes. When inspecting  props.content
@@ -41,13 +38,6 @@ const LayerFormCard = (props) => {
         const newGeoJson =
             props.drawnItems.current.toGeoJSON().features[0].geometry;
 
-        console.log({
-            ...newFeatureObject,
-            position: {
-                ...newFeatureObject.position,
-                geometry: newGeoJson,
-            },
-        });
         const result = await putFeatures.putFeatures({
             ...newFeatureObject,
             position: {
@@ -58,14 +48,12 @@ const LayerFormCard = (props) => {
         props.setShowFormCard(false);
         props.setTriggerRedraw(true);
         props.drawnItems.current.clearLayers();
-        console.log(result);
     };
 
     const handleClickDeleteButton = async () => {
         const result = await deleteFeatures.deleteFeatures(newFeatureObject);
         props.setShowFormCard(false);
         props.setCard(null);
-        console.log(result);
     };
 
     const saveButton = (
@@ -89,7 +77,6 @@ const LayerFormCard = (props) => {
     function changeHandler(event) {
         let newObject = { ...newFeatureObject };
 
-        console.log('THIS IS NEW OBJECT', newObject);
         newObject.position.properties[event.target.name] = event.target.value;
 
         setNewFeatureObject({ ...newFeatureObject, ...newObject });

@@ -2,7 +2,6 @@ const baseUrl = 'http://localhost:4000';
 
 const postFeatures = {
     postFeatures: async function postFeatures(data) {
-        console.log('POOOOOOOOOOOOOOOOOOOOOOOOSTDATA', data);
         const postData = JSON.stringify(data);
         const response = await fetch(
             `${baseUrl}/${data.position.properties.featureType}`,

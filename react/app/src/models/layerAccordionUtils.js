@@ -2,16 +2,11 @@ import LayerButton from '../components/LayerButton';
 
 function createAccordionUtils(args) {
     const handleClickChangeButton = () => {
-        /* console.log('Ändra');
-        console.log('showforminclick', showFormCard); */
         args.setShowFormCard(true);
         args.setActivateDraw(true);
-        console.log('ARGS IN CREATEACCORDIONUTILS', args);
     };
 
     const handleClickCancelButton = () => {
-        /* console.log('Cancel');
-        console.log('showformincancel', showFormCard); */
         args.setShowFormCard(false);
         args.setActivateDraw(false);
     };
@@ -20,10 +15,7 @@ function createAccordionUtils(args) {
         //
     };
 
-    const handleClickDeleteButton = () => {
-        /* console.log('Cancel');
-        console.log('showformincancel', showFormCard); */
-    };
+    const handleClickDeleteButton = () => {};
 
     const editButton = (
         <LayerButton

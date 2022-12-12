@@ -1,5 +1,5 @@
 import './App_layerstack.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import LayerStack from './components/LayerStack';
 import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
@@ -12,7 +12,7 @@ import getFeatures from './models/getFeatures';
 
 import L from 'leaflet';
 
-function App() {
+function AppMap() {
     const [showCities, setShowCities] = useState(true);
     const [showParkings, setShowParkings] = useState(true);
     const [showChargingStations, setShowChargingStations] = useState(true);
@@ -28,8 +28,6 @@ function App() {
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
     const [triggerNewObject, setTriggerNewObject] = useState(false);
     const [newObjectContainer, setNewObjectContainer] = useState(null);
-
-    console.log('triggerNewObject', triggerNewObject);
 
     useEffect(() => {
         const props = {
@@ -65,15 +63,6 @@ function App() {
     }, [triggerNewObject]);
 
     useEffect(() => {
-        //alert('NEW OBJECT');
-        console.log(
-            'LAYHERSTACK USEFFECT GDFNKGDFKJKDGFJKGFJDKJGDFKJSDGDKJSGDKJSDKJFSDKJSDJDKSG',
-            triggerNewObject
-        );
-        //setExpanded(true);
-    }, [triggerNewObject]);
-
-    useEffect(() => {
         (async () => {
             dataFromBackend.cities = await getFeatures.getCities();
 
@@ -96,7 +85,6 @@ function App() {
                 await getFeatures.getChargingStations();
 
             for (const charger of dataFromBackend.chargingStations) {
-                console.log('CHARGER ', charger);
                 allLayers.chargingStations.addLayer(
                     L.geoJson(charger.position, {
                         pointToLayer: function (feature, latlng) {
@@ -160,7 +148,7 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
+            <div className="App-header">
                 <div className="App-left">
                     <LayerStack
                         components={containerArray}
@@ -183,9 +171,9 @@ function App() {
                         setTriggerNewObject={setTriggerNewObject}
                     />
                 </div>
-            </header>
+            </div>
         </div>
     );
 }
 
-export default App;
+export default AppMap;
