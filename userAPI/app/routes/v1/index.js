@@ -39,4 +39,33 @@ router.get('/geojson/geometry', async (req, res) => {
     res.status(200).json(data);
 });
 
+router.get('/bikes', async (req, res) => {
+    const sql = 'SELECT * FROM bikes';
+    const data = await queryDatabase(sql);
+    // res.status(200).json(data);
+    res.status(200).json(sqlToJson(data));
+});
+
+const sqlToJson = (sql) => {
+    const geoJson = sql.map((x) => {
+        return {
+            position: {
+                type: 'Feature',
+                geometry: x.geometry,
+                properties: {
+                    id: x.id,
+                    charging: x.charging,
+                    blocked: x.blocked,
+                    batteryWarning: x.battery_warning,
+                    batteryDepleted: x.battery_depleted,
+                    rented: x.rented,
+                    userId: x.user_id,
+                    featureType: 'bikes',
+                },
+            },
+        };
+    });
+    return geoJson;
+};
+
 module.exports = router;
