@@ -11,15 +11,15 @@ function App() {
     const [showUserUI, setShowUserUI] = useState(false);
     const [user, setUser] = useState();
     const [pwd, setPwd] = useState();
-    const [token, setToken] = useState('korv');
+    const [token, setToken] = useState();
 
     const logInAdmin = async () => {
         const adminToken = await postUsers.logInAdmin({
-            username: user,
+            email: user,
             password: pwd,
         });
-        console.log(adminToken);
-        setToken(adminToken);
+        console.log(adminToken.data.token);
+        setToken(adminToken.data.token);
     };
     if (token) {
         return (
@@ -28,7 +28,7 @@ function App() {
                     showUser={showUserUI}
                     setShowUser={setShowUserUI}
                 />
-                {showUserUI ? <AppUser /> : <AppMap />}
+                {showUserUI ? <AppUser token={token} /> : <AppMap />}
             </div>
         );
     } else {
