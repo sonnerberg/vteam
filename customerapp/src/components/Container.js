@@ -1,12 +1,28 @@
 import { useState } from "react";
-import { Grid, Button } from "@mui/material";
+import {
+  Grid,
+  RestoreIcon,
+  FavoriteIcon,
+  LocationOnIcon,
+  BottomNavigation,
+  BottomNavigationAction,
+  Button,
+} from "@mui/material";
 import Map from "./Map";
 
 const Container = (props) => {
+  const [value, setValue] = useState("");
   return (
-    <Grid container>
-      <Map />
-      <Grid container>
+    <Grid container direction="column" justify="space-between">
+      <Grid item xs={12}>
+        <Map />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        container
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+      >
         <Grid item xs={4}>
           <Button fullWidth={true} variant="contained">
             Karta
@@ -27,3 +43,18 @@ const Container = (props) => {
   );
 };
 export default Container;
+
+/*
+
+            <BottomNavigation
+        showLabels
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+      >
+        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+      </BottomNavigation>
+*/
