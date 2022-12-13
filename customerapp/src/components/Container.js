@@ -7,32 +7,65 @@ import {
   Fab,
 } from "@mui/material";
 import {
-  RestoreIcon,
-  FavoriteIcon,
-  LocationOnIcon,
+  ManageAccounts,
+  Layers,
+  Login,
   ElectricScooter,
 } from "@mui/icons-material";
 
 import Map from "./Map";
 
 const Container = (props) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState("map");
+  let view;
+  if (value === "map") {
+    view = <Map />;
+    console.log("MAP");
+  } else if (value === "account") {
+    view = <Map />;
+    console.log("ACCOUNT");
+  } else if (value === "login") {
+    view = <Map />;
+    console.log("LOGIN");
+  }
   return (
     <Grid container direction="column" justify="space-between">
       <Grid item xs={12}>
-        <Map />
+        {view}
       </Grid>
       <Fab color="primary" aria-label="add">
         <ElectricScooter />
       </Fab>
-      <Grid
-        item
-        xs={12}
-        container
+
+      <BottomNavigation
+        showLabels
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+          console.log("VALUE IS ", value);
+        }}
         sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
       >
-        <Grid item xs={4}>
-          <Button fullWidth={true} variant="contained">
+        <BottomNavigationAction label="Karta" icon={<Layers />} value="map" />
+        <BottomNavigationAction
+          label="Konto"
+          icon={<ManageAccounts />}
+          value="account"
+        />
+        <BottomNavigationAction
+          label="Logga in"
+          icon={<Login />}
+          value="login"
+        />
+      </BottomNavigation>
+    </Grid>
+  );
+};
+export default Container;
+
+/*
+
+<Button fullWidth={true} variant="contained">
             Karta
           </Button>
         </Grid>
@@ -46,24 +79,4 @@ const Container = (props) => {
           <Button fullWidth={true} variant="contained">
             Logga ut
           </Button>
-        </Grid>
-      </Grid>
-    </Grid>
-  );
-};
-export default Container;
-
-/*
-
-            <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      >
-        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-      </BottomNavigation>
 */
