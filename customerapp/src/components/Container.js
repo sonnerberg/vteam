@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Grid,
   BottomNavigation,
@@ -14,15 +14,30 @@ import {
 } from "@mui/icons-material";
 
 import Map from "./Map";
+import getUserData from "../models/getUserData";
+import UserCard from "./UserCard";
 
 const Container = (props) => {
   const [value, setValue] = useState("map");
+  const [userData, setUserData] = useState("");
+
+  async function getUser() {
+    //const user = {};
+    const user = await getUserData.getUser(1);
+
+    setUserData(user);
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   let view;
   if (value === "map") {
     view = <Map />;
     console.log("MAP");
   } else if (value === "account") {
-    view = <Map />;
+    view = <UserCard content={userData} />;
     console.log("ACCOUNT");
   } else if (value === "login") {
     view = <Map />;
