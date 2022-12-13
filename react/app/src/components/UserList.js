@@ -103,6 +103,8 @@ function renderRow(props) {
 function UserList(props) {
     const [showAdmins, setShowAdmins] = useState(props.showAdmins);
 
+    const token = props.token;
+
     const data = showAdmins
         ? props.userData.adminUserData
         : props.userData.customerUserData;
@@ -134,9 +136,8 @@ function UserList(props) {
     };
 
     const newAdminObject = {
-        username: '',
-        pass: '',
-        competence: '',
+        email: '',
+        password: '',
     };
 
     const onSwitchChange = () => {
@@ -145,8 +146,18 @@ function UserList(props) {
         props.setUserTrips(null);
     };
 
+    let fakeResult = null;
+
     const handleClickSaveNewButton = async (newUserObject) => {
-        const result = await postUsers.postUsers(newUserObject, data.userType);
+        if (data.UserType === 'administrators') {
+            const result = await postUsers.registerAdmin(newUserObject, token);
+            /*  const result2 = await postUsers.postUsers(
+                newUserObject,
+                data.userType
+            ); */
+        } else if (data.UserType === 'users') {
+            const result = await postUsers.registerUser(newUserObject, token);
+        }
 
         data.setDetailCard(null);
         /*  data.setDetailCard(
@@ -156,9 +167,10 @@ function UserList(props) {
         //data.setUserFormCard(null);
         data.setShowUserFormCard(false);
 
+        // Get all users on save
         data.saveFunction();
 
-        console.log(result);
+        //console.log(fakeResult);
     };
 
     const handleClickNewButton = () => {
