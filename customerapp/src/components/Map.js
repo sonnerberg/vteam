@@ -145,7 +145,7 @@ const Map = (props) => {
     // Create the zoom control:
     L.control
       .zoom({
-        position: "topleft",
+        position: "topright",
       })
       .addTo(mapRef.current); // Add the control to our map instance
 

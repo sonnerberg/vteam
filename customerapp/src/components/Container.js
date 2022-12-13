@@ -1,13 +1,18 @@
 import { useState } from "react";
 import {
   Grid,
-  RestoreIcon,
-  FavoriteIcon,
-  LocationOnIcon,
   BottomNavigation,
   BottomNavigationAction,
   Button,
+  Fab,
 } from "@mui/material";
+import {
+  RestoreIcon,
+  FavoriteIcon,
+  LocationOnIcon,
+  ElectricScooter,
+} from "@mui/icons-material";
+
 import Map from "./Map";
 
 const Container = (props) => {
@@ -17,6 +22,9 @@ const Container = (props) => {
       <Grid item xs={12}>
         <Map />
       </Grid>
+      <Fab color="primary" aria-label="add">
+        <ElectricScooter />
+      </Fab>
       <Grid
         item
         xs={12}
@@ -28,6 +36,7 @@ const Container = (props) => {
             Karta
           </Button>
         </Grid>
+
         <Grid item xs={4}>
           <Button fullWidth={true} variant="contained">
             Mitt konto
