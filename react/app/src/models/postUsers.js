@@ -28,6 +28,21 @@ const postUsers = {
         console.log(result);
         return result;
     },
+    registerAdmin: async function registerAdmin(data, token) {
+        console.log(data);
+        const response = await fetch(`${baseUrl}/v1/auth/register`, {
+            body: JSON.stringify(data),
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+            method: 'POST',
+        });
+        console.log(response);
+        const result = await response.json();
+        //console.log(result);
+        //return result;
+    },
 };
 
 export default postUsers;
