@@ -32,3 +32,49 @@ IGNORE 1 LINES
 SET
 `geometry` = PointFromText(@col1)
 ;
+
+-- Procedure update_scooter_position()
+
+DROP PROCEDURE IF EXISTS update_scooter_position;
+
+DELIMITER ;;
+
+CREATE PROCEDURE update_scooter_position(
+                    `scooter_id` INT,
+                    `latitude` FLOAT,
+                    `longitude` FLOAT
+)
+ BEGIN
+ SET @coords = CONCAT('POINT(', latitude, ' ', longitude, ')');
+
+    UPDATE bikes
+    SET geometry = ST_PointFromText(@coords)
+    WHERE id = scooter_id;
+
+
+  END
+;;
+
+DELIMITER ;
+
+-- Procedure new_scooter()
+
+DROP PROCEDURE IF EXISTS new_scooter;
+
+DELIMITER ;;
+
+CREATE PROCEDURE new_scooter(
+                    `latitude` FLOAT,
+                    `longitude` FLOAT
+)
+ BEGIN
+ SET @coords = CONCAT('POINT(', latitude, ' ', longitude, ')');
+
+    INSERT INTO bikes (geometry)
+    VALUES (PointFromText(@coords));
+
+
+  END
+;;
+
+DELIMITER ;

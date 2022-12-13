@@ -8,20 +8,24 @@ const router = express.Router();
 router.get('/bikes', async (req, res) => {
     const sql = 'SELECT * FROM bikes';
     const data = await queryDatabase(sql);
-    // res.status(200).json(data);
     res.status(200).json(sqlToGeoJson(data));
 });
 
 router.put('/bikes/position', async (req, res) => {
-    // TODO placeholder and stored procedure bugs out. why?
     const bikeId = req.body.id;
     const latitude = req.body.latitude;
     const longitude = req.body.longitude;
-    const sql = `UPDATE bikes
-         SET geometry = ST_PointFromText("POINT(${latitude} ${longitude})")
-         WHERE id=${bikeId}`;
-    const data = await updateBikePosition(sql);
+    const sql = 'CALL update_scooter_position(?, ?, ?)';
+    const placeholder = [bikeId, latitude, longitude];
+    const data = await updateBikePosition(sql, placeholder);
     res.json(data);
+});
+
+router.post('/bikes/new', async (req, res) => {
+    const sql = 'CALL new_scooter(?, ?)';
+    const placeholder = [req.body.latitude, req.body.longitude];
+    const data = await insertNewBike(sql, placeholder);
+    res.status(200).json(data);
 });
 
 const sqlToGeoJson = (sql) => {
@@ -48,15 +52,40 @@ const sqlToGeoJson = (sql) => {
     };
 };
 
-const updateBikePosition = async (sql) => {
-    const data = await queryDatabase(sql);
-    if (data.error) {
-        return data;
+const updateBikePosition = async (sql, placeholder) => {
+    const data = await queryDatabase(sql, placeholder);
+    if (data.text) {
+        return {
+            error: {
+                status: 500,
+                message: data.text,
+            },
+        };
     }
     return {
         data: {
             status: 200,
             message: 'bike position updated',
+        },
+    };
+};
+
+const insertNewBike = async (sql, placeholder) => {
+    const data = await queryDatabase(sql, placeholder);
+    console.log(data);
+    if (data.text) {
+        return {
+            error: {
+                status: 500,
+                message: data.text,
+            },
+        };
+    }
+
+    return {
+        data: {
+            status: 200,
+            message: 'bike added',
         },
     };
 };
