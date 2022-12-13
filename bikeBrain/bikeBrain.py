@@ -32,6 +32,7 @@ class Brain:
         self._journey_log_start_position = position
         self._journey_log_start_time = 0.0
 
+        self._report_interval = 10
         self._default_report_interval = 10
         self._moving_report_interval = 5
 
@@ -52,15 +53,19 @@ class Brain:
         self._is_locked = is_locked
 
     def get_battery_capacity(self):
+        """Gets battery capacity"""
         return self._battery_capacity
 
     def set_battery_capacity(self, battery_capacity):
-        self.batteryCapacity = battery_capacity
+        """Sets battery capacity"""
+        self._battery_capacity = battery_capacity
 
     def get_battery_decrease(self):
+        """Gets battery decrease value"""
         return self._battery_decrease
 
     def set_battery_decrease(self, battery_decrease):
+        """Sets battery decrease value"""
         self._battery_decrease = battery_decrease
 
     def get_position(self):
@@ -69,7 +74,7 @@ class Brain:
 
     def set_position(self, coordinates):
         """Sets position"""
-        self._position["geometry"]["coordinates"] = coordinates
+        self._position["coordinates"] = coordinates
 
     def get_speed(self):
         """Gets speed"""
@@ -87,9 +92,9 @@ class Brain:
         """Set log for startposition"""
         self._journey_log_start_position = position
 
-    def set_journey_log_start_time(self, time):
+    def set_journey_log_start_time(self, a_time):
         """Set log start time"""
-        self._journey_log_start_time = time
+        self._journey_log_start_time = a_time
 
     def get_journey_log_start_time(self):
         """Get log start time"""
@@ -98,7 +103,7 @@ class Brain:
     def set_current_user(self, user_id):
         """Set current user"""
         self._current_user = user_id
-        self._position["geometry"]["properties"]["userid"] = user_id
+        self._position["properties"]["userid"] = user_id
 
     def get_current_user(self):
         """Get current user"""
@@ -128,7 +133,7 @@ class Brain:
     def set_is_whole(self, status):
         """Sets is_whole"""
         self._is_whole = status
-        self._position["geometry"]["properties"]["whole"] = status
+        self._position["properties"]["whole"] = status
 
     def get_is_charging(self):
         """Gets is_charging"""
@@ -137,7 +142,7 @@ class Brain:
     def set_is_charging(self, status):
         """Sets i_charging"""
         self._is_charging = status
-        self._position["geometry"]["properties"]["charging"] = status
+        self._position["properties"]["charging"] = status
 
     def get_is_blocked(self):
         """Gets is_blocked"""
@@ -146,7 +151,7 @@ class Brain:
     def set_is_blocked(self, status):
         """Sets is_blocked"""
         self._is_blocked = status
-        self._position["geometry"]["properties"]["blocked"] = status
+        self._position["properties"]["blocked"] = status
 
     def get_is_warning_battery(self):
         """Sets _is_warning_battery"""
@@ -155,7 +160,7 @@ class Brain:
     def set_is_warning_battery(self, status):
         """Sets _is_warning_battery"""
         self._is_warning_battery = status
-        self._position["geometry"]["properties"]["batterywarning"] = status
+        self._position["properties"]["batterywarning"] = status
 
     def get_is_battery_depleted(self):
         """Get _is_battery_depleted"""
@@ -164,7 +169,7 @@ class Brain:
     def set_is_battery_depleted(self, status):
         """Sets _is_battery_depleted"""
         self._is_battery_depleted = status
-        self._position["geometry"]["properties"]["batterydepleted"] = status
+        self._position["properties"]["batterydepleted"] = status
 
     def get_rented(self):
         """Gets rented status"""
@@ -173,7 +178,7 @@ class Brain:
     def set_rented(self, status):
         """Sets rented status"""
         self._is_rented = status
-        self._position["geometry"]["properties"]["rented"] = status
+        self._position["properties"]["rented"] = status
 
     # Is bike breaking down during move?
     async def check_health(self):
@@ -213,8 +218,6 @@ class Brain:
         if interval > self.get_report_interval():
             # Set start_time to begin counting against the interval again
             self.set_start_time(time.time())
-
-            print(f"Bike {self.get_id()} reporting")
 
             position = self.get_position()
 
@@ -258,7 +261,7 @@ class Brain:
         }
 
         async with self._session.post(
-            f"http://server:3000/trips/", json=payload
+            "http://server:3000/trips/", json=payload
         ) as resp:
             result = await resp.json()
             # Handle result if necessary

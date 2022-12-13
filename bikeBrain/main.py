@@ -1,15 +1,16 @@
-import bikeBrain
-import user as UserClass
+""""Bikebrain simulation"""
 import time
-import requests
-import aiohttp
 import asyncio
-import sys
 import errno
 import json
+import requests
+import aiohttp
+import user as UserClass
+import bikeBrain
 
 
 async def main():
+    """main"""
     async with aiohttp.ClientSession() as session:
         nr_of_users = 10
         nr_of_bikes = 10
@@ -21,7 +22,7 @@ async def main():
         report_start_time = time.time()
         report_interval = 5
 
-        with open("punkter_for_resa.geojson") as file:
+        with open("punkter_for_resa.geojson", encoding="utf-8") as file:
             data = json.load(file)
 
         features = data["features"]
@@ -66,17 +67,17 @@ async def main():
                 "geometry": {
                     "type": "Point",
                     "coordinates": coordinates,
-                    "properties": {
-                        "id": _id,
-                        "whole": True,
-                        "charging": False,
-                        "blocked": False,
-                        "batterywarning": False,
-                        "batterydepleted": False,
-                        "rented": True,
-                        "userid": None,
-                        "featureType": "bikes",
-                    },
+                },
+                "properties": {
+                    "id": _id,
+                    "whole": True,
+                    "charging": False,
+                    "blocked": False,
+                    "batterywarning": False,
+                    "batterydepleted": False,
+                    "rented": True,
+                    "userid": None,
+                    "featureType": "bikes",
                 },
             }
 
@@ -129,8 +130,8 @@ async def main():
                     payload = {"report": report_dict}
                     # r = requests.put("http://server:3000/reports/1", json=payload)
                     report_start_time = current_time
-            except IOError as e:
-                if e.errno == errno.EPIPE:
+            except IOError as error:
+                if error.errno == errno.EPIPE:
                     pass
 
 
