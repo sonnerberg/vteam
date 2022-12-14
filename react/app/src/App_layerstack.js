@@ -1,5 +1,5 @@
 import './App_layerstack.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import LayerStack from './components/LayerStack';
 import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
@@ -12,7 +12,7 @@ import getFeatures from './models/getFeatures';
 
 import L from 'leaflet';
 
-function App() {
+function AppMap() {
     const [showCities, setShowCities] = useState(true);
     const [showParkings, setShowParkings] = useState(true);
     const [showChargingStations, setShowChargingStations] = useState(true);
@@ -28,8 +28,6 @@ function App() {
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
     const [triggerNewObject, setTriggerNewObject] = useState(false);
     const [newObjectContainer, setNewObjectContainer] = useState(null);
-
-    console.log('triggerNewObject', triggerNewObject);
 
     useEffect(() => {
         const props = {
@@ -62,16 +60,19 @@ function App() {
         const containerArray = layerStackBuilder(props);
 
         setContainerArray(containerArray);
-    }, [triggerNewObject]);
-
-    useEffect(() => {
-        //alert('NEW OBJECT');
-        console.log(
-            'LAYHERSTACK USEFFECT GDFNKGDFKJKDGFJKGFJDKJGDFKJSDGDKJSGDKJSDKJFSDKJSDJDKSG',
-            triggerNewObject
-        );
-        //setExpanded(true);
-    }, [triggerNewObject]);
+    }, [
+        triggerNewObject,
+        newObjectContainer,
+        showBikes,
+        showChargingStations,
+        showCities,
+        showParkings,
+        showZones,
+        triggerChargeRedraw,
+        triggerCityRedraw,
+        triggerParkingRedraw,
+        triggerZoneRedraw,
+    ]);
 
     useEffect(() => {
         (async () => {
@@ -89,6 +90,7 @@ function App() {
         setTriggerCityRedraw(false);
 
         return () => allLayers.cities.clearLayers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triggerCityRedraw]);
     useEffect(() => {
         (async () => {
@@ -96,7 +98,6 @@ function App() {
                 await getFeatures.getChargingStations();
 
             for (const charger of dataFromBackend.chargingStations) {
-                console.log('CHARGER ', charger);
                 allLayers.chargingStations.addLayer(
                     L.geoJson(charger.position, {
                         pointToLayer: function (feature, latlng) {
@@ -109,6 +110,7 @@ function App() {
         setTriggerChargeRedraw(false);
 
         return () => allLayers.chargingStations.clearLayers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triggerChargeRedraw]);
     useEffect(() => {
         (async () => {
@@ -125,16 +127,19 @@ function App() {
         setTriggerParkingRedraw(false);
 
         return () => allLayers.parkingLots.clearLayers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triggerParkingRedraw]);
     useEffect(() => {
         (async () => {
             dataFromBackend.bikes = await getFeatures.getBikes();
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         (async () => {
             dataFromBackend.workshops = await getFeatures.getWorkshops();
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         (async () => {
@@ -151,17 +156,19 @@ function App() {
         setTriggerZoneRedraw(false);
 
         return () => allLayers.zones.clearLayers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triggerZoneRedraw]);
     useEffect(() => {
         (async () => {
             dataFromBackend.points = await getFeatures.getPoints();
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <div className="App-left">
+        <div className="AppMap">
+            <div className="App-header-Map">
+                <div className="App-left-Map">
                     <LayerStack
                         components={containerArray}
                         setActivateDraw={setActivateDraw}
@@ -170,7 +177,7 @@ function App() {
                         setTriggerCityRedraw={setTriggerCityRedraw}
                     />
                 </div>
-                <div className="App-right">
+                <div className="App-right-Map">
                     <Map
                         showCities={showCities}
                         showParkings={showParkings}
@@ -183,9 +190,9 @@ function App() {
                         setTriggerNewObject={setTriggerNewObject}
                     />
                 </div>
-            </header>
+            </div>
         </div>
     );
 }
 
-export default App;
+export default AppMap;

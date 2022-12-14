@@ -15,8 +15,6 @@ import TableRow from '@mui/material/TableRow';
 const LayerCard = (props) => {
     const rows = [];
 
-    console.log('card props.content', props.content);
-
     for (const property in props.content.position.properties) {
         rows.push({
             name: property,

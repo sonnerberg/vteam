@@ -6,8 +6,6 @@ const allLayers = {
     //så här initierar vi helt enkelt alla featurgroups (= lager i kartan) och sätter gemensamma funktioner
     //på alla ingående objekt, som popup och click enligt nedan
     cities: L.featureGroup().on('click', function (event) {
-        console.log('Clicked city', event.propagatedFrom);
-        console.log(event.propagatedFrom);
         eventBus.dispatch('cityClicked', {
             id: event.propagatedFrom.feature.properties.id,
             position: event.propagatedFrom.feature,
@@ -20,7 +18,6 @@ const allLayers = {
         });
     }),
     parkingLots: L.featureGroup().on('click', function (event) {
-        console.log(event.propagatedFrom);
         eventBus.dispatch('parkingLotClicked', {
             id: event.propagatedFrom.feature.properties.id,
             position: event.propagatedFrom.feature,
@@ -43,7 +40,6 @@ const allLayers = {
             id: event.propagatedFrom.feature.properties.id,
             position: event.propagatedFrom.feature,
         });
-        console.log(event.propagatedFrom.feature.properties.type);
     }),
 };
 

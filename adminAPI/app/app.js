@@ -1,7 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 const { queryDatabase } = require('./database/mariadb');
 
 const app = express();
+app.use(cors());
+app.options('*', cors());
 const v1 = require('./v1');
 
 app.use(express.json());
