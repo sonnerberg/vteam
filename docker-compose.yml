@@ -70,3 +70,14 @@ services:
     ports:
       - 3000:3000
     restart: on-failure
+
+  customerapp:
+    container_name: customerapp
+    build: ./customerapp
+    working_dir: /code
+    command: npm start
+    volumes:
+      - ./customerapp/src:/code/src
+    ports:
+      - 3100:3000
+    restart: on-failure
