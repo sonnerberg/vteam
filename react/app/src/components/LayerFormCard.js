@@ -38,7 +38,7 @@ const LayerFormCard = (props) => {
         const newGeoJson =
             props.drawnItems.current.toGeoJSON().features[0].geometry;
 
-        const result = await putFeatures.putFeatures({
+        await putFeatures.putFeatures({
             ...newFeatureObject,
             position: {
                 ...newFeatureObject.position,
@@ -51,7 +51,7 @@ const LayerFormCard = (props) => {
     };
 
     const handleClickDeleteButton = async () => {
-        const result = await deleteFeatures.deleteFeatures(newFeatureObject);
+        await deleteFeatures.deleteFeatures(newFeatureObject);
         props.setShowFormCard(false);
         props.setCard(null);
     };
