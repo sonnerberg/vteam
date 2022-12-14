@@ -5,12 +5,59 @@ const { queryDatabase } = require('../../database/mariadb');
 const router = express.Router();
 // const routeName = '/bikes';
 
+const allowedFields = {
+    coordinates: 'geometry',
+    charging: 'charging',
+    blocked: 'blocked',
+    whole: 'whole',
+    battery_warning: 'battery_warning',
+    battery_depleted: 'battery_depleted',
+    rented: 'rented',
+    user_id: 'user_id',
+};
+
 router.get('/bikes', async (_, res) => {
     const sql = 'CALL get_all_scooters()';
     const { 0: data } = await queryDatabase(sql);
     res.status(200).json(sqlToGeoJson(data));
 });
 
+router.put('/bikes/:id', async (req, res) => {
+    try {
+        let updateFields = [];
+        let params = [];
+        let sql = 'UPDATE bikes SET ';
+
+        const { body } = req;
+        for (const field in allowedFields) {
+            console.log(field, body[field]);
+            if (field === 'coordinates') {
+                updateFields.push(
+                    allowedFields[field] +
+                        ' = ST_PointFromText(CONCAT(\'POINT(\', ?, \' \', ?, \')\'))'
+                );
+                params.push(body[field][0], body[field][1]);
+            } else {
+                updateFields.push(allowedFields[field] + ' = ?');
+                params.push(body[field]);
+            }
+        }
+        sql += updateFields.join(', ');
+
+        sql += ' WHERE id = ?';
+
+        params.push(req.params.id);
+        sql += ';';
+        const { affectedRows } = await queryDatabase(sql, params);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
 router.put('/bikes/charging/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -143,7 +190,6 @@ router.post('/bikes/new', async (req, res) => {
     const sql = 'CALL new_scooter(?, ?)';
     const placeholder = [req.body.latitude, req.body.longitude];
     const data = await insertNewBike(sql, placeholder);
-    // console.log(data);
     res.status(200).json(data);
 });
 
