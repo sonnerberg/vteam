@@ -153,31 +153,19 @@ function UserList(props) {
         props.setUserFormCard(null);
     };
 
-    let fakeResult = null;
-
     const handleClickSaveNewButton = async (newUserObject) => {
         if (data.UserType === 'administrators') {
-            const result = await postUsers.registerAdmin(newUserObject, token);
-            /*  const result2 = await postUsers.postUsers(
-                newUserObject,
-                data.userType
-            ); */
+            await postUsers.registerAdmin(newUserObject, token);
         } else if (data.UserType === 'users') {
-            const result = await postUsers.registerUser(newUserObject, token);
+            await postUsers.registerUser(newUserObject, token);
         }
 
         data.setDetailCard(null);
-        /*  data.setDetailCard(
-            <UserCard content={newUserObject} />
-        ); */
 
-        //data.setUserFormCard(null);
         data.setShowUserFormCard(false);
 
         // Get all users on save
         data.saveFunction();
-
-        //console.log(fakeResult);
     };
 
     const handleClickNewButton = () => {

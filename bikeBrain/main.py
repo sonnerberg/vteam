@@ -69,7 +69,7 @@ async def main():
                     "coordinates": coordinates,
                 },
                 "properties": {
-                    "id": _id,
+                    "id": _id,  # Ta bort
                     "whole": True,
                     "charging": False,
                     "blocked": False,
@@ -95,8 +95,9 @@ async def main():
         for i in range(nr_of_bikes):
             position = bikes[i].get_position()
             _id = bikes[i].get_id()
-            payload = {"id": _id, "position": position}
+            payload = {"id": _id, "position": position}  #
             r = requests.post("http://server:3000/bikes/", json=payload)
+            # Sätt cykelns id och token
 
         # Create users and append them to the user list,
         # users get id:s from 1 -

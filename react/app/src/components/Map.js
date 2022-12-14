@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import { Draw } from 'leaflet-draw';
+//import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
 import mapStyles from '../models/mapStyles';
 import allLayers from '../models/allLayers';
@@ -8,7 +8,7 @@ require('../../node_modules/leaflet/dist/leaflet.css');
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css');
 
 const Map = (props) => {
-    const [points, setPoints] = useState({});
+    //const [points, setPoints] = useState({});
 
     // Create our map ref:
     const mapRef = useRef(null);
@@ -131,6 +131,7 @@ const Map = (props) => {
         //maybe build a counter that gets updated for every time this effect runs to understand if the app is recreating
         //the map many times?
         return () => mapRef.current.remove();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     /*[props.activateDraw]
     useEffect(() => {
