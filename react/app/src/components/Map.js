@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
-//import { Draw } from 'leaflet-draw';
+// eslint-disable-next-line
+import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
 import mapStyles from '../models/mapStyles';
 import allLayers from '../models/allLayers';
@@ -8,7 +9,8 @@ require('../../node_modules/leaflet/dist/leaflet.css');
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css');
 
 const Map = (props) => {
-    //const [points, setPoints] = useState({});
+    // eslint-disable-next-line
+    const [points, setPoints] = useState({});
 
     // Create our map ref:
     const mapRef = useRef(null);
