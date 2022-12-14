@@ -22,12 +22,13 @@ const TripCard = (props) => {
         if (property === 'startposition') {
             rows.push({
                 name: property,
-                value: `${props.content.startposition.longitude}Longitude: ${props.content.startposition.longitude} Latitude: ${props.content.startposition.latitude} `,
+                value: `Long: ${props.content.startposition.longitude}
+                        Lat: ${props.content.startposition.latitude} `,
             });
         } else if (property === 'endposition') {
             rows.push({
                 name: property,
-                value: `${props.content.startposition.longitude}Longitude: ${props.content.endposition.longitude} Latitude: ${props.content.endposition.latitude} `,
+                value: `Long: ${props.content.endposition.longitude} Lat: ${props.content.endposition.latitude} `,
             });
         } else
             rows.push({

@@ -1,6 +1,8 @@
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { FixedSizeList } from 'react-window';
 import { useState } from 'react';
 import { Switch } from '@mui/material';
@@ -14,11 +16,15 @@ import getCustomerData from '../models/getCustomerData';
 function renderRow(props) {
     const { index, style, data } = props;
     const handleClick = async () => {
-        const trips = await getCustomerData.getTripsByUserId(data[index].id);
-        if (trips) {
-            data.setUserTrips(trips);
-        } else {
-            data.setUserTrips(null);
+        if (data.userType === 'users') {
+            const trips = await getCustomerData.getTripsByUserId(
+                data[index].id
+            );
+            if (trips) {
+                data.setUserTrips(trips);
+            } else {
+                data.setUserTrips(null);
+            }
         }
 
         data.setUserFormCard(null);
@@ -144,6 +150,7 @@ function UserList(props) {
         setShowAdmins(!showAdmins);
         props.setDetailCard(null);
         props.setUserTrips(null);
+        props.setUserFormCard(null);
     };
 
     let fakeResult = null;
@@ -203,8 +210,22 @@ function UserList(props) {
 
     return (
         <div>
-            <Switch onChange={onSwitchChange}></Switch>
-            <LayerButton handleClick={handleClickNewButton} buttonText={'Ny'} />
+            <FormGroup sx={{ margin: 1 }}>
+                <FormControlLabel
+                    control={<Switch onChange={onSwitchChange}></Switch>}
+                    label={
+                        showAdmins
+                            ? 'Växla till kunder'
+                            : 'Växla till administratörer'
+                    }
+                />
+            </FormGroup>
+
+            <LayerButton
+                handleClick={handleClickNewButton}
+                buttonText={'Ny'}
+                sx={{ mr: 'auto' }}
+            />
             <FixedSizeList
                 height={400}
                 width={360}
