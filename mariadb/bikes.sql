@@ -80,3 +80,20 @@ CREATE PROCEDURE new_scooter(
 ;;
 
 DELIMITER ;
+
+-- Procedure get_all_scooters()
+
+DROP PROCEDURE IF EXISTS get_all_scooters;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_all_scooters()
+
+ BEGIN
+
+    SELECT * FROM bikes;
+
+  END
+;;
+
+DELIMITER ;

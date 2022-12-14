@@ -5,9 +5,9 @@ const { queryDatabase } = require('../../database/mariadb');
 const router = express.Router();
 // const routeName = '/bikes';
 
-router.get('/bikes', async (req, res) => {
-    const sql = 'SELECT * FROM bikes';
-    const data = await queryDatabase(sql);
+router.get('/bikes', async (_, res) => {
+    const sql = 'CALL get_all_scooters()';
+    const { 0: data } = await queryDatabase(sql);
     res.status(200).json(sqlToGeoJson(data));
 });
 
