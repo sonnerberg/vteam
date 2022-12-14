@@ -243,6 +243,8 @@ class Brain:
             self.set_journey_log_start_position(pos_dict)
             self.set_current_user(user_id)
             self.set_rented(True)
+            # Skicka start data: startposition, starttid user_id, bike_id
+            # få resans id tillbaka
 
     # Lock the bike and report the journey
     async def lock(self):
@@ -260,6 +262,7 @@ class Brain:
             "bike-id": self.get_id(),
         }
 
+        # Ändra till put med  reseid.
         async with self._session.post(
             "http://server:3000/trips/", json=payload
         ) as resp:
