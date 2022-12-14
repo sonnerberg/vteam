@@ -60,7 +60,19 @@ function AppMap() {
         const containerArray = layerStackBuilder(props);
 
         setContainerArray(containerArray);
-    }, [triggerNewObject]);
+    }, [
+        triggerNewObject,
+        newObjectContainer,
+        showBikes,
+        showChargingStations,
+        showCities,
+        showParkings,
+        showZones,
+        triggerChargeRedraw,
+        triggerCityRedraw,
+        triggerParkingRedraw,
+        triggerZoneRedraw,
+    ]);
 
     useEffect(() => {
         (async () => {
@@ -78,6 +90,7 @@ function AppMap() {
         setTriggerCityRedraw(false);
 
         return () => allLayers.cities.clearLayers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triggerCityRedraw]);
     useEffect(() => {
         (async () => {
@@ -97,6 +110,7 @@ function AppMap() {
         setTriggerChargeRedraw(false);
 
         return () => allLayers.chargingStations.clearLayers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triggerChargeRedraw]);
     useEffect(() => {
         (async () => {
@@ -113,16 +127,19 @@ function AppMap() {
         setTriggerParkingRedraw(false);
 
         return () => allLayers.parkingLots.clearLayers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triggerParkingRedraw]);
     useEffect(() => {
         (async () => {
             dataFromBackend.bikes = await getFeatures.getBikes();
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         (async () => {
             dataFromBackend.workshops = await getFeatures.getWorkshops();
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         (async () => {
@@ -139,11 +156,13 @@ function AppMap() {
         setTriggerZoneRedraw(false);
 
         return () => allLayers.zones.clearLayers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triggerZoneRedraw]);
     useEffect(() => {
         (async () => {
             dataFromBackend.points = await getFeatures.getPoints();
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
