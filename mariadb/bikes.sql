@@ -19,19 +19,19 @@ COLLATE utf8_swedish_ci
 --
 -- Insert some scooters.
 --
--- LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/bikes.csv'
--- INTO TABLE bikes
--- CHARSET utf8
--- FIELDS
---     TERMINATED BY ','
---     ENCLOSED BY '"'
--- LINES
---     TERMINATED BY '\n'
--- IGNORE 1 LINES
--- (@col1)
--- SET
--- `geometry` = PointFromText(@col1)
--- ;
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/bikes.csv'
+INTO TABLE bikes
+CHARSET utf8
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1 LINES
+(@col1)
+SET
+`geometry` = PointFromText(@col1)
+;
 
 -- Procedure update_scooter_position()
 
