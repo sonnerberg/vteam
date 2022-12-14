@@ -65,6 +65,7 @@ const LayerAccordion = (props) => {
 
             props.setTriggerNewObject(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.triggerNewObject]);
 
     useEffect(() => {
@@ -110,6 +111,7 @@ const LayerAccordion = (props) => {
         });
 
         return eventBus.remove(props.event);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

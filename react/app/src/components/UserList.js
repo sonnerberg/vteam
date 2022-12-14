@@ -1,6 +1,8 @@
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { FixedSizeList } from 'react-window';
 import { useState } from 'react';
 import { Switch } from '@mui/material';
@@ -14,11 +16,15 @@ import getCustomerData from '../models/getCustomerData';
 function renderRow(props) {
     const { index, style, data } = props;
     const handleClick = async () => {
-        const trips = await getCustomerData.getTripsByUserId(data[index].id);
-        if (trips) {
-            data.setUserTrips(trips);
-        } else {
-            data.setUserTrips(null);
+        if (data.userType === 'users') {
+            const trips = await getCustomerData.getTripsByUserId(
+                data[index].id
+            );
+            if (trips) {
+                data.setUserTrips(trips);
+            } else {
+                data.setUserTrips(null);
+            }
         }
 
         data.setUserFormCard(null);
@@ -103,6 +109,8 @@ function renderRow(props) {
 function UserList(props) {
     const [showAdmins, setShowAdmins] = useState(props.showAdmins);
 
+    const token = props.token;
+
     const data = showAdmins
         ? props.userData.adminUserData
         : props.userData.customerUserData;
@@ -134,31 +142,30 @@ function UserList(props) {
     };
 
     const newAdminObject = {
-        username: '',
-        pass: '',
-        competence: '',
+        email: '',
+        password: '',
     };
 
     const onSwitchChange = () => {
         setShowAdmins(!showAdmins);
         props.setDetailCard(null);
         props.setUserTrips(null);
+        props.setUserFormCard(null);
     };
 
     const handleClickSaveNewButton = async (newUserObject) => {
-        const result = await postUsers.postUsers(newUserObject, data.userType);
+        if (data.UserType === 'administrators') {
+            await postUsers.registerAdmin(newUserObject, token);
+        } else if (data.UserType === 'users') {
+            await postUsers.registerUser(newUserObject, token);
+        }
 
         data.setDetailCard(null);
-        /*  data.setDetailCard(
-            <UserCard content={newUserObject} />
-        ); */
 
-        //data.setUserFormCard(null);
         data.setShowUserFormCard(false);
 
+        // Get all users on save
         data.saveFunction();
-
-        console.log(result);
     };
 
     const handleClickNewButton = () => {
@@ -191,8 +198,22 @@ function UserList(props) {
 
     return (
         <div>
-            <Switch onChange={onSwitchChange}></Switch>
-            <LayerButton handleClick={handleClickNewButton} buttonText={'Ny'} />
+            <FormGroup sx={{ margin: 1 }}>
+                <FormControlLabel
+                    control={<Switch onChange={onSwitchChange}></Switch>}
+                    label={
+                        showAdmins
+                            ? 'Växla till kunder'
+                            : 'Växla till administratörer'
+                    }
+                />
+            </FormGroup>
+
+            <LayerButton
+                handleClick={handleClickNewButton}
+                buttonText={'Ny'}
+                sx={{ mr: 'auto' }}
+            />
             <FixedSizeList
                 height={400}
                 width={360}

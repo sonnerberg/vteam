@@ -1,12 +1,11 @@
 import './App_user.css';
 import getUserData from './models/getUserData';
-import getCustomerData from './models/getCustomerData';
 import UserList from './components/UserList';
 import TripContainer from './components/TripContainer';
 
 import { useEffect, useState } from 'react';
 
-function AppUser() {
+function AppUser(props) {
     const [userData, setUserData] = useState(null);
     const [detailCard, setDetailCard] = useState(null);
     const [userFormCard, setUserFormCard] = useState(null);
@@ -37,6 +36,7 @@ function AppUser() {
                             setShowUserFormCard={setShowUserFormCard}
                             saveFunction={getUsers}
                             setUserTrips={setUserTrips}
+                            token={props.token}
                         />
                     ) : (
                         <></>

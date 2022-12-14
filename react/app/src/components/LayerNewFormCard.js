@@ -4,7 +4,6 @@ import CardContent from '@mui/material/CardContent';
 import { TextField } from '@mui/material';
 import { useState } from 'react';
 import postFeatures from '../models/postFeatures';
-import deleteFeatures from '../models/deleteFeatures';
 import LayerButton from '../components/LayerButton';
 
 /**
@@ -36,7 +35,7 @@ const LayerNewFormCard = (props) => {
         const newGeoJson =
             props.drawnItems.current.toGeoJSON().features[0].geometry;
 
-        const result = await postFeatures.postFeatures({
+        await postFeatures.postFeatures({
             ...newFeatureObject,
             position: {
                 ...newFeatureObject.position,

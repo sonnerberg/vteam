@@ -1,0 +1,11 @@
+FROM node:latest
+
+WORKDIR /server/app/
+
+COPY package* ./
+
+COPY db.json ./
+
+COPY server.js ./
+
+RUN npm install
