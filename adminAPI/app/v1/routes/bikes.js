@@ -11,6 +11,124 @@ router.get('/bikes', async (_, res) => {
     res.status(200).json(sqlToGeoJson(data));
 });
 
+router.put('/bikes/charging/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { charging } = req.body;
+        const sql = 'CALL update_scooter_charging(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [charging, id]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
+router.put('/bikes/blocked/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { blocked } = req.body;
+        const sql = 'CALL update_scooter_blocked(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [blocked, id]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
+router.put('/bikes/battery_warning/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { battery_warning } = req.body;
+        const sql = 'CALL update_scooter_battery_warning(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [
+            battery_warning,
+            id,
+        ]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
+router.put('/bikes/battery_depleted/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { battery_depleted } = req.body;
+        const sql = 'CALL update_scooter_battery_depleted(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [
+            battery_depleted,
+            id,
+        ]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
+router.put('/bikes/rented/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { rented } = req.body;
+        const sql = 'CALL update_scooter_rented(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [rented, id]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
+router.put('/bikes/user_id/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { user_id } = req.body;
+        const sql = 'CALL update_scooter_user_id(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [user_id, id]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
+router.put('/bikes/whole/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { whole } = req.body;
+        const sql = 'CALL update_scooter_whole(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [whole, id]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
 router.put('/bikes/position', async (req, res) => {
     const bikeId = req.body.id;
     const latitude = req.body.latitude;
@@ -41,6 +159,7 @@ const sqlToGeoJson = (sql) => {
                     blocked: x.blocked,
                     batteryWarning: x.battery_warning,
                     batteryDepleted: x.battery_depleted,
+                    whole: x.whole,
                     rented: x.rented,
                     userId: x.user_id,
                     featureType: 'bikes',
