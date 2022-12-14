@@ -1,6 +1,5 @@
 import './App_user.css';
 import getUserData from './models/getUserData';
-import getCustomerData from './models/getCustomerData';
 import UserList from './components/UserList';
 import TripContainer from './components/TripContainer';
 
