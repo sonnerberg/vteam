@@ -150,6 +150,7 @@ function UserList(props) {
         setShowAdmins(!showAdmins);
         props.setDetailCard(null);
         props.setUserTrips(null);
+        props.setUserFormCard(null);
     };
 
     let fakeResult = null;
