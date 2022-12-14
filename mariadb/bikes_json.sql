@@ -193,4 +193,4 @@ CREATE PROCEDURE delete_bike(
 
 
 
-INSERT INTO bikes_json (jsonfield) VALUES (' { "position": { "type": "Feature", "geometry": { "type": "Point", "coordinates": [16.371662891697607, 59.40388342350176] } }, "properties": { "whole": false, "charging": false, "blocked": true, "batterywarning": false, "batterydepleted": false, "rented": false, "userid": 1, "featureType": "bikes"} } ');
+-- INSERT INTO bikes_json (jsonfield) VALUES (' { "position": { "type": "Feature", "geometry": { "type": "Point", "coordinates": [16.371662891697607, 59.40388342350176] } }, "properties": { "whole": false, "charging": false, "blocked": true, "batterywarning": false, "batterydepleted": false, "rented": false, "userid": 1, "featureType": "bikes"} } ');
