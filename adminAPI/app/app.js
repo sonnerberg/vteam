@@ -27,12 +27,12 @@ app.use('/v1', v1);
 //     }
 // });
 
-// v1.stack.forEach(function (stack) {
-//     stack.handle.stack.forEach((r) => {
-//         if (r.route && r.route.path) {
-//             console.log(`{{baseURL}}/v1${r.route.path}`);
-//         }
-//     });
-// });
+v1.stack.forEach(function (stack) {
+    stack.handle.stack.forEach((r) => {
+        if (r.route && r.route.path) {
+            console.log(`{{baseURL}}/v1${r.route.path}`);
+        }
+    });
+});
 
 module.exports = app;
