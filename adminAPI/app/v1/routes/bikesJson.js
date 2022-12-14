@@ -83,12 +83,17 @@ async function addABike(req, res) {
         const validationResult = scooterSchema.validate(req.body);
         if (validationResult.error) throw 'InvalidUserInput';
         const sql = 'CALL add_bike(?,?);';
-        const { affectedRows } = await queryDatabase(sql, [
-            defaultScooter,
-            req.body,
-        ]);
+        const {
+            1: { affectedRows },
+            0: { 0: { id }, },
+        } = await queryDatabase(sql, [defaultScooter, req.body]);
         if (affectedRows) {
-            res.sendStatus(200);
+            res.status(200).json({
+                data: {
+                    id: Number(id),
+                    token: 'asdf',
+                },
+            });
         } else {
             throw 'CannotInsert';
         }
@@ -98,11 +103,7 @@ async function addABike(req, res) {
 }
 async function deleteABike(req, res) {
     try {
-        // eslint-disable-next-line object-curly-newline
-        const {
-            params: { id },
-            // eslint-disable-next-line object-curly-newline
-        } = req;
+        const { params: { id }, } = req;
         const sql = 'CALL delete_bike(?)';
         const { affectedRows } = await queryDatabase(sql, [id]);
 
@@ -117,19 +118,9 @@ async function deleteABike(req, res) {
 }
 async function getABike(req, res) {
     try {
-        // eslint-disable-next-line object-curly-newline
-        const {
-            params: { id },
-            // eslint-disable-next-line object-curly-newline
-        } = req;
+        const { params: { id }, } = req;
         const sql = 'CALL get_bike_by_id(?)';
-        const {
-            // eslint-disable-next-line object-curly-newline
-            0: {
-                0: { bike: data },
-                // eslint-disable-next-line object-curly-newline
-            },
-        } = await queryDatabase(sql, [id]);
+        const { 0: { 0: { bike: data }, }, } = await queryDatabase(sql, [id]);
 
         // console.log(data[0].bike);
 

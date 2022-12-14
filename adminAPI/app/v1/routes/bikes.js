@@ -73,7 +73,6 @@ const updateBikePosition = async (sql, placeholder) => {
 
 const insertNewBike = async (sql, placeholder) => {
     const data = await queryDatabase(sql, placeholder);
-    console.log('bike inserted', Number(data[0][0].id));
     if (data.text) {
         return {
             error: {
