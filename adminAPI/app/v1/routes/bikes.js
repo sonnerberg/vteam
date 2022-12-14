@@ -25,6 +25,7 @@ router.post('/bikes/new', async (req, res) => {
     const sql = 'CALL new_scooter(?, ?)';
     const placeholder = [req.body.latitude, req.body.longitude];
     const data = await insertNewBike(sql, placeholder);
+    // console.log(data);
     res.status(200).json(data);
 });
 
@@ -72,7 +73,7 @@ const updateBikePosition = async (sql, placeholder) => {
 
 const insertNewBike = async (sql, placeholder) => {
     const data = await queryDatabase(sql, placeholder);
-    console.log(data);
+    console.log('bike inserted', Number(data[0][0].id));
     if (data.text) {
         return {
             error: {
@@ -86,6 +87,8 @@ const insertNewBike = async (sql, placeholder) => {
         data: {
             status: 200,
             message: 'bike added',
+            id: Number(data[0][0].id),
+            token: 'asdf',
         },
     };
 };

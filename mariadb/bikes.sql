@@ -73,6 +73,8 @@ CREATE PROCEDURE new_scooter(
     INSERT INTO bikes (geometry)
     VALUES (PointFromText(@coords));
 
+    SELECT LAST_INSERT_ID() AS id;
+
 
   END
 ;;
