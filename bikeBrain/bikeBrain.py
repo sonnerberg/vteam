@@ -9,9 +9,11 @@ import json
 class Brain:
     """Class for bike brain"""
 
-    def __init__(self, _id, session, start_time, position, battery_capacity):
+    def __init__(
+        self, breaking_seed, session, token, start_time, position, battery_capacity
+    ):
         """Init"""
-        self._id = _id
+        self._id = None
         self._session = session
         self._start_time = start_time
         self._position = position
@@ -38,11 +40,17 @@ class Brain:
 
         self._current_user = None
 
-        seed(self._id)
+        self._token = token
+
+        seed(breaking_seed)
 
     def get_id(self):
         """Gets _id"""
         return self._id
+
+    def set_id(self, _id):
+        """Gets _id"""
+        self._id = _id
 
     def get_is_locked(self):
         """Gets is locked status"""
@@ -220,7 +228,7 @@ class Brain:
             self.set_start_time(time.time())
 
             position = self.get_position()
-
+            # Header med self._token
             payload = {"position": position}
 
             async with self._session.put(
