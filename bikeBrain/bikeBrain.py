@@ -9,25 +9,25 @@ import json
 class Brain:
     """Class for bike brain"""
 
-    def __init__(self, _id, session, start_time, position, battery_capacity):
+    def __init__(self, _id, session, token, start_time, position):
         """Init"""
         self._id = _id
         self._session = session
         self._start_time = start_time
         self._position = position
-        self._battery_capacity = battery_capacity
+        self._battery_capacity = 100
 
         self._speed = 0
         self._is_locked = True
-        self._is_whole = True
-        self._is_charging = False
-        self._is_blocked = False
-        self._is_rented = False
-        self._is_warning_battery = False
-        self._is_battery_depleted = False
+        self._is_whole = position["properties"]["whole"]
+        self._is_charging = position["properties"]["charging"]
+        self._is_blocked = position["properties"]["blocked"]
+        self._is_rented = position["properties"]["rented"]
+        self._is_warning_battery = position["properties"]["batteryWarning"]
+        self._is_battery_depleted = position["properties"]["batteryDepleted"]
 
         self._battery_decrease = 5
-        self._breaking_probability = 5
+        self._breaking_probability = 3
 
         self._journey_log_start_position = position
         self._journey_log_start_time = 0.0
@@ -36,13 +36,20 @@ class Brain:
         self._default_report_interval = 10
         self._moving_report_interval = 5
 
-        self._current_user = None
+        self._current_user = position["properties"]["userId"]
 
-        seed(self._id)
+        self._token = token
+
+        seed(_id)
+        print("Bike created!")
 
     def get_id(self):
         """Gets _id"""
         return self._id
+
+    def set_id(self, _id):
+        """Gets _id"""
+        self._id = _id
 
     def get_is_locked(self):
         """Gets is locked status"""
@@ -74,7 +81,7 @@ class Brain:
 
     def set_position(self, coordinates):
         """Sets position"""
-        self._position["coordinates"] = coordinates
+        self._position["geometry"]["coordinates"] = coordinates
 
     def get_speed(self):
         """Gets speed"""
@@ -103,7 +110,8 @@ class Brain:
     def set_current_user(self, user_id):
         """Set current user"""
         self._current_user = user_id
-        self._position["properties"]["userid"] = user_id
+        self._position["properties"]["userId"] = user_id
+        print(self._position["properties"]["userId"])
 
     def get_current_user(self):
         """Get current user"""
@@ -160,7 +168,7 @@ class Brain:
     def set_is_warning_battery(self, status):
         """Sets _is_warning_battery"""
         self._is_warning_battery = status
-        self._position["properties"]["batterywarning"] = status
+        self._position["properties"]["batteryWarning"] = status
 
     def get_is_battery_depleted(self):
         """Get _is_battery_depleted"""
@@ -169,7 +177,7 @@ class Brain:
     def set_is_battery_depleted(self, status):
         """Sets _is_battery_depleted"""
         self._is_battery_depleted = status
-        self._position["properties"]["batterydepleted"] = status
+        self._position["properties"]["batteryDepleted"] = status
 
     def get_rented(self):
         """Gets rented status"""
@@ -219,18 +227,31 @@ class Brain:
             # Set start_time to begin counting against the interval again
             self.set_start_time(time.time())
 
+            # Header
+            headers = {"Authorization": "Bearer {token}"}
             position = self.get_position()
+            payload = {
+                "whole": self.get_is_whole(),
+                "battery_warning": bool(position["properties"]["batteryWarning"]),
+                "battery_depleted": bool(position["properties"]["batteryDepleted"]),
+                "rented": bool(position["properties"]["rented"]),
+                "user_id": position["properties"]["userId"],
+                "charging": bool(position["properties"]["charging"]),
+                "blocked": bool(position["properties"]["blocked"]),
+                "coordinates": position["geometry"]["coordinates"],
+            }
 
-            payload = {"position": position}
+            # print(payload)
 
             async with self._session.put(
-                f"http://server:3000/bikes/{self.get_id()}", json=payload
+                f"http://admin-api:3000/v1/bikes/{self.get_id()}",
+                json=payload,
+                headers=headers,
             ) as resp:
-                result = await resp.json()
+                # result = await resp.json()
+                print(resp)
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
-
-            return payload
 
     # Unlock the bike and set statuses for new journey
     def unlock(self, user_id):
@@ -246,13 +267,15 @@ class Brain:
             # Skicka start data: startposition, starttid user_id, bike_id
             # få resans id tillbaka
 
-    # Lock the bike and report the journey
+    # Lock the bike and report the journey fix the reporting to match
+    # backend expectations
     async def lock(self):
         """Lock"""
         self.set_is_locked(True)
         self.set_rented(False)
         self.set_report_interval(self._default_report_interval)
 
+        # Positions probably need to change maybe only coords
         payload = {
             "startpostion": self.get_journey_log_start_position(),
             "endposition": self.get_position(),
@@ -263,11 +286,11 @@ class Brain:
         }
 
         # Ändra till put med  reseid.
-        async with self._session.post(
-            "http://server:3000/trips/", json=payload
-        ) as resp:
-            result = await resp.json()
-            # Handle result if necessary
+        # async with self._session.post(
+        #    "http://server:3000/trips/", json=payload
+        # ) as resp:
+        # result = await resp.json()
+        # Handle result if necessary
 
         self.set_current_user(None)
         print("Travel done")

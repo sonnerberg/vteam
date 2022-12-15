@@ -33,6 +33,7 @@ class User:
     def begin_journey(self):
         """Begins journey"""
         self.bike.unlock(self._id)
+        print(self.bike.get_current_user())
         self.set_journey_start_time(time.time())
         self.bike.set_speed(15)
 

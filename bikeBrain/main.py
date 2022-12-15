@@ -11,13 +11,17 @@ import bikeBrain
 
 async def main():
     """main"""
+    print("bikeBrain starting")
+    # Log in to get token
+    token = "asdf"
+
     async with aiohttp.ClientSession() as session:
-        nr_of_users = 10
-        nr_of_bikes = 10
+        nr_of_users = 72
+        nr_of_bikes = 5000
         report_dict = {}
         users = []
         bikes = []
-        bikes_start_positions = []
+        # bikes_start_positions = []
         start_time = time.time()
         report_start_time = time.time()
         report_interval = 5
@@ -52,57 +56,56 @@ async def main():
         # Remove empty lists from travel_plans
         travel_plans = list(filter(None, travel_plans))
 
-        # Set start positions (geojson object) for bikes
+        # Set start positions (coordinates) for bikes
         for i in range(nr_of_bikes):
-
-            _id = i + 1
-
             # Get the coordinates for the starting point
             # from the travel_plans list
-            coordinates = travel_plans[i][0]
+            coordinates = [16.0, 59.0]
+            if i < len(travel_plans):
+                coordinates = travel_plans[i][0]
 
-            # Create the position, add the coordinates
-            position = {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": coordinates,
-                },
-                "properties": {
-                    "id": _id,  # Ta bort
-                    "whole": True,
-                    "charging": False,
-                    "blocked": False,
-                    "batterywarning": False,
-                    "batterydepleted": False,
-                    "rented": True,
-                    "userid": None,
-                    "featureType": "bikes",
-                },
-            }
+            # Post bike to db
+            latitude = coordinates[0]
+            longitude = coordinates[1]
 
-            bikes_start_positions.append(position)
+            # create header with admin token
+            headers = {"Authorization": "Bearer {token}"}
+            payload = {"latitude": latitude, "longitude": longitude}
 
-        # Create bikes and append to bikes list
-        for i in range(nr_of_bikes):
-            bikes.append(
-                bikeBrain.Brain(
-                    i + 1, session, start_time, bikes_start_positions[i], 100
-                )
+            response = requests.post(
+                "http://admin-api:3000/v1/bikes/new", json=payload, headers=headers
             )
 
-        # Post all bikes to db
-        for i in range(nr_of_bikes):
-            position = bikes[i].get_position()
-            _id = bikes[i].get_id()
-            payload = {"id": _id, "position": position}  #
-            r = requests.post("http://server:3000/bikes/", json=payload)
-            # Sätt cykelns id och token
+            # Get the new bike id and token
+            json_response = response.json()
+            print(json_response)
+            _id = json_response["data"]["id"]
+            bike_token = json_response["data"]["token"]
+
+            # Get the new bike
+            response = requests.get(f"http://admin-api:3000/v1/bikes/{_id}")
+
+            position = response.json()["data"][0]["position"]
+
+            print(position)
+
+            # Create bike
+            bikes.append(
+                bikeBrain.Brain(_id, session, bike_token, start_time, position)
+            )
+
+            # Request på cykel med id, skapa cykeln och lägg i lista
+            # bikes[i].set_id(r.data.id)
+            # bikes[i].set_token(r.data.token)
+
+            # bikes_start_positions.append()
 
         # Create users and append them to the user list,
         # users get id:s from 1 -
         for i in range(nr_of_users):
             users.append(UserClass.User(i + 1, bikes[i], travel_plans[i]))
+
+        print(users)
 
         # Decides if program loop runs
         run = True
