@@ -20,7 +20,6 @@ const postFeatures = {
         return result;
     },
     postToGetBikes: async function postToGetBikes(bboxAsGeoJson) {
-        console.log('bboxAsGeoJson', bboxAsGeoJson);
         const postData = JSON.stringify(bboxAsGeoJson);
         const response = await fetch(`${backendUrl}/bikes/within`, {
             body: postData,
@@ -29,10 +28,8 @@ const postFeatures = {
             },
             method: 'POST',
         });
-        console.log('postdata', postData);
-        console.log('response', response);
+
         const result = await response.json();
-        console.log('result', result);
 
         return result.data;
     },
