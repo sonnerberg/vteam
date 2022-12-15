@@ -17,13 +17,17 @@ const allowedFields = {
 };
 
 router.post('/bikes/within', async (req, res) => {
-    console.log(req.body);
-    const sql =
-        'SELECT id FROM bikes WHERE ST_CONTAINS(ST_GeomFromGeoJson(\'?\'), geometry)';
-    // 'SELECT 123';
-    const data = await queryDatabase(sql, [req.body]);
-    console.log(data[0]);
-    res.sendStatus(200);
+    try {
+        const sql = 'CALL get_scooters_within(?);';
+        const { 0: data } = await queryDatabase(sql, [
+            JSON.stringify(req.body),
+        ]);
+        res.json({
+            data,
+        });
+    } catch {
+        res.sendStatus(400);
+    }
 });
 
 router.get('/bikes', async (_, res) => {

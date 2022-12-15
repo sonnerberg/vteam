@@ -235,6 +235,25 @@ CREATE PROCEDURE new_scooter(
 
 DELIMITER ;
 
+-- Procedure get_scooters_within()
+
+DROP PROCEDURE IF EXISTS get_scooters_within;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_scooters_within(
+    `a_geometry_object` VARCHAR(1024)
+)
+
+ BEGIN
+
+    SELECT * FROM bikes WHERE ST_CONTAINS(ST_GeomFromGeoJson(a_geometry_object), geometry);
+
+  END
+;;
+
+DELIMITER ;
+
 -- Procedure get_all_scooters()
 
 DROP PROCEDURE IF EXISTS get_all_scooters;
