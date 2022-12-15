@@ -30,6 +30,19 @@ router.post('/bikes/within', async (req, res) => {
     }
 });
 
+router.get('/bikes/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const sql = 'CALL get_scooter_by_id(?)';
+        const { 0: { 0: data }, } = await queryDatabase(sql, [id]);
+        res.json({
+            data,
+        });
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
 router.get('/bikes', async (_, res) => {
     const sql = 'CALL get_all_scooters()';
     const { 0: data } = await queryDatabase(sql);

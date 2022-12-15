@@ -254,6 +254,25 @@ CREATE PROCEDURE get_scooters_within(
 
 DELIMITER ;
 
+-- Procedure get_scooter_by_id()
+
+DROP PROCEDURE IF EXISTS get_scooter_by_id;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_scooter_by_id(
+    `a_scooter_id` INTEGER
+)
+
+ BEGIN
+
+    SELECT * FROM bikes WHERE id = a_scooter_id;
+
+  END
+;;
+
+DELIMITER ;
+
 -- Procedure get_all_scooters()
 
 DROP PROCEDURE IF EXISTS get_all_scooters;
