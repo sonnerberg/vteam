@@ -166,6 +166,9 @@ CREATE PROCEDURE add_bike(
                      INTO `bikes_json` (jsonfield)
                    VALUES (JSON_MERGE_PATCH(a_default_scooter, a_partial_scooter));
 
+                SELECT LAST_INSERT_ID() AS id;
+
+
       END
     ;;
 
