@@ -52,15 +52,17 @@ const Map = (props) => {
     //only points within bounds so we filter in frontend for now...
     const loadScooters = (bounds) => {
         allLayers.bikes.clearLayers();
+        console.log('DATAFROMBACKEND POINTS , ', props.dataFromBackend.bikes);
 
-        for (const point of props.dataFromBackend.points) {
-            const newPoint = L.geoJson(point, {
+        for (const bike of props.dataFromBackend.bikes) {
+            console.log('bike ', bike);
+            const newBike = L.geoJson(bike.position, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, mapStyles['scooter']);
                 },
             });
-            if (bounds.contains(newPoint.getBounds())) {
-                allLayers.bikes.addLayer(newPoint);
+            if (bounds.contains(newBike.getBounds())) {
+                allLayers.bikes.addLayer(newBike);
             }
         }
     };

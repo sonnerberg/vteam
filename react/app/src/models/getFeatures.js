@@ -1,4 +1,5 @@
 const baseUrl = 'http://localhost:4000';
+const backendUrl = 'http://localhost:8081/v1/';
 
 const getFeatures = {
     getCities: async function getCities() {
@@ -16,11 +17,6 @@ const getFeatures = {
         const result = await response.json();
         return result;
     },
-    getBikes: async function getBikes() {
-        const response = await fetch(`${baseUrl}/bikes`);
-        const result = await response.json();
-        return result;
-    },
     getWorkshops: async function getWorkshops() {
         const response = await fetch(`${baseUrl}/workshops`);
         const result = await response.json();
@@ -31,10 +27,12 @@ const getFeatures = {
         const result = await response.json();
         return result;
     },
-    getPoints: async function getPoints() {
-        const response = await fetch(`${baseUrl}/points`);
+    getBikes: async function getBikes() {
+        const response = await fetch(`${backendUrl}/bikes`);
+        console.log('RESPONSE ', response);
         const result = await response.json();
-        return result;
+        console.log('RESULT ', result);
+        return result.data;
     },
 };
 
