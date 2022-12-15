@@ -5,6 +5,7 @@ import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
 import mapStyles from '../models/mapStyles';
 import allLayers from '../models/allLayers';
+import postFeatures from '../models/postFeatures';
 require('../../node_modules/leaflet/dist/leaflet.css');
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css');
 
@@ -50,20 +51,89 @@ const Map = (props) => {
     //currently clears all POINTS and loads all POINTS bc
     //we dont have 1000 scooters in mock-backend + mock-backend cant handle returning
     //only points within bounds so we filter in frontend for now...
-    const loadScooters = (bounds) => {
+    const loadScooters = async (bounds) => {
         allLayers.bikes.clearLayers();
-        console.log('DATAFROMBACKEND POINTS , ', props.dataFromBackend.bikes);
 
-        for (const bike of props.dataFromBackend.bikes) {
-            console.log('bike ', bike);
-            const newBike = L.geoJson(bike.position, {
+        const sw = bounds.getSouthWest();
+        const ne = bounds.getNorthEast();
+        console.log(
+            [sw.lng, sw.lat],
+            [ne.lng, sw.lat],
+            [ne.lng, ne.lat],
+            [sw.lng, ne.lat],
+            [sw.lng, sw.lat]
+        );
+        const boundsAsGeoJson = {
+            type: 'Polygon',
+            coordinates: [
+                [
+                    [sw.lng, sw.lat],
+                    [ne.lng, sw.lat],
+                    [ne.lng, ne.lat],
+                    [sw.lng, ne.lat],
+                    [sw.lng, sw.lat],
+                ],
+            ],
+        };
+
+        console.log('BOUNDS AS GEOJSON ', boundsAsGeoJson);
+
+        /*
+        const BoundsInMap2 = L.geoJson(
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'Polygon',
+                    coordinates: [
+                        [sw.lng, sw.lat],
+                        [ne.lng, sw.lat],
+                        [ne.lng, ne.lat],
+                        [sw.lng, ne.lat],
+                        [sw.lng, sw.lat],
+                    ],
+                },
+            }*/ /*{
+                type: 'Feature',
+                geometry: {
+                    type: 'Polygon',
+                    coordinates: [
+                        [
+                            [16.520348, 59.281668],
+                            [16.54541, 59.235689],
+                            [16.289978, 59.235689],
+                            [16.110077, 59.280616],
+                            [15.486603, 59.237796],
+                            [14.80957, 59.548241],
+                            [15.79422, 59.637211],
+                            [16.189728, 59.527354],
+                            [16.335297, 59.549633],
+                            [16.4246, 59.4128],
+                            [16.4747, 59.4308],
+                            [16.5876, 59.376],
+                            [16.831055, 59.826874],
+                            [17.311707, 59.349996],
+                            [17.605591, 58.982576],
+                            [16.840668, 59.291137],
+                            [16.4743, 59.3138],
+                            [16.520348, 59.281668],
+                        ],
+                    ],
+                },
+            }
+        );*/
+        //allLayers.bikes.addLayer(BoundsInMap);
+        console.log('BOUNDS AS GEOJSON ', boundsAsGeoJson);
+        const bikes = await postFeatures.postToGetBikes(boundsAsGeoJson);
+        console.log('BIKES ', bikes);
+        //for (const bike of props.dataFromBackend.bikes) {
+        for (const bike of bikes) {
+            const newBike = L.geoJson(bike.geometry, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, mapStyles['scooter']);
                 },
             });
-            if (bounds.contains(newBike.getBounds())) {
-                allLayers.bikes.addLayer(newBike);
-            }
+
+            allLayers.bikes.addLayer(newBike);
         }
     };
 
