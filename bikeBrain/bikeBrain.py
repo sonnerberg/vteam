@@ -9,24 +9,22 @@ import json
 class Brain:
     """Class for bike brain"""
 
-    def __init__(
-        self, breaking_seed, session, token, start_time, position, battery_capacity
-    ):
+    def __init__(self, _id, session, token, start_time, position):
         """Init"""
-        self._id = None
+        self._id = _id
         self._session = session
         self._start_time = start_time
         self._position = position
-        self._battery_capacity = battery_capacity
+        self._battery_capacity = 100
 
         self._speed = 0
         self._is_locked = True
-        self._is_whole = True
-        self._is_charging = False
-        self._is_blocked = False
-        self._is_rented = False
-        self._is_warning_battery = False
-        self._is_battery_depleted = False
+        self._is_whole = position["properties"]["whole"]
+        self._is_charging = position["properties"]["charging"]
+        self._is_blocked = position["properties"]["blocked"]
+        self._is_rented = position["properties"]["rented"]
+        self._is_warning_battery = position["properties"]["battery_warning"]
+        self._is_battery_depleted = position["properties"]["battery_depleted"]
 
         self._battery_decrease = 5
         self._breaking_probability = 5
@@ -42,7 +40,8 @@ class Brain:
 
         self._token = token
 
-        seed(breaking_seed)
+        seed(_id)
+        print("Bike created!")
 
     def get_id(self):
         """Gets _id"""
@@ -228,17 +227,29 @@ class Brain:
             self.set_start_time(time.time())
 
             position = self.get_position()
-            # Header med self._token
-            payload = {"position": position}
+            # Header
+            headers = {"Authorization": "Bearer {token}"}
+            position = self.get_position()
+            payload = {
+                "whole": position["properties"]["whole"],
+                "battery_warning": position["properties"]["battery_warning"],
+                "battery_depleted": position["properties"]["battery_depleted"],
+                "rented": position["properties"]["rented"],
+                "user_id": position["properties"]["userid"],
+                "charging": position["properties"]["charging"],
+                "blocked": position["properties"]["blocked"],
+                "coordinates": position["geometry"]["coordinates"],
+            }
 
             async with self._session.put(
-                f"http://server:3000/bikes/{self.get_id()}", json=payload
+                f"http://admin-api:3000/bikes/{self.get_id()}",
+                json=payload,
+                headers=headers,
             ) as resp:
                 result = await resp.json()
+                print(result)
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
-
-            return payload
 
     # Unlock the bike and set statuses for new journey
     def unlock(self, user_id):
@@ -271,11 +282,11 @@ class Brain:
         }
 
         # Ändra till put med  reseid.
-        async with self._session.post(
-            "http://server:3000/trips/", json=payload
-        ) as resp:
-            result = await resp.json()
-            # Handle result if necessary
+        # async with self._session.post(
+        #    "http://server:3000/trips/", json=payload
+        # ) as resp:
+        # result = await resp.json()
+        # Handle result if necessary
 
         self.set_current_user(None)
         print("Travel done")
