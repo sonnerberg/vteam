@@ -22,9 +22,7 @@ router.post('/bikes/within', async (req, res) => {
         const { 0: data } = await queryDatabase(sql, [
             JSON.stringify(req.body),
         ]);
-        res.json({
-            data,
-        });
+        res.json(sqlToGeoJson(data));
     } catch {
         res.sendStatus(400);
     }
