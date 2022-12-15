@@ -5,6 +5,7 @@ import { Draw } from 'leaflet-draw';
 import mapModel from '../models/mapModel';
 import mapStyles from '../models/mapStyles';
 import allLayers from '../models/allLayers';
+import postFeatures from '../models/postFeatures';
 require('../../node_modules/leaflet/dist/leaflet.css');
 require('../../node_modules/leaflet-draw/dist/leaflet.draw.css');
 
@@ -50,23 +51,74 @@ const Map = (props) => {
     //currently clears all POINTS and loads all POINTS bc
     //we dont have 1000 scooters in mock-backend + mock-backend cant handle returning
     //only points within bounds so we filter in frontend for now...
-    const loadScooters = (bounds) => {
-        allLayers.bikes.clearLayers();
-        console.log('DATAFROMBACKEND POINTS , ', props.dataFromBackend.bikes);
+    const loadScooters = async (bounds) => {
+        /*allLayers.bikes.clearLayers();
 
-        for (const bike of props.dataFromBackend.bikes) {
-            console.log('bike ', bike);
+        const sw = bounds.getSouthWest();
+        const ne = bounds.getNorthEast();
+
+        const boundsAsGeoJson = {
+            type: 'Polygon',
+            coordinates: [
+                [
+                    [sw.lng, sw.lat],
+                    [ne.lng, sw.lat],
+                    [ne.lng, ne.lat],
+                    [sw.lng, ne.lat],
+                    [sw.lng, sw.lat],
+                ],
+            ],
+        };
+
+        const bikes = await postFeatures.postToGetBikes(boundsAsGeoJson);
+        for (const bike of bikes) {
             const newBike = L.geoJson(bike.position, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, mapStyles['scooter']);
                 },
             });
-            if (bounds.contains(newBike.getBounds())) {
+
+            allLayers.bikes.addLayer(newBike);
+        }*/
+    };
+    useEffect(() => {
+        async function fetchData() {
+            const bounds = mapRef.current.getBounds();
+            const sw = bounds.getSouthWest();
+            const ne = bounds.getNorthEast();
+
+            const boundsAsGeoJson = {
+                type: 'Polygon',
+                coordinates: [
+                    [
+                        [sw.lng, sw.lat],
+                        [ne.lng, sw.lat],
+                        [ne.lng, ne.lat],
+                        [sw.lng, ne.lat],
+                        [sw.lng, sw.lat],
+                    ],
+                ],
+            };
+            const bikes = await postFeatures.postToGetBikes(boundsAsGeoJson);
+
+            allLayers.bikes.clearLayers();
+
+            for (const bike of bikes) {
+                const newBike = L.geoJson(bike.position, {
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng, mapStyles['scooter']);
+                    },
+                });
+
                 allLayers.bikes.addLayer(newBike);
             }
         }
-    };
 
+        const intervalId = setInterval(() => {
+            fetchData();
+        }, 1000); // in milliseconds
+        return () => clearInterval(intervalId);
+    });
     // This useEffect hook runs when the component is first mounted,
     // empty array in the end means only runs at first load of app
     useEffect(() => {
