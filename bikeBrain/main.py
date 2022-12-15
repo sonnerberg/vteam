@@ -21,7 +21,7 @@ async def main():
         report_dict = {}
         users = []
         bikes = []
-        bikes_start_positions = []
+        # bikes_start_positions = []
         start_time = time.time()
         report_start_time = time.time()
         report_interval = 5
@@ -67,7 +67,7 @@ async def main():
             longitude = coordinates[1]
 
             # create header with admin token
-            headers = {f"Authorization: `Bearer {token}`,"}
+            headers = {"Authorization": "Bearer {token}"}
             payload = {"latitude": latitude, "longitude": longitude}
 
             response = requests.post(
@@ -76,36 +76,18 @@ async def main():
 
             # Get the new bike id and token
             json_response = response.json()
-            _id = json_response.data.id
-            bike_token = json_response.data.token
+            print(json_response)
+            _id = json_response["data"]["id"]
+            bike_token = json_response["data"]["token"]
 
             # Get the new bike
             response = requests.get(f"http://admin-api:3000/v1/bikes/{_id}")
 
-            bike_properties = response.json()
-
-            # Create the position, with bike_properties add the coordinates
-            """  position = {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": coordinates,
-                },
-                "properties": {
-                    "whole": True,
-                    "charging": False,
-                    "blocked": False,
-                    "batterywarning": False,
-                    "batterydepleted": False,
-                    "rented": True,
-                    "userid": None,
-                    "featureType": "bikes",
-                },
-            } """
+            position = response.json()["data"]
 
             # Create bike
-            bikes[i] = bikeBrain.Brain(
-                i + 1, session, bike_token, start_time, position, 100
+            bikes.append(
+                bikeBrain.Brain(_id, session, bike_token, start_time, position)
             )
 
             # Request på cykel med id, skapa cykeln och lägg i lista
