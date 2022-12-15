@@ -20,23 +20,23 @@ CHARSET utf8
 COLLATE utf8_swedish_ci
 ;
 
-CREATE TABLE IF NOT EXISTS `scooter` (
-`id` INT AUTO_INCREMENT,
-`position` POINT,
-`status` VARCHAR(50),
-`health` VARCHAR(50),
-`rented` BOOLEAN,
-`speed` INT,
-PRIMARY KEY (`id`))
-ENGINE = InnoDB
-CHARSET utf8
-COLLATE utf8_swedish_ci
-;
-
+/* CREATE TABLE IF NOT EXISTS `scooter` ( */
+/* `id` INT AUTO_INCREMENT, */
+/* `position` POINT, */
+/* `status` VARCHAR(50), */
+/* `health` VARCHAR(50), */
+/* `rented` BOOLEAN, */
+/* `speed` INT, */
+/* PRIMARY KEY (`id`)) */
+/* ENGINE = InnoDB */
+/* CHARSET utf8 */
+/* COLLATE utf8_swedish_ci */
+/* ; */
+/*  */
 CREATE TABLE IF NOT EXISTS `zones` (
 `id` INT AUTO_INCREMENT,
 `position` POLYGON,
-`type` VARCHAR(50),
+`type` ENUM('speed', 'forbidden'),
 `speed_limit` INT,
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -73,23 +73,23 @@ IGNORE 1 LINES
 --
 -- Insert some scooters.
 --
-LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/scooters.csv'
-INTO TABLE scooter
-CHARSET utf8
-FIELDS
-    TERMINATED BY ','
-    ENCLOSED BY '"'
-LINES
-    TERMINATED BY '\n'
-IGNORE 1 LINES
-(@col1, @col2, @col3, @col4, @col5)
-SET
-`position` = PointFromText(@col1),
-`status` = @col2,
-`health` = @col3,
-`rented` = @col4,
-`speed` = @col5
-;
+/* LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/scooters.csv' */
+/* INTO TABLE scooter */
+/* CHARSET utf8 */
+/* FIELDS */
+/*     TERMINATED BY ',' */
+/*     ENCLOSED BY '"' */
+/* LINES */
+/*     TERMINATED BY '\n' */
+/* IGNORE 1 LINES */
+/* (@col1, @col2, @col3, @col4, @col5) */
+/* SET */
+/* `position` = PointFromText(@col1), */
+/* `status` = @col2, */
+/* `health` = @col3, */
+/* `rented` = @col4, */
+/* `speed` = @col5 */
+/* ; */
 
 --
 -- Insert some zones.
