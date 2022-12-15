@@ -16,8 +16,8 @@ async def main():
     token = "asdf"
 
     async with aiohttp.ClientSession() as session:
-        nr_of_users = 1
-        nr_of_bikes = 1
+        nr_of_users = 72
+        nr_of_bikes = 5000
         report_dict = {}
         users = []
         bikes = []
@@ -60,7 +60,9 @@ async def main():
         for i in range(nr_of_bikes):
             # Get the coordinates for the starting point
             # from the travel_plans list
-            coordinates = travel_plans[i][0]
+            coordinates = [16.0, 59.0]
+            if i < len(travel_plans):
+                coordinates = travel_plans[i][0]
 
             # Post bike to db
             latitude = coordinates[0]
@@ -83,7 +85,9 @@ async def main():
             # Get the new bike
             response = requests.get(f"http://admin-api:3000/v1/bikes/{_id}")
 
-            position = response.json()["data"]
+            position = response.json()["data"][0]["position"]
+
+            print(position)
 
             # Create bike
             bikes.append(
@@ -101,12 +105,14 @@ async def main():
         for i in range(nr_of_users):
             users.append(UserClass.User(i + 1, bikes[i], travel_plans[i]))
 
+        print(users)
+
         # Decides if program loop runs
-        run = False
+        run = True
 
         # Loop through users and begin journeys (unlock bikes)
-        # for user in users:
-        # user.begin_journey()
+        for user in users:
+            user.begin_journey()
 
         while run:
             try:
