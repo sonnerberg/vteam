@@ -6,7 +6,18 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.bike
+    depends_on:
+      - "server"
     working_dir: /brain/app
     command: python3 main.py
-    networks:
-      - vteam_default
+
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: ./Dockerfile.server
+    working_dir: /server/app
+    command: node server.js
+    ports:
+      - 5000:3000
+    restart: on-failure

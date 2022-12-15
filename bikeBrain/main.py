@@ -66,7 +66,7 @@ async def main():
             latitude = coordinates[0]
             longitude = coordinates[1]
 
-            # create header med admin token
+            # create header with admin token
             headers = {f"Authorization: `Bearer {token}`,"}
             payload = {"latitude": latitude, "longitude": longitude}
 
@@ -105,14 +105,14 @@ async def main():
 
             # Create bike
             bikes[i] = bikeBrain.Brain(
-                i + 1, session, start_time, bikes_start_positions[i], 100
+                i + 1, session, bike_token, start_time, position, 100
             )
 
             # Request på cykel med id, skapa cykeln och lägg i lista
             # bikes[i].set_id(r.data.id)
             # bikes[i].set_token(r.data.token)
 
-            bikes_start_positions.append(position)
+            # bikes_start_positions.append()
 
         # Create users and append them to the user list,
         # users get id:s from 1 -
