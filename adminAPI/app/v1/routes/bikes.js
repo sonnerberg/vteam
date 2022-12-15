@@ -35,9 +35,7 @@ router.get('/bikes/:id', async (req, res) => {
         const { id } = req.params;
         const sql = 'CALL get_scooter_by_id(?)';
         const { 0: { 0: data }, } = await queryDatabase(sql, [id]);
-        res.json({
-            data,
-        });
+        res.json(sqlToGeoJson([data]));
     } catch {
         res.sendStatus(400);
     }

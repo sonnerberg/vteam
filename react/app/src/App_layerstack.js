@@ -158,12 +158,6 @@ function AppMap() {
         return () => allLayers.zones.clearLayers();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triggerZoneRedraw]);
-    useEffect(() => {
-        (async () => {
-            dataFromBackend.points = await getFeatures.getPoints();
-        })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <div className="AppMap">
