@@ -5,26 +5,13 @@ const { queryDatabase } = require('../../database/mariadb');
 const router = express.Router();
 // const routeName = '/bikes';
 
-const allowedFields = {
-    coordinates: 'geometry',
-    charging: 'charging',
-    blocked: 'blocked',
-    whole: 'whole',
-    battery_warning: 'battery_warning',
-    battery_depleted: 'battery_depleted',
-    rented: 'rented',
-    user_id: 'user_id',
-};
-
 router.post('/bikes/within', async (req, res) => {
     try {
         const sql = 'CALL get_scooters_within(?);';
         const { 0: data } = await queryDatabase(sql, [
             JSON.stringify(req.body),
         ]);
-        res.json({
-            data,
-        });
+        res.json(sqlToGeoJson(data));
     } catch {
         res.sendStatus(400);
     }
@@ -48,6 +35,17 @@ router.get('/bikes', async (_, res) => {
 });
 
 router.put('/bikes/:id', async (req, res) => {
+    const allowedFields = {
+        coordinates: 'geometry',
+        charging: 'charging',
+        blocked: 'blocked',
+        whole: 'whole',
+        battery_warning: 'battery_warning',
+        battery_depleted: 'battery_depleted',
+        rented: 'rented',
+        user_id: 'user_id',
+    };
+
     try {
         let updateFields = [];
         let params = [];
