@@ -5,6 +5,36 @@ const { queryDatabase } = require('../../database/mariadb');
 const router = express.Router();
 // const routeName = '/bikes';
 
+router.post('/bikes/return', async (req, res) => {
+    try {
+        const { username, id } = req.body;
+        const sql = 'CALL set_scooter_returned(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [username, id]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(204);
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
+router.post('/bikes/rent', async (req, res) => {
+    try {
+        const { username, id } = req.body;
+        const sql = 'CALL set_scooter_rented(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [username, id]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            throw 'CannotRent';
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+});
+
 router.post('/bikes/within', async (req, res) => {
     try {
         const sql = 'CALL get_scooters_within(?);';
@@ -42,8 +72,8 @@ router.put('/bikes/:id', async (req, res) => {
         whole: 'whole',
         battery_warning: 'battery_warning',
         battery_depleted: 'battery_depleted',
-        rented: 'rented',
-        user_id: 'user_id',
+        // rented: 'rented',
+        // user_id: 'user_id',
     };
 
     try {
@@ -151,37 +181,37 @@ router.put('/bikes/battery_depleted/:id', async (req, res) => {
     }
 });
 
-router.put('/bikes/rented/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { rented } = req.body;
-        const sql = 'CALL update_scooter_rented(?,?);';
-        const { affectedRows } = await queryDatabase(sql, [rented, id]);
-        if (affectedRows) {
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(404);
-        }
-    } catch {
-        res.sendStatus(400);
-    }
-});
+// router.put('/bikes/rented/:id', async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const { rented } = req.body;
+//         const sql = 'CALL update_scooter_rented(?,?);';
+//         const { affectedRows } = await queryDatabase(sql, [rented, id]);
+//         if (affectedRows) {
+//             res.sendStatus(200);
+//         } else {
+//             res.sendStatus(404);
+//         }
+//     } catch {
+//         res.sendStatus(400);
+//     }
+// });
 
-router.put('/bikes/user_id/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { user_id } = req.body;
-        const sql = 'CALL update_scooter_user_id(?,?);';
-        const { affectedRows } = await queryDatabase(sql, [user_id, id]);
-        if (affectedRows) {
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(404);
-        }
-    } catch {
-        res.sendStatus(400);
-    }
-});
+// router.put('/bikes/user_id/:id', async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const { user_id } = req.body;
+//         const sql = 'CALL update_scooter_user_id(?,?);';
+//         const { affectedRows } = await queryDatabase(sql, [user_id, id]);
+//         if (affectedRows) {
+//             res.sendStatus(200);
+//         } else {
+//             res.sendStatus(404);
+//         }
+//     } catch {
+//         res.sendStatus(400);
+//     }
+// });
 
 router.put('/bikes/whole/:id', async (req, res) => {
     try {
@@ -231,6 +261,7 @@ const sqlToGeoJson = (sql) => {
                     whole: x.whole,
                     rented: x.rented,
                     userId: x.user_id,
+                    username: x.username,
                     featureType: 'bikes',
                 },
             },

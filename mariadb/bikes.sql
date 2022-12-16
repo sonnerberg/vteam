@@ -1,21 +1,3 @@
-DROP TABLE IF EXISTS `bikes`;
-
-CREATE TABLE IF NOT EXISTS `bikes` (
-`id` INT AUTO_INCREMENT,
-`geometry` POINT,
-`whole` BOOLEAN DEFAULT 1,
-`charging` BOOLEAN DEFAULT 0,
-`blocked` BOOLEAN DEFAULT 0,
-`battery_warning` BOOLEAN DEFAULT 0,
-`battery_depleted` BOOLEAN DEFAULT 0,
-`rented` BOOLEAN DEFAULT 0,
-`user_id` INT,
-PRIMARY KEY (`id`))
-ENGINE = InnoDB
-CHARSET utf8
-COLLATE utf8_swedish_ci
-;
-
 --
 -- Insert some scooters.
 --
@@ -273,6 +255,45 @@ CREATE PROCEDURE get_scooter_by_id(
 
 DELIMITER ;
 
+-- Procedure set_scooter_returned()
+
+DROP PROCEDURE IF EXISTS set_scooter_returned;
+
+DELIMITER ;;
+
+CREATE PROCEDURE set_scooter_returned(
+    `a_username` VARCHAR(50),
+    `a_scooter_id` INTEGER
+    )
+
+ BEGIN
+
+    DELETE FROM customer2bike WHERE customer_username = `a_username` AND bike_id = `a_scooter_id`;
+
+  END
+;;
+
+DELIMITER ;
+-- Procedure set_scooter_rented()
+
+DROP PROCEDURE IF EXISTS set_scooter_rented;
+
+DELIMITER ;;
+
+CREATE PROCEDURE set_scooter_rented(
+    `a_username` VARCHAR(50),
+    `a_scooter_id` INTEGER
+    )
+
+ BEGIN
+
+    INSERT INTO customer2bike SET customer_username = `a_username`, bike_id = `a_scooter_id`;
+
+  END
+;;
+
+DELIMITER ;
+
 -- Procedure get_all_scooters()
 
 DROP PROCEDURE IF EXISTS get_all_scooters;
@@ -286,6 +307,50 @@ CREATE PROCEDURE get_all_scooters()
     SELECT * FROM bikes;
 
   END
+;;
+
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS set_returned;
+
+DELIMITER ;;
+CREATE TRIGGER set_returned
+AFTER DELETE ON customer2bike
+FOR EACH ROW
+BEGIN
+    UPDATE bikes SET rented = false, username = null WHERE id = OLD.bike_id;
+END;
+;;
+
+DELIMITER ;
+DROP TRIGGER IF EXISTS set_rented;
+
+DELIMITER ;;
+CREATE TRIGGER set_rented
+AFTER INSERT ON customer2bike
+FOR EACH ROW
+BEGIN
+    UPDATE bikes SET rented = true, username = NEW.customer_username WHERE id = NEW.bike_id;
+END;
+;;
+
+DELIMITER ;
+DROP TRIGGER IF EXISTS insert_trip;
+
+DELIMITER ;;
+CREATE TRIGGER insert_trip
+AFTER UPDATE ON bikes
+FOR EACH ROW
+BEGIN
+ IF OLD.rented = false AND NEW.rented = true AND NEW.username IS NOT NULL THEN
+    INSERT INTO trips (startposition,starttime,username)
+    VALUES (NEW.geometry, CURRENT_TIMESTAMP, NEW.username);
+ END IF;
+ IF OLD.rented = true AND NEW.rented = false AND NEW.username IS NULL THEN
+    UPDATE trips
+       SET endposition = NEW.geometry, endtime = CURRENT_TIMESTAMP, cost = 999 WHERE OLD.username = trips.username ORDER BY id DESC LIMIT 1;
+ END IF;
+END;
 ;;
 
 DELIMITER ;
