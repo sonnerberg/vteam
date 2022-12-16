@@ -8,23 +8,27 @@ import aiohttp
 import user as UserClass
 import bikeBrain
 
-
+# pylint: disable=locally-disabled, too-many-locals
 async def main():
     """main"""
     print("bikeBrain starting")
-    # Log in to get token
-    token = "asdf"
 
     async with aiohttp.ClientSession() as session:
+
+        # Log in to get token
+        payload = {"email": "email@examples.com", "password": "12345678"}
+        async with session.post(
+            "http://admin-api:3000/v1/admin/login",
+            json=payload,
+        ) as resp:
+            # result = await resp.json()
+            print(resp)
+
         nr_of_users = 72
         nr_of_bikes = 5000
-        report_dict = {}
         users = []
         bikes = []
-        # bikes_start_positions = []
         start_time = time.time()
-        report_start_time = time.time()
-        report_interval = 5
 
         with open("punkter_for_resa.geojson", encoding="utf-8") as file:
             data = json.load(file)
@@ -44,14 +48,14 @@ async def main():
 
         # Append the coordinates to the
         # list at the right index in travel_plans
-        for i in range(len(features)):
+        for i, feature in enumerate(features):
             # Check which index should be used based
             # on the journeys id
-            index = int(features[i]["properties"]["id"]) - 1
+            index = int(feature["properties"]["id"]) - 1
 
             # Append the coordinates to the list at the correct
             # index
-            travel_plans[index].append(features[i]["geometry"]["coordinates"])
+            travel_plans[index].append(feature["geometry"]["coordinates"])
 
         # Remove empty lists from travel_plans
         travel_plans = list(filter(None, travel_plans))
@@ -73,7 +77,10 @@ async def main():
             payload = {"latitude": latitude, "longitude": longitude}
 
             response = requests.post(
-                "http://admin-api:3000/v1/bikes/new", json=payload, headers=headers
+                "http://admin-api:3000/v1/bikes/new",
+                json=payload,
+                headers=headers,
+                timeout=100000,
             )
 
             # Get the new bike id and token
@@ -83,29 +90,21 @@ async def main():
             bike_token = json_response["data"]["token"]
 
             # Get the new bike
-            response = requests.get(f"http://admin-api:3000/v1/bikes/{_id}")
+            response = requests.get(
+                f"http://admin-api:3000/v1/bikes/{_id}", timeout=100000
+            )
 
             position = response.json()["data"][0]["position"]
-
-            print(position)
 
             # Create bike
             bikes.append(
                 bikeBrain.Brain(_id, session, bike_token, start_time, position)
             )
 
-            # Request på cykel med id, skapa cykeln och lägg i lista
-            # bikes[i].set_id(r.data.id)
-            # bikes[i].set_token(r.data.token)
-
-            # bikes_start_positions.append()
-
         # Create users and append them to the user list,
         # users get id:s from 1 -
         for i in range(nr_of_users):
             users.append(UserClass.User(i + 1, bikes[i], travel_plans[i]))
-
-        print(users)
 
         # Decides if program loop runs
         run = True
@@ -125,15 +124,7 @@ async def main():
                     # Have all bikes report their position (will only send request if the right interval has passed)
                     await bike.report_position()
 
-                    # Build a dict with all bike positions
-                    report_dict[bike.get_id()] = bike.get_position()
-
                 # PUT the report to db
-                current_time = time.time()
-                if current_time - report_start_time > report_interval:
-                    payload = {"report": report_dict}
-                    # r = requests.put("http://server:3000/reports/1", json=payload)
-                    report_start_time = current_time
             except IOError as error:
                 if error.errno == errno.EPIPE:
                     pass
