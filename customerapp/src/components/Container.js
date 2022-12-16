@@ -16,10 +16,11 @@ import {
 import Map from "./Map";
 import getUserData from "../models/getUserData";
 import UserCard from "./UserCard";
+import LoginForm from "./LoginForm";
 
 const Container = (props) => {
-  const [value, setValue] = useState("map");
-  const [userData, setUserData] = useState("");
+  const [value, setValue] = useState("login");
+  const [userData, setUserData] = useState();
 
   async function getUser() {
     //const user = {};
@@ -40,17 +41,19 @@ const Container = (props) => {
     view = <UserCard content={userData} />;
     console.log("ACCOUNT");
   } else if (value === "login") {
-    view = <Map />;
+    view = <LoginForm getUser={getUser} setUserData={setUserData} />;
     console.log("LOGIN");
   }
   return (
-    <Grid container direction="column" justify="space-between">
+    <Grid container justify="center">
       <Grid item xs={12}>
         {view}
       </Grid>
-      <Fab color="primary" aria-label="add">
-        <ElectricScooter />
-      </Fab>
+      {userData && value === "map" ? (
+        <Fab color="primary" aria-label="add">
+          <ElectricScooter />
+        </Fab>
+      ) : null}
 
       <BottomNavigation
         showLabels
