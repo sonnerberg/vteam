@@ -124,6 +124,7 @@ const Map = (props) => {
   useEffect(() => {
     // Init map and assign the map instance to the mapRef:
     mapRef.current = L.map("map", mapModel.mapParams);
+    mapRef.current.locate({ setView: true, maxZoom: 16 });
     //add eventlisteners for zoomend and moveend. pass current bounds to
     //scooterloader function to load
     //only scooters currently visible
