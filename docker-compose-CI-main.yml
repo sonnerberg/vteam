@@ -1,0 +1,94 @@
+version: "3.4"
+
+services:
+  admin-api:
+    container_name: admin-api
+    build: ./adminAPI
+    working_dir: /code
+    command: npm run start:dev
+    volumes:
+      - ./adminAPI/app:/code/app
+    ports:
+      - 8081:3000
+    restart: on-failure
+    environment:
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  user-api:
+    container_name: user-api
+    build: ./userAPI
+    working_dir: /code
+    command: npm run start:dev
+    volumes:
+      - ./userAPI/app:/code/app
+    ports:
+      - 8082:3000
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_SECRET: ${GITHUB_SECRET}
+      JWT_USER_SECRET: ${JWT_USER_SECRET}
+
+  #  auth-react:
+  #    image: node:latest
+  #    container_name: auth-react
+  #    working_dir: /code/app
+  #    command: bash -c "npm install && npm start"
+  #    volumes:
+  #      - ./authFrontend/app:/code/app
+  #    ports:
+  #      - 3000:3000
+  #    restart: on-failure
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    restart: always
+    volumes:
+      - ./mariadb/:/docker-entrypoint-initdb.d/
+    ports:
+      - 8084:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  react:
+    container_name: react
+    build: ./react
+    working_dir: /code/app
+    command: npm start
+    volumes:
+      - ./react/app/src:/code/app/src
+    ports:
+      - 3000:3000
+    restart: on-failure
+
+  customerapp:
+    container_name: customerapp
+    build: ./customerapp
+    working_dir: /code
+    command: npm start
+    volumes:
+      - ./customerapp/src:/code/src
+    ports:
+      - 3100:3000
+    restart: on-failure
+
+  bike-brain:
+    container_name: bike-brain2
+    build:
+      context: ./bikeBrain
+      dockerfile: ./Dockerfile.bike
+    working_dir: /brain/app
+    command: python3 main.py
+    depends_on:
+      - "admin-api"
+      - "mariadb"

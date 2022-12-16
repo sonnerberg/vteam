@@ -1,0 +1,66 @@
+name: Express CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: isbang/compose-action@v1.4.1
+        # - name: build containers
+        with:
+          compose-file: "./docker-compose-CI-main.yml"
+        env:
+          ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          GITHUB_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
+          GITHUB_SECRET: ${{ secrets.GITHUB_SECRET }}
+          JWT_USER_SECRET: ${{ secrets.JWT_USER_SECRET }}
+      - name: Test user-api
+        run: docker exec user-api bash -c "npm run test"
+      - name: Test admin-api
+        run: docker exec admin-api bash -c "npm run test"
+      - name: Test react
+        run: docker exec react bash -c "npm run test"
+      - name: Test customerapp
+        run: docker exec customerapp bash -c "npm run test"
+      - name: Create coverage folder
+        run: mkdir -v ./coverage
+      - name: Get lcov.info
+        run: docker exec admin-api bash -c "cat /code/coverage/lcov.info" > ./coverage/lcov.info
+      - name: Check contents lcov.info
+        run: cat ./coverage/lcov.info
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    # -------
+    # strategy:
+    #   matrix:
+    #     node-version: [14.x, 16.x, 18.x]
+    #     # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    # steps:
+    #   - uses: actions/checkout@v3
+    #   - name: Use Node.js ${{ matrix.node-version }}
+    #     uses: actions/setup-node@v3
+    #     with:
+    #       node-version: ${{ matrix.node-version }}
+    #       cache: "npm"
+    #       cache-dependency-path: "./express/package-lock.json"
+    #   - run: npm ci
+    #     working-directory: ./express
+    #   - run: npm run build --if-present
+    #     working-directory: ./express
+    #   - run: npm test
+    #     working-directory: ./express
