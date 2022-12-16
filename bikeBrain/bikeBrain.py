@@ -36,7 +36,7 @@ class Brain:
         self._default_report_interval = 10
         self._moving_report_interval = 5
 
-        self._current_user = position["properties"]["userId"]
+        self._current_user = position["properties"]["username"]
 
         self._token = token
 
@@ -110,8 +110,8 @@ class Brain:
     def set_current_user(self, user_id):
         """Set current user"""
         self._current_user = user_id
-        self._position["properties"]["userId"] = user_id
-        print(self._position["properties"]["userId"])
+        self._position["properties"]["username"] = user_id
+        print(self._position["properties"]["username"])
 
     def get_current_user(self):
         """Get current user"""
@@ -235,7 +235,7 @@ class Brain:
                 "battery_warning": bool(position["properties"]["batteryWarning"]),
                 "battery_depleted": bool(position["properties"]["batteryDepleted"]),
                 "rented": bool(position["properties"]["rented"]),
-                "user_id": position["properties"]["userId"],
+                "user_id": position["properties"]["username"],
                 "charging": bool(position["properties"]["charging"]),
                 "blocked": bool(position["properties"]["blocked"]),
                 "coordinates": position["geometry"]["coordinates"],
