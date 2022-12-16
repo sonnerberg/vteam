@@ -83,7 +83,6 @@ router.put('/bikes/:id', async (req, res) => {
 
         const { body } = req;
         for (const field in allowedFields) {
-            console.log(field, body[field]);
             if (field === 'coordinates') {
                 updateFields.push(
                     allowedFields[field] +

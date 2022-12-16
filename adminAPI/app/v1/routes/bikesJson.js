@@ -122,8 +122,6 @@ async function getABike(req, res) {
         const sql = 'CALL get_bike_by_id(?)';
         const { 0: { 0: { bike: data }, }, } = await queryDatabase(sql, [id]);
 
-        // console.log(data[0].bike);
-
         res.json({
             data,
         });
@@ -134,20 +132,15 @@ async function getABike(req, res) {
 
 async function getAllBikesWithin(req, res) {
     // TODO: Validate req.body
-    console.log(req.body);
     try {
         const sql = 'CALL get_bikes_within_bounding_box(?)';
         const data = await queryDatabase(sql, [
             JSON.parse(JSON.stringify(req.body)),
         ]);
 
-        console.log('data', data);
-
-        // res.json({
-        //     data,
-        // });
-
-        res.sendStatus(200);
+        res.json({
+            data,
+        });
     } catch (error) {
         res.sendStatus(500);
     }

@@ -13,7 +13,6 @@ app.get('/', (req, res) => {
     res.send('Hello World from admin and nodemon!');
 });
 
-console.log('node env is', process.env.NOVE_ENV);
 app.get('/mariadb', async (req, res) => {
     const sql = 'CALL get_filtered_admin(?)';
     const email = 'email@example.com';
