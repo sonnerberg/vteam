@@ -1,5 +1,5 @@
 filter:
-  paths: ["adminAPI/*", "userAPI/*", "react/*"]
+  paths: ["adminAPI/*", "userAPI/*", "react/*", "customerapp/*"]
 
 checks:
   javascript:
