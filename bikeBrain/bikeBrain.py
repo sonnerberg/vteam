@@ -5,7 +5,7 @@ import json
 
 # import requests
 
-
+# pylint: disable=locally-disabled, too-many-instance-attributes, too-many-public-methods
 class Brain:
     """Class for bike brain"""
 
@@ -255,7 +255,7 @@ class Brain:
                 # selfs status or position
 
     # Unlock the bike and set statuses for new journey
-    def unlock(self, user_id):
+    async def unlock(self, user_id):
         """Unlock"""
         if not self.get_is_blocked():
             self.set_is_locked(False)
@@ -267,6 +267,19 @@ class Brain:
             self.set_rented(True)
             # Skicka start data: startposition, starttid user_id, bike_id
             # få resans id tillbaka
+            payload = {"username": str(self.get_current_user()), "id": self.get_id()}
+
+            headers = {"Authorization": "Bearer {token}"}
+
+            async with self._session.post(
+                "http://admin-api:3000/v1/bikes/rent",
+                json=payload,
+                headers=headers,
+            ) as resp:
+                # result = await resp.json()
+                print(resp)
+                # handle result eg. set status to blocked depending on
+                # selfs status or position
 
     # Lock the bike and report the journey fix the reporting to match
     # backend expectations
@@ -276,22 +289,17 @@ class Brain:
         self.set_rented(False)
         self.set_report_interval(self._default_report_interval)
 
-        # Positions probably need to change maybe only coords
-        payload = {
-            "startpostion": self.get_journey_log_start_position(),
-            "endposition": self.get_position(),
-            "starttime": self.get_journey_log_start_time(),
-            "endtime": time.time(),
-            "user-id": self.get_current_user(),
-            "bike-id": self.get_id(),
-        }
+        payload = {"username": str(self.get_current_user()), "id": self.get_id()}
 
-        # Ändra till put med  reseid.
-        # async with self._session.post(
-        #    "http://server:3000/trips/", json=payload
-        # ) as resp:
-        # result = await resp.json()
-        # Handle result if necessary
+        headers = {"Authorization": "Bearer {token}"}
+
+        async with self._session.post(
+            "http://admin-api:3000/v1/bikes/return",
+            json=payload,
+            headers=headers,
+        ) as resp:
+            # result = await resp.json()
+            print(resp)
 
         self.set_current_user(None)
         print("Travel done")
