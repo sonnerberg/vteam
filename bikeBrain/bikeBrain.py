@@ -29,6 +29,7 @@ class Brain:
         self._battery_decrease = 5
         self._breaking_probability = 3
 
+        # These can be removed
         self._journey_log_start_position = position
         self._journey_log_start_time = 0.0
 
