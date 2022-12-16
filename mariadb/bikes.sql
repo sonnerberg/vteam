@@ -16,6 +16,22 @@ CHARSET utf8
 COLLATE utf8_swedish_ci
 ;
 
+DROP TABLE IF EXISTS `customer2bike`;
+
+CREATE TABLE IF NOT EXISTS `customer2bike` (
+    `customer_username` VARCHAR(50) UNIQUE,
+    `bike_id` INT UNIQUE,
+
+    FOREIGN KEY(`customer_username`) REFERENCES `customer` (`username`),
+    FOREIGN KEY(`bike_id`) REFERENCES `bikes`(`id`),
+
+    PRIMARY key (`customer_username`, `bike_id`)
+)
+    ENGINE = InnoDB
+    CHARSET utf8
+    COLLATE utf8_swedish_ci
+    ;
+
 --
 -- Insert some scooters.
 --
