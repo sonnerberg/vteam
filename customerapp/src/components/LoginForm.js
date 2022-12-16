@@ -8,7 +8,84 @@ import {
   Link,
 } from "@mui/material";
 import PropTypes from "prop-types";
+const LoginForm = () => {
+  const githubURl = "https://github.com/login/oauth/authorize";
 
+  const options = {
+    client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
+    redirect_uri: process.env.REACT_APP_GITHUB_REDIRECT,
+    scope: "user:email",
+    //state: "http://localhost:3100",
+  };
+
+  const qs = new URLSearchParams(options);
+
+  const fullRequest = `${githubURl}?${qs.toString()}`;
+  return (
+    <div>
+      <Grid container spacing={0} justify="center" direction="row">
+        <Grid className="login-container">
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            spacing={2}
+            className="login-form"
+          >
+            <Paper
+              variant="elevation"
+              elevation={2}
+              className="login-background"
+            >
+              <Grid item>
+                <Typography component="h1" variant="h5">
+                  Inloggning med GitHub
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container direction="column" spacing={2}>
+                  <Grid item>
+                    <a href={fullRequest} target="_blank" rel="noreferrer">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        className="button-block"
+                      >
+                        Ta mig till GitHub!
+                      </Button>
+                    </a>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
+
+const SendCodeToServer = () => {
+  const tokenURl = "http://localhost:8082/auth/github";
+  const queryParams = new URLSearchParams(document.location.search);
+  const options = {
+    code: queryParams?.get("code"),
+  };
+  const qs = new URLSearchParams(options);
+
+  const getTokenFromServer = async () => {
+    await fetch(`${tokenURl}?${qs.toString()}`);
+  };
+  return (
+    <div>
+      <div>Code: {queryParams.get("code") || "none"}</div>
+      <div>State: {queryParams.get("state") || "none"}</div>
+      <h3>byt code mot token</h3>
+      <button onClick={getTokenFromServer}>send code to server</button>
+    </div>
+  );
+}; /*
 const LoginForm = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -100,6 +177,6 @@ LoginForm.propTypes = {
   setUser: PropTypes.func,
   pwd: PropTypes.string,
   setPwd: PropTypes.func,
-};
+};*/
 
 export default LoginForm;
