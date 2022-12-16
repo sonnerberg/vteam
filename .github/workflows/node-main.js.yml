@@ -2,7 +2,7 @@ name: Express CI
 
 on:
   push:
-    branches: ["main", "AddActionToMain"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
@@ -31,8 +31,8 @@ jobs:
         run: docker exec admin-api bash -c "npm run test"
       - name: Test react
         run: docker exec react bash -c "CI=true npm test -- --coverage"
-      - name: Test customerapp
-        run: docker exec customerapp bash -c "CI=true npm test -- --coverage"
+      # - name: Test customerapp
+      #   run: docker exec customerapp bash -c "CI=true npm test -- --coverage"
       - name: Create coverage folder
         run: mkdir -v ./coverage
       - name: Get lcov.info
