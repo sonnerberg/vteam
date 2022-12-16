@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `bikes` (
 `battery_warning` BOOLEAN DEFAULT 0,
 `battery_depleted` BOOLEAN DEFAULT 0,
 `rented` BOOLEAN DEFAULT 0,
-`user_id` INT,
+`user_id` INT UNIQUE,
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
 CHARSET utf8
@@ -286,6 +286,26 @@ CREATE PROCEDURE get_all_scooters()
     SELECT * FROM bikes;
 
   END
+;;
+
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS insert_trip;
+
+DELIMITER ;;
+CREATE TRIGGER insert_trip
+AFTER UPDATE ON bikes
+FOR EACH ROW
+BEGIN
+ IF OLD.rented = false AND NEW.rented = true AND NEW.user_id IS NOT NULL THEN
+    INSERT INTO trips (startposition,starttime,user_id)
+    VALUES (NEW.geometry, CURRENT_TIMESTAMP, NEW.user_id);
+ END IF;
+ IF OLD.rented = true AND NEW.rented = false THEN
+    UPDATE trips
+       SET endposition = NEW.geometry, endtime = CURRENT_TIMESTAMP, cost = 999 WHERE NEW.user_id = trips.user_id ORDER BY id LIMIT 1;
+ END IF;
+END;
 ;;
 
 DELIMITER ;
