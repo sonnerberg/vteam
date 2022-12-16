@@ -14,7 +14,13 @@ const allLayers = {
     return layer.feature.properties.type;
   }),
   bikes: L.featureGroup().bindPopup(function (layer) {
-    return layer.feature.properties.name;
+    console.log(layer);
+    return (
+      "ID " +
+      layer.feature.properties.id +
+      " UTHYRD? " +
+      layer.feature.properties.rented
+    );
   }),
   workshops: L.featureGroup().bindPopup(function (layer) {
     return layer.feature.properties.name;
