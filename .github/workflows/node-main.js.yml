@@ -29,10 +29,10 @@ jobs:
         run: docker exec user-api bash -c "npm run test"
       - name: Test admin-api
         run: docker exec admin-api bash -c "npm run test"
-      - name: Test react
-        run: docker exec react bash -c "npm run test"
-      - name: Test customerapp
-        run: docker exec customerapp bash -c "npm run test"
+      # - name: Test react
+      #   run: docker exec react bash -c "npm run test"
+      # - name: Test customerapp
+      #   run: docker exec customerapp bash -c "npm run test"
       - name: Create coverage folder
         run: mkdir -v ./coverage
       - name: Get lcov.info
