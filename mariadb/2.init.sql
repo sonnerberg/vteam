@@ -2,6 +2,8 @@ DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `scooter`;
 DROP TABLE IF EXISTS `zones`;
 DROP TABLE IF EXISTS `geojson`;
+DROP TABLE IF EXISTS `bikes`;
+DROP TABLE IF EXISTS `customer2bike`;
 
 CREATE TABLE IF NOT EXISTS `customer` (
 `surname` VARCHAR(50),
@@ -10,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 `billing_adress` VARCHAR(50),
 `username` VARCHAR(50),
 `password` VARCHAR(250),
-`email` VARCHAR(50),
+`email` VARCHAR(50) UNIQUE,
 `balance` INT,
 `status` VARCHAR(50),
 PRIMARY KEY (`username`))
@@ -53,6 +55,38 @@ ENGINE = InnoDB
 CHARSET utf8
 COLLATE utf8_swedish_ci
 ;
+
+CREATE TABLE IF NOT EXISTS `bikes` (
+`id` INT AUTO_INCREMENT,
+`geometry` POINT,
+`whole` BOOLEAN DEFAULT 1,
+`charging` BOOLEAN DEFAULT 0,
+`blocked` BOOLEAN DEFAULT 0,
+`battery_warning` BOOLEAN DEFAULT 0,
+`battery_depleted` BOOLEAN DEFAULT 0,
+`rented` BOOLEAN DEFAULT 0,
+`username` VARCHAR(50),
+FOREIGN KEY(`username`) REFERENCES customer(`username`),
+PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET utf8
+COLLATE utf8_swedish_ci
+;
+
+
+CREATE TABLE IF NOT EXISTS `customer2bike` (
+    `customer_username` VARCHAR(50) UNIQUE,
+    `bike_id` INT UNIQUE,
+
+    FOREIGN KEY(`customer_username`) REFERENCES `customer` (`username`),
+    FOREIGN KEY(`bike_id`) REFERENCES `bikes`(`id`),
+
+    PRIMARY key (`customer_username`, `bike_id`)
+)
+    ENGINE = InnoDB
+    CHARSET utf8
+    COLLATE utf8_swedish_ci
+    ;
 
 --
 -- Insert some customers.

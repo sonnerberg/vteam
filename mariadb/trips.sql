@@ -6,8 +6,9 @@ CREATE TABLE IF NOT EXISTS `trips` (
 `endposition` POINT,
 `starttime` DATETIME,
 `endtime` DATETIME,
-`user_id` INTEGER,
+`username` VARCHAR(50),
 `cost` FLOAT,
+FOREIGN KEY(`username`) REFERENCES `customer`(`username`),
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
 CHARSET utf8
@@ -26,13 +27,13 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1 LINES
-(@startposition,@endposition,@starttime,@endtime,@user_id,@cost)
+(@startposition,@endposition,@starttime,@endtime,@username,@cost)
 SET
 `startposition` = PointFromText(@startposition),
 `endposition` = PointFromText(@endposition),
 `starttime` = @starttime,
 `endtime` = @endtime,
-`user_id` = @user_id,
+`username` = @username,
 `cost` = @cost
 ;
 
@@ -52,20 +53,20 @@ CREATE PROCEDURE get_all_trips()
 
 DELIMITER ;
 
--- Procedure get_all_trips_by_user_id()
+-- Procedure get_all_trips_by_username()
 
-DROP PROCEDURE IF EXISTS get_all_trips_by_user_id;
+DROP PROCEDURE IF EXISTS get_all_trips_by_username;
 
 DELIMITER ;;
 
-CREATE PROCEDURE get_all_trips_by_user_id(
-                    `a_user_id` INTEGER
+CREATE PROCEDURE get_all_trips_by_username(
+                    `a_username` VARCHAR(50)
 )
  BEGIN
 
    SELECT *
      FROM trips
-    WHERE user_id = a_user_id;
+    WHERE username = a_username;
 
 
   END

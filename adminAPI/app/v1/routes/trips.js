@@ -5,7 +5,7 @@ const trips = require('../models/trips');
 const router = express.Router();
 const routeName = '/trips';
 
-router.get(`${routeName}/:userId`, trips.getTripsByUserId);
+router.get(`${routeName}/:username`, trips.getTripsByUsername);
 router.get(`${routeName}/`, trips.getAllTrips);
 
 module.exports = router;

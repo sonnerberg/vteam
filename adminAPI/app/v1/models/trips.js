@@ -7,15 +7,15 @@ async function getAllTrips(_, res) {
         data,
     });
 }
-async function getTripsByUserId(req, res) {
-    const { userId } = req.params;
-    const sql = 'CALL get_all_trips_by_user_id(?);';
-    const { 0: data } = await queryDatabase(sql, [userId]);
+async function getTripsByUsername(req, res) {
+    const { username } = req.params;
+    const sql = 'CALL get_all_trips_by_username(?);';
+    const { 0: data } = await queryDatabase(sql, [username]);
     res.json({
         data,
     });
 }
 module.exports = {
     getAllTrips,
-    getTripsByUserId,
+    getTripsByUsername,
 };
