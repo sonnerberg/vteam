@@ -15,160 +15,6 @@ SET
 `geometry` = PointFromText(@col1)
 ;
 
--- Procedure update_scooter_charging()
-
-DROP PROCEDURE IF EXISTS update_scooter_charging;
-
-DELIMITER ;;
-
-CREATE PROCEDURE update_scooter_charging(
-                    `a_boolean` BOOLEAN,
-                    `a_scooter_id` INTEGER
-)
- BEGIN
-
-    UPDATE bikes
-    SET charging = a_boolean
-    WHERE id = a_scooter_id;
-
-
-  END
-;;
-
-DELIMITER ;
-
--- Procedure update_scooter_blocked()
-
-DROP PROCEDURE IF EXISTS update_scooter_blocked;
-
-DELIMITER ;;
-
-CREATE PROCEDURE update_scooter_blocked(
-                    `a_boolean` BOOLEAN,
-                    `a_scooter_id` INTEGER
-)
- BEGIN
-
-    UPDATE bikes
-    SET blocked = a_boolean
-    WHERE id = a_scooter_id;
-
-
-  END
-;;
-
-DELIMITER ;
-
--- Procedure update_scooter_battery_warning()
-
-DROP PROCEDURE IF EXISTS update_scooter_battery_warning;
-
-DELIMITER ;;
-
-CREATE PROCEDURE update_scooter_battery_warning(
-                    `a_boolean` BOOLEAN,
-                    `a_scooter_id` INTEGER
-)
- BEGIN
-
-    UPDATE bikes
-    SET battery_warning = a_boolean
-    WHERE id = a_scooter_id;
-
-
-  END
-;;
-
-DELIMITER ;
-
--- Procedure update_scooter_battery_depleted()
-
-DROP PROCEDURE IF EXISTS update_scooter_battery_depleted;
-
-DELIMITER ;;
-
-CREATE PROCEDURE update_scooter_battery_depleted(
-                    `a_boolean` BOOLEAN,
-                    `a_scooter_id` INTEGER
-)
- BEGIN
-
-    UPDATE bikes
-    SET battery_depleted = a_boolean
-    WHERE id = a_scooter_id;
-
-
-  END
-;;
-
-DELIMITER ;
-
--- Procedure update_scooter_rented()
-
-DROP PROCEDURE IF EXISTS update_scooter_rented;
-
-DELIMITER ;;
-
-CREATE PROCEDURE update_scooter_rented(
-                    `a_boolean` BOOLEAN,
-                    `a_scooter_id` INTEGER
-)
- BEGIN
-
-    UPDATE bikes
-    SET rented = a_boolean
-    WHERE id = a_scooter_id;
-
-
-  END
-;;
-
-DELIMITER ;
-
--- Procedure update_scooter_user_id()
-
-DROP PROCEDURE IF EXISTS update_scooter_user_id;
-
-DELIMITER ;;
-
-CREATE PROCEDURE update_scooter_user_id(
-                    `a_user_id` INTEGER,
-                    `a_scooter_id` INTEGER
-)
- BEGIN
-
-    UPDATE bikes
-    SET user_id = a_user_id
-    WHERE id = a_scooter_id;
-
-
-  END
-;;
-
-DELIMITER ;
-
--- Procedure update_scooter_whole()
-
-DROP PROCEDURE IF EXISTS update_scooter_whole;
-
-DELIMITER ;;
-
-CREATE PROCEDURE update_scooter_whole(
-                    `a_boolean` BOOLEAN,
-                    `a_scooter_id` INTEGER
-)
- BEGIN
-
-    UPDATE bikes
-    SET whole = a_boolean
-    WHERE id = a_scooter_id;
-
-
-  END
-;;
-
-DELIMITER ;
-
 -- Procedure update_scooter_position()
 
 DROP PROCEDURE IF EXISTS update_scooter_position;
@@ -262,13 +108,12 @@ DROP PROCEDURE IF EXISTS set_scooter_returned;
 DELIMITER ;;
 
 CREATE PROCEDURE set_scooter_returned(
-    `a_username` VARCHAR(50),
-    `a_scooter_id` INTEGER
+    `a_username` VARCHAR(50)
     )
 
  BEGIN
 
-    DELETE FROM customer2bike WHERE customer_username = `a_username` AND bike_id = `a_scooter_id`;
+    DELETE FROM customer2bike WHERE customer_username = `a_username`;
 
   END
 ;;
@@ -331,25 +176,6 @@ AFTER INSERT ON customer2bike
 FOR EACH ROW
 BEGIN
     UPDATE bikes SET rented = true, username = NEW.customer_username WHERE id = NEW.bike_id;
-END;
-;;
-
-DELIMITER ;
-DROP TRIGGER IF EXISTS insert_trip;
-
-DELIMITER ;;
-CREATE TRIGGER insert_trip
-AFTER UPDATE ON bikes
-FOR EACH ROW
-BEGIN
- IF OLD.rented = false AND NEW.rented = true AND NEW.username IS NOT NULL THEN
-    INSERT INTO trips (startposition,starttime,username)
-    VALUES (NEW.geometry, CURRENT_TIMESTAMP, NEW.username);
- END IF;
- IF OLD.rented = true AND NEW.rented = false AND NEW.username IS NULL THEN
-    UPDATE trips
-       SET endposition = NEW.geometry, endtime = CURRENT_TIMESTAMP, cost = 999 WHERE OLD.username = trips.username ORDER BY id DESC LIMIT 1;
- END IF;
 END;
 ;;
 
