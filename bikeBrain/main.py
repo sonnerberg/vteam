@@ -22,10 +22,10 @@ async def main():
             json=payload,
         ) as resp:
             # result = await resp.json()
-            print(resp)
+            print("Logged in")
 
-        nr_of_users = 72
-        nr_of_bikes = 5000
+        nr_of_users = 2
+        nr_of_bikes = 2
         users = []
         bikes = []
         start_time = time.time()
@@ -85,7 +85,7 @@ async def main():
 
             # Get the new bike id and token
             json_response = response.json()
-            print(json_response)
+            # print(json_response)
             _id = json_response["data"]["id"]
             bike_token = json_response["data"]["token"]
 
@@ -111,7 +111,7 @@ async def main():
 
         # Loop through users and begin journeys (unlock bikes)
         for user in users:
-            user.begin_journey()
+            await user.begin_journey()
 
         while run:
             try:
