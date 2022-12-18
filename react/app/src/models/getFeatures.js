@@ -23,8 +23,11 @@ const getFeatures = {
         return result;
     },
     getZones: async function getZones() {
-        const response = await fetch(`${baseUrl}/zones`);
+        const response = await fetch(`${backendUrl}/zones`);
+        console.log('RESPONSE ZONES ', response);
         const result = await response.json();
+        console.log('result ZONES ', result);
+        //EV SKA DETTA ERSÄTTAS AV RESULT.DATA SENARE? BIKES LEVERERAS SÅ
         return result;
     },
     getBikes: async function getBikes() {
