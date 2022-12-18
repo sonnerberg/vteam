@@ -20,6 +20,7 @@ import LoginForm from "./LoginForm";
 
 const Container = (props) => {
   const [value, setValue] = useState("login");
+  const [userToken, setUserToken] = useState();
   const [userData, setUserData] = useState();
 
   async function getUser() {
@@ -30,19 +31,23 @@ const Container = (props) => {
   }
 
   useEffect(() => {
+    console.log("USERTOKEN, ", userToken);
     getUser();
-  }, []);
+  }, [userToken]);
 
   let view;
   if (value === "map") {
     view = <Map />;
-    console.log("MAP");
   } else if (value === "account") {
     view = <UserCard content={userData} />;
-    console.log("ACCOUNT");
   } else if (value === "login") {
-    view = <LoginForm getUser={getUser} setUserData={setUserData} />;
-    console.log("LOGIN");
+    view = (
+      <LoginForm
+        setValue={setValue}
+        setUserToken={setUserToken}
+        getUser={getUser}
+      />
+    );
   }
   return (
     <Grid container justify="center">
