@@ -5,7 +5,7 @@ import json
 
 # import requests
 
-# pylint: disable=locally-disabled, too-many-instance-attributes, too-many-public-methods
+
 class Brain:
     """Class for bike brain"""
 
@@ -27,7 +27,7 @@ class Brain:
         self._is_battery_depleted = position["properties"]["batteryDepleted"]
 
         self._battery_decrease = 5
-        self._breaking_probability = 3
+        self._breaking_probability = 0
 
         # These can be removed
         self._journey_log_start_position = position
@@ -35,7 +35,7 @@ class Brain:
 
         self._report_interval = 10
         self._default_report_interval = 10
-        self._moving_report_interval = 5
+        self._moving_report_interval = 1
 
         self._current_user = position["properties"]["username"]
 
@@ -250,7 +250,8 @@ class Brain:
                 headers=headers,
             ) as resp:
                 # result = await resp.json()
-                print(resp)
+                # print(resp)
+                print("Moved")
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
 
@@ -265,8 +266,7 @@ class Brain:
             self.set_journey_log_start_position(pos_dict)
             self.set_current_user(user_id)
             self.set_rented(True)
-            # Skicka start data: startposition, starttid user_id, bike_id
-            # få resans id tillbaka
+
             payload = {"username": str(self.get_current_user()), "id": self.get_id()}
 
             headers = {"Authorization": "Bearer {token}"}
@@ -277,7 +277,8 @@ class Brain:
                 headers=headers,
             ) as resp:
                 # result = await resp.json()
-                print(resp)
+                # print(resp)
+                print("Unlocked")
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
 
@@ -299,7 +300,8 @@ class Brain:
             headers=headers,
         ) as resp:
             # result = await resp.json()
-            print(resp)
+            # print(resp)
+            print("Locked")
 
         self.set_current_user(None)
         print("Travel done")
