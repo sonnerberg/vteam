@@ -23,6 +23,7 @@ const Container = (props) => {
   const [value, setValue] = useState("login");
   const [userToken, setUserToken] = useState();
   const [userData, setUserData] = useState();
+  const [scanQrCode, setScanQrCode] = useState(false);
 
   async function getUser() {
     //const user = {};
@@ -58,48 +59,59 @@ const Container = (props) => {
   } else if (value === "logout") {
     view = <div> Tack för besöket</div>;
   }
-  return (
-    <Grid container justify="center">
-      <Grid item xs={12}>
-        {view}
-      </Grid>
-      {userData && value === "map" ? (
-        <Fab color="primary" aria-label="add">
-          <ElectricScooter />
-        </Fab>
-      ) : null}
 
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-          console.log("VALUE IS ", value);
-        }}
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-      >
-        <BottomNavigationAction label="Karta" icon={<Layers />} value="map" />
-        <BottomNavigationAction
-          label="Konto"
-          icon={<ManageAccounts />}
-          value="account"
-        />
-        {userToken ? (
+  if (scanQrCode) {
+    return <div>RELOAD</div>;
+  } else {
+    return (
+      <Grid container justify="center">
+        <Grid item xs={12}>
+          {view}
+        </Grid>
+        {userData && value === "map" ? (
+          <Fab
+            color="primary"
+            aria-label="add"
+            onClick={() => {
+              setScanQrCode(true);
+            }}
+          >
+            <ElectricScooter />
+          </Fab>
+        ) : null}
+
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+            console.log("VALUE IS ", value);
+          }}
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        >
+          <BottomNavigationAction label="Karta" icon={<Layers />} value="map" />
           <BottomNavigationAction
-            label="Logga ut"
-            icon={<Logout />}
-            value="logout"
+            label="Konto"
+            icon={<ManageAccounts />}
+            value="account"
           />
-        ) : (
-          <BottomNavigationAction
-            label="Logga in"
-            icon={<Login />}
-            value="login"
-          />
-        )}
-      </BottomNavigation>
-    </Grid>
-  );
+          {userToken ? (
+            <BottomNavigationAction
+              label="Logga ut"
+              icon={<Logout />}
+              value="logout"
+            />
+          ) : (
+            <BottomNavigationAction
+              label="Logga in"
+              icon={<Login />}
+              value="login"
+            />
+          )}
+        </BottomNavigation>
+      </Grid>
+    );
+  }
 };
 export default Container;
 
