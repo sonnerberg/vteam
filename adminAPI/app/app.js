@@ -13,7 +13,6 @@ app.get('/', (req, res) => {
     res.send('Hello World from admin and nodemon!');
 });
 
-console.log('node env is', process.env.NOVE_ENV);
 app.get('/mariadb', async (req, res) => {
     const sql = 'CALL get_filtered_admin(?)';
     const email = 'email@example.com';
@@ -33,7 +32,12 @@ app.use('/v1', v1);
 v1.stack.forEach(function (stack) {
     stack.handle.stack.forEach((r) => {
         if (r.route && r.route.path) {
-            console.log(`{{baseURL}}/v1${r.route.path}`);
+            console.log(
+                `${String(Object.keys(r.route.methods)).padEnd(
+                    4
+                )} http://localhost:8081/v1${r.route.path}`
+            );
+            console.log();
         }
     });
 });
