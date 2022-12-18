@@ -7,8 +7,7 @@ import {
   Typography,
   Link,
 } from "@mui/material";
-import PropTypes from "prop-types";
-import { PropaneSharp } from "@mui/icons-material";
+
 const LoginForm = (props) => {
   const githubURl = "https://github.com/login/oauth/authorize";
   const options = {
@@ -23,9 +22,9 @@ const LoginForm = (props) => {
 
   useEffect(() => {
     const queryParams = new URLSearchParams(document.location.search);
-    setGithub(queryParams?.get("code"));
 
     if (queryParams?.get("code")) {
+      setGithub(queryParams?.get("code"));
       (async () => {
         const tokenURl = "http://localhost:8082/auth/github";
         const queryParams = new URLSearchParams(document.location.search);
