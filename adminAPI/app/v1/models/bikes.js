@@ -131,9 +131,9 @@ const rentBike = async (req, res) => {
 };
 const returnBike = async (req, res) => {
     try {
-        const { username, id } = req.body;
-        const sql = 'CALL set_scooter_returned(?,?);';
-        const { affectedRows } = await queryDatabase(sql, [username, id]);
+        const { username } = req.body;
+        const sql = 'CALL set_scooter_returned(?);';
+        const { affectedRows } = await queryDatabase(sql, [username]);
         if (affectedRows) {
             res.sendStatus(200);
         } else {

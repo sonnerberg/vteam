@@ -4,6 +4,9 @@ DROP TABLE IF EXISTS `zones`;
 DROP TABLE IF EXISTS `geojson`;
 DROP TABLE IF EXISTS `bikes`;
 DROP TABLE IF EXISTS `customer2bike`;
+DROP TABLE IF EXISTS `admin`;
+DROP TABLE IF EXISTS `trips`;
+
 
 CREATE TABLE IF NOT EXISTS `customer` (
 `surname` VARCHAR(50),
@@ -21,19 +24,6 @@ CHARSET utf8
 COLLATE utf8_swedish_ci
 ;
 
-/* CREATE TABLE IF NOT EXISTS `scooter` ( */
-/* `id` INT AUTO_INCREMENT, */
-/* `position` POINT, */
-/* `status` VARCHAR(50), */
-/* `health` VARCHAR(50), */
-/* `rented` BOOLEAN, */
-/* `speed` INT, */
-/* PRIMARY KEY (`id`)) */
-/* ENGINE = InnoDB */
-/* CHARSET utf8 */
-/* COLLATE utf8_swedish_ci */
-/* ; */
-/*  */
 CREATE TABLE IF NOT EXISTS `zones` (
 `id` INT AUTO_INCREMENT,
 `position` POLYGON,
@@ -87,6 +77,31 @@ CREATE TABLE IF NOT EXISTS `customer2bike` (
     CHARSET utf8
     COLLATE utf8_swedish_ci
     ;
+
+CREATE TABLE IF NOT EXISTS `admin` (
+`password` VARCHAR(255),
+`email` VARCHAR(100),
+`super` BOOLEAN,
+PRIMARY KEY (`email`))
+ENGINE = InnoDB
+CHARSET utf8
+COLLATE utf8_swedish_ci
+;
+
+CREATE TABLE IF NOT EXISTS `trips` (
+`id` INT AUTO_INCREMENT,
+`startposition` POINT,
+`endposition` POINT,
+`starttime` DATETIME,
+`endtime` DATETIME,
+`username` VARCHAR(50),
+`cost` FLOAT,
+FOREIGN KEY(`username`) REFERENCES `customer`(`username`),
+PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET utf8
+COLLATE utf8_swedish_ci
+;
 
 --
 -- Insert some customers.
