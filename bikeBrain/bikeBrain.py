@@ -27,7 +27,7 @@ class Brain:
         self._is_battery_depleted = position["properties"]["batteryDepleted"]
 
         self._battery_decrease = 5
-        self._breaking_probability = 0
+        self._breaking_probability = 3
 
         # These can be removed
         self._journey_log_start_position = position
@@ -290,7 +290,7 @@ class Brain:
         self.set_rented(False)
         self.set_report_interval(self._default_report_interval)
 
-        payload = {"username": str(self.get_current_user()), "id": self.get_id()}
+        payload = {"username": str(self.get_current_user())}
 
         headers = {"Authorization": "Bearer {token}"}
 
