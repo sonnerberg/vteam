@@ -72,15 +72,17 @@ const updateABike = async (req, res) => {
 
         const { body } = req;
         for (const field in allowedFields) {
-            if (field === 'coordinates') {
-                updateFields.push(
-                    allowedFields[field] +
-                        ' = ST_PointFromText(CONCAT(\'POINT(\', ?, \' \', ?, \')\'))'
-                );
-                params.push(body[field][0], body[field][1]);
-            } else {
-                updateFields.push(allowedFields[field] + ' = ?');
-                params.push(body[field]);
+            if (body[field] !== undefined) {
+                if (field === 'coordinates') {
+                    updateFields.push(
+                        allowedFields[field] +
+                            ' = ST_PointFromText(CONCAT(\'POINT(\', ?, \' \', ?, \')\'))'
+                    );
+                    params.push(body[field][0], body[field][1]);
+                } else {
+                    updateFields.push(allowedFields[field] + ' = ?');
+                    params.push(body[field]);
+                }
             }
         }
         sql += updateFields.join(', ');
