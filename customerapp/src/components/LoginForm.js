@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   TextField,
@@ -8,19 +8,42 @@ import {
   Link,
 } from "@mui/material";
 import PropTypes from "prop-types";
-const LoginForm = () => {
+import { PropaneSharp } from "@mui/icons-material";
+const LoginForm = (props) => {
   const githubURl = "https://github.com/login/oauth/authorize";
-
   const options = {
     client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
     redirect_uri: process.env.REACT_APP_GITHUB_REDIRECT,
     scope: "user:email",
     //state: "http://localhost:3100",
   };
-
   const qs = new URLSearchParams(options);
-
   const fullRequest = `${githubURl}?${qs.toString()}`;
+  const [Github, setGithub] = useState();
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(document.location.search);
+    setGithub(queryParams?.get("code"));
+
+    if (queryParams?.get("code")) {
+      (async () => {
+        const tokenURl = "http://localhost:8082/auth/github";
+        const queryParams = new URLSearchParams(document.location.search);
+        const options = {
+          code: queryParams?.get("code"),
+        };
+        const qs = new URLSearchParams(options);
+
+        const getTokenFromServer = await fetch(`${tokenURl}?${qs.toString()}`);
+        const data = await getTokenFromServer.json();
+        props.setUserToken(data);
+        props.setValue("map");
+        console.log("GITHUB ", Github);
+        console.log("data ", data);
+      })();
+    }
+  }, [Github]);
+
   return (
     <div>
       <Grid container spacing={0} justify="center" direction="row">
