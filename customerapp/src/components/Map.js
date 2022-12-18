@@ -31,9 +31,11 @@ const Map = (props) => {
     allLayers.bikes.clearLayers();
     console.log(dataFromBackend.bikes);
     for (const bike of dataFromBackend.bikes) {
+      const bikeicon =
+        bike.position.properties.rented === 0 ? "scooterRented" : "scooter";
       const newBike = L.geoJson(bike.position, {
         pointToLayer: function (feature, latlng) {
-          return L.marker(latlng, mapStyles["scooter"]);
+          return L.marker(latlng, mapStyles[bikeicon]);
         },
       });
       if (bounds.contains(newBike.getBounds())) {

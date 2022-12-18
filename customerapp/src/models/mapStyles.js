@@ -1,9 +1,22 @@
 import L from "leaflet";
-import scooterIconUrl from "../images/electric-scooter.png";
+import scooterIconUrl from "../images/electric-scooter-green.png";
+import scooterRentedIconUrl from "../images/electric-scooter-red.png";
+
 import chargerIconUrl from "../images/battery-status.png";
 
 const scooterIcon = new L.Icon({
   iconUrl: scooterIconUrl,
+  iconSize: [20, 20],
+  //FATTA ICONANCHOR BÄTTRE!! DENNA SÄTTER EN OFFSET
+  iconAnchor: [10, 10],
+  popupAnchor: [-3, -76],
+  //shadowUrl: 'my-icon-shadow.png',
+  //shadowSize: [68, 95],
+  //shadowAnchor: [22, 94],
+});
+
+const scooterRentedIcon = new L.Icon({
+  iconUrl: scooterRentedIconUrl,
   iconSize: [20, 20],
   //FATTA ICONANCHOR BÄTTRE!! DENNA SÄTTER EN OFFSET
   iconAnchor: [10, 10],
@@ -42,6 +55,9 @@ const mapStyles = {
   },
   scooter: {
     icon: scooterIcon,
+  },
+  scooterRented: {
+    icon: scooterRentedIcon,
   },
   charger: {
     icon: chargerIcon,
