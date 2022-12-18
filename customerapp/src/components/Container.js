@@ -10,6 +10,7 @@ import {
   ManageAccounts,
   Layers,
   Login,
+  Logout,
   ElectricScooter,
 } from "@mui/icons-material";
 
@@ -34,6 +35,11 @@ const Container = (props) => {
     console.log("USERTOKEN, ", userToken);
     getUser();
   }, [userToken]);
+  useEffect(() => {
+    if (value === "logout") {
+      setUserToken(null);
+    }
+  }, [value]);
 
   let view;
   if (value === "map") {
@@ -45,9 +51,12 @@ const Container = (props) => {
       <LoginForm
         setValue={setValue}
         setUserToken={setUserToken}
+        setUserData={setUserData}
         getUser={getUser}
       />
     );
+  } else if (value === "logout") {
+    view = <div> Tack för besöket</div>;
   }
   return (
     <Grid container justify="center">
@@ -75,11 +84,19 @@ const Container = (props) => {
           icon={<ManageAccounts />}
           value="account"
         />
-        <BottomNavigationAction
-          label="Logga in"
-          icon={<Login />}
-          value="login"
-        />
+        {userToken ? (
+          <BottomNavigationAction
+            label="Logga ut"
+            icon={<Logout />}
+            value="logout"
+          />
+        ) : (
+          <BottomNavigationAction
+            label="Logga in"
+            icon={<Login />}
+            value="login"
+          />
+        )}
       </BottomNavigation>
     </Grid>
   );
