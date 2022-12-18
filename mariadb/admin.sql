@@ -98,3 +98,21 @@ CREATE PROCEDURE register_admin(
 ;;
 
 DELIMITER ;
+
+-- Procedure get_all_admins_except_super()
+
+DROP PROCEDURE IF EXISTS get_all_admins_except_super;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_all_admins_except_super()
+ BEGIN
+
+    SELECT email
+      FROM admin
+     WHERE super IS NOT true;
+
+  END
+;;
+
+DELIMITER ;

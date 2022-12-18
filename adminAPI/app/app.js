@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const { queryDatabase } = require('./database/mariadb');
 
 const app = express();
 app.use(cors());
@@ -8,17 +7,6 @@ app.options('*', cors());
 const v1 = require('./v1');
 
 app.use(express.json());
-
-app.get('/', (req, res) => {
-    res.send('Hello World from admin and nodemon!');
-});
-
-app.get('/mariadb', async (req, res) => {
-    const sql = 'CALL get_filtered_admin(?)';
-    const email = 'email@example.com';
-    const data = await queryDatabase(sql, [email]);
-    res.status(200).json(data[0]);
-});
 
 app.use('/v1', v1);
 

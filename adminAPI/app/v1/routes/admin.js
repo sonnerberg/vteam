@@ -1,11 +1,9 @@
 const express = require('express');
-const { authMiddleware } = require('../middleware/authMiddleware');
-const { register, login } = require('../models/admin');
+const admin = require('../models/admin');
 
 const router = express.Router();
-const routeName = '/auth';
+const routeName = '/admin';
 
-router.post(`${routeName}/register`, authMiddleware, register);
-router.post(`${routeName}/login`, login);
+router.get(`${routeName}/`, admin.getAllAdmins);
 
 module.exports = router;
