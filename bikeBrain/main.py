@@ -24,8 +24,8 @@ async def main():
             # result = await resp.json()
             print("Logged in")
 
-        nr_of_users = 2
-        nr_of_bikes = 2
+        nr_of_users = 72
+        nr_of_bikes = 3000
         users = []
         bikes = []
         start_time = time.time()
