@@ -1,3 +1,8 @@
+""""Something is wrong in this file, bikes not moving
+    Compare with bikeBrain.py, focus on adding
+    report to rent and return
+"""
+
 from random import seed
 from random import randrange
 import time
@@ -5,7 +10,7 @@ import json
 
 # import requests
 
-
+# pylint: disable=locally-disabled, too-many-instance-attributes, too-many-public-methods
 class Brain:
     """Class for bike brain"""
 
@@ -35,7 +40,7 @@ class Brain:
 
         self._report_interval = 10
         self._default_report_interval = 10
-        self._moving_report_interval = 1
+        self._moving_report_interval = 5
 
         self._current_user = position["properties"]["username"]
 
@@ -251,7 +256,7 @@ class Brain:
             ) as resp:
                 # result = await resp.json()
                 # print(resp)
-                print("Moved")
+                print("Bike moved")
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
 
@@ -266,7 +271,8 @@ class Brain:
             self.set_journey_log_start_position(pos_dict)
             self.set_current_user(user_id)
             self.set_rented(True)
-
+            # Skicka start data: startposition, starttid user_id, bike_id
+            # få resans id tillbaka
             payload = {"username": str(self.get_current_user()), "id": self.get_id()}
 
             headers = {"Authorization": "Bearer {token}"}
@@ -278,7 +284,7 @@ class Brain:
             ) as resp:
                 # result = await resp.json()
                 # print(resp)
-                print("Unlocked")
+                print("Bike unlocked")
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
 
@@ -290,7 +296,7 @@ class Brain:
         self.set_rented(False)
         self.set_report_interval(self._default_report_interval)
 
-        payload = {"username": str(self.get_current_user())}
+        payload = {"username": str(self.get_current_user()), "id": self.get_id()}
 
         headers = {"Authorization": "Bearer {token}"}
 
@@ -301,7 +307,7 @@ class Brain:
         ) as resp:
             # result = await resp.json()
             # print(resp)
-            print("Locked")
+            print("Bike locked")
 
         self.set_current_user(None)
         print("Travel done")

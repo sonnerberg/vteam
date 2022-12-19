@@ -12,7 +12,7 @@ class User:
         self._travel_plan = travel_plan
         self._travel_plan_index = 0
         self._journey_start_time = 0
-        self._move_interval = 5
+        self._move_interval = 1
 
         seed(self._id)
 
@@ -30,9 +30,9 @@ class User:
         # Calculate the amount of time to reach next point based on current speed
         # Adjust move_interval
 
-    def begin_journey(self):
+    async def begin_journey(self):
         """Begins journey"""
-        self.bike.unlock(self._id)
+        await self.bike.unlock(self._id)
         print(self.bike.get_current_user())
         self.set_journey_start_time(time.time())
         self.bike.set_speed(15)
