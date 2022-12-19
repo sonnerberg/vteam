@@ -26,6 +26,7 @@ async def main():
 
         nr_of_users = 85
         nr_of_bikes = 85
+
         users = []
         bikes = []
         start_time = time.time()
@@ -117,11 +118,13 @@ async def main():
 
         # Loop through users and begin journeys (unlock bikes)
         for user in users:
+
             try:
                 await user.begin_journey()
             except IOError as error:
                 if error.errno == errno.EPIPE:
                     pass
+
         while run:
             try:
                 # Loop through users and move them according to plan (users move in intervals see UserClass.move)

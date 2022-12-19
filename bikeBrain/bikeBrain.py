@@ -278,7 +278,9 @@ class Brain:
             ) as resp:
                 # result = await resp.json()
                 # print(resp)
+
                 print(f"Unlocked {self.get_id()}")
+
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
 
