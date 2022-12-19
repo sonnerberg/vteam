@@ -16,9 +16,10 @@ import getCustomerData from '../models/getCustomerData';
 function renderRow(props) {
     const { index, style, data } = props;
     const handleClick = async () => {
+        console.log(data[index]);
         if (data.userType === 'users') {
-            const trips = await getCustomerData.getTripsByUserId(
-                data[index].id
+            const trips = await getCustomerData.getTripsByUserName(
+                data[index].username
             );
             if (trips) {
                 data.setUserTrips(trips);
@@ -100,7 +101,13 @@ function renderRow(props) {
     return (
         <ListItem style={style} key={index} component="div" disablePadding>
             <ListItemButton onClick={handleClick}>
-                <ListItemText primary={`${index} - ${data[index].username}`} />
+                <ListItemText
+                    primary={`${index} - ${
+                        data[index].username
+                            ? data[index].username
+                            : data[index].email
+                    }`}
+                />
             </ListItemButton>
         </ListItem>
     );
@@ -154,9 +161,9 @@ function UserList(props) {
     };
 
     const handleClickSaveNewButton = async (newUserObject) => {
-        if (data.UserType === 'administrators') {
+        if (data.userType === 'administrators') {
             await postUsers.registerAdmin(newUserObject, token);
-        } else if (data.UserType === 'users') {
+        } else if (data.userType === 'users') {
             await postUsers.registerUser(newUserObject, token);
         }
 

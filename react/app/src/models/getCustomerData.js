@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:4000';
+const baseUrl = 'http://localhost:8081/v1';
 
 const getCustomerData = {
     getTrips: async function getUsers() {
@@ -8,19 +8,11 @@ const getCustomerData = {
         return result;
     },
 
-    getTripsByUserId: async function getTripsByUserId(user_id) {
+    getTripsByUserName: async function getTripsByUserName(userName) {
         console.log('Getting trips');
-        const response = await fetch(`${baseUrl}/trips`);
+        const response = await fetch(`${baseUrl}/trips/${userName}`);
         const result = await response.json();
-        const tripsByUser = [];
-        for (const trip of result) {
-            console.log('trip user', trip.userid);
-            if (trip.userid === user_id) {
-                tripsByUser.push(trip);
-            }
-        }
-
-        return tripsByUser;
+        return result.data;
     },
 };
 
