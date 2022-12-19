@@ -28,6 +28,24 @@
   color: #61dafb;
 }
 
+.login-form {
+  justify-content: center;
+  margin: auto;
+  width: 75%;
+  min-height: 90vh;
+}
+
+.login-container {
+  margin: auto;
+  width: 75%;
+}
+
+.login-background {
+  justify-content: center;
+  min-height: 30vh;
+  padding: 50px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -39,7 +39,6 @@ services:
     depends_on:
       - "mariadb"
 
-
   #  auth-react:
   #    image: node:latest
   #    container_name: auth-react
@@ -88,17 +87,20 @@ services:
     ports:
       - 3100:3000
     restart: on-failure
+    environment:
+      REACT_APP_GITHUB_CLIENT_ID: ${REACT_APP_GITHUB_CLIENT_ID}
+      REACT_APP_GITHUB_REDIRECT: ${REACT_APP_GITHUB_REDIRECT}
     depends_on:
       - "user-api"
 
-  bike-brain:
-    container_name: bike-brain2
-    build:
-      context: ./bikeBrain
-      dockerfile: ./Dockerfile.bike
-    working_dir: /brain/app
-    restart: on-failure
-    command: python3 main.py
-    depends_on:
-      - "admin-api"
-      - "mariadb"
+  #bike-brain:
+  #  container_name: bike-brain2
+  #  build:
+  #    context: ./bikeBrain
+  #    dockerfile: ./Dockerfile.bike
+  #  working_dir: /brain/app
+  #  restart: on-failure
+  #  command: python3 main.py
+  #  depends_on:
+  #    - "admin-api"
+  #    - "mariadb"

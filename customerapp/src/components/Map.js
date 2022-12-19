@@ -29,15 +29,17 @@ const Map = (props) => {
   //only points within bounds so we filter in frontend for now...
   const loadScooters = (bounds) => {
     allLayers.bikes.clearLayers();
-
-    for (const point of dataFromBackend.points) {
-      const newPoint = L.geoJson(point, {
+    console.log(dataFromBackend.bikes);
+    for (const bike of dataFromBackend.bikes) {
+      const bikeicon =
+        bike.position.properties.rented === 0 ? "scooterRented" : "scooter";
+      const newBike = L.geoJson(bike.position, {
         pointToLayer: function (feature, latlng) {
-          return L.marker(latlng, mapStyles["scooter"]);
+          return L.marker(latlng, mapStyles[bikeicon]);
         },
       });
-      if (bounds.contains(newPoint.getBounds())) {
-        allLayers.bikes.addLayer(newPoint);
+      if (bounds.contains(newBike.getBounds())) {
+        allLayers.bikes.addLayer(newBike);
       }
     }
   };
@@ -89,11 +91,7 @@ const Map = (props) => {
 
     return () => allLayers.parkingLots.clearLayers();
   }, []);
-  useEffect(() => {
-    (async () => {
-      dataFromBackend.bikes = await getFeatures.getBikes();
-    })();
-  }, []);
+
   useEffect(() => {
     (async () => {
       dataFromBackend.workshops = await getFeatures.getWorkshops();
@@ -116,7 +114,7 @@ const Map = (props) => {
   }, []);
   useEffect(() => {
     (async () => {
-      dataFromBackend.points = await getFeatures.getPoints();
+      dataFromBackend.bikes = await getFeatures.getBikes();
     })();
   }, []);
   // This useEffect hook runs when the component is first mounted,
@@ -124,6 +122,7 @@ const Map = (props) => {
   useEffect(() => {
     // Init map and assign the map instance to the mapRef:
     mapRef.current = L.map("map", mapModel.mapParams);
+    // mapRef.current.locate({ setView: true, maxZoom: 16 });
     //add eventlisteners for zoomend and moveend. pass current bounds to
     //scooterloader function to load
     //only scooters currently visible

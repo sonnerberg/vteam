@@ -10,16 +10,20 @@ import {
   ManageAccounts,
   Layers,
   Login,
+  Logout,
   ElectricScooter,
 } from "@mui/icons-material";
 
 import Map from "./Map";
 import getUserData from "../models/getUserData";
 import UserCard from "./UserCard";
+import LoginForm from "./LoginForm";
 
 const Container = (props) => {
-  const [value, setValue] = useState("map");
-  const [userData, setUserData] = useState("");
+  const [value, setValue] = useState("login");
+  const [userToken, setUserToken] = useState();
+  const [userData, setUserData] = useState();
+  const [scanQrCode, setScanQrCode] = useState(false);
 
   async function getUser() {
     //const user = {};
@@ -29,52 +33,85 @@ const Container = (props) => {
   }
 
   useEffect(() => {
+    console.log("USERTOKEN, ", userToken);
     getUser();
-  }, []);
+  }, [userToken]);
+  useEffect(() => {
+    if (value === "logout") {
+      setUserToken(null);
+    }
+  }, [value]);
 
   let view;
   if (value === "map") {
     view = <Map />;
-    console.log("MAP");
   } else if (value === "account") {
     view = <UserCard content={userData} />;
-    console.log("ACCOUNT");
   } else if (value === "login") {
-    view = <Map />;
-    console.log("LOGIN");
+    view = (
+      <LoginForm
+        setValue={setValue}
+        setUserToken={setUserToken}
+        setUserData={setUserData}
+        getUser={getUser}
+      />
+    );
+  } else if (value === "logout") {
+    view = <div> Tack för besöket</div>;
   }
-  return (
-    <Grid container direction="column" justify="space-between">
-      <Grid item xs={12}>
-        {view}
-      </Grid>
-      <Fab color="primary" aria-label="add">
-        <ElectricScooter />
-      </Fab>
 
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-          console.log("VALUE IS ", value);
-        }}
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-      >
-        <BottomNavigationAction label="Karta" icon={<Layers />} value="map" />
-        <BottomNavigationAction
-          label="Konto"
-          icon={<ManageAccounts />}
-          value="account"
-        />
-        <BottomNavigationAction
-          label="Logga in"
-          icon={<Login />}
-          value="login"
-        />
-      </BottomNavigation>
-    </Grid>
-  );
+  if (scanQrCode) {
+    return <div>RELOAD</div>;
+  } else {
+    return (
+      <Grid container justify="center">
+        <Grid item xs={12}>
+          {view}
+        </Grid>
+        {userData && value === "map" ? (
+          <Fab
+            color="primary"
+            aria-label="add"
+            onClick={() => {
+              setScanQrCode(true);
+            }}
+          >
+            <ElectricScooter />
+          </Fab>
+        ) : null}
+
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+            console.log("VALUE IS ", value);
+          }}
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        >
+          <BottomNavigationAction label="Karta" icon={<Layers />} value="map" />
+          <BottomNavigationAction
+            label="Konto"
+            icon={<ManageAccounts />}
+            value="account"
+          />
+          {userToken ? (
+            <BottomNavigationAction
+              label="Logga ut"
+              icon={<Logout />}
+              value="logout"
+            />
+          ) : (
+            <BottomNavigationAction
+              label="Logga in"
+              icon={<Login />}
+              value="login"
+            />
+          )}
+        </BottomNavigation>
+      </Grid>
+    );
+  }
 };
 export default Container;
 
