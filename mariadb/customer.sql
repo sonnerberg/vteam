@@ -35,3 +35,34 @@ CREATE PROCEDURE get_customer_by_username(
 ;;
 
 DELIMITER ;
+
+-- Procedure update_customer_info()
+
+DROP PROCEDURE IF EXISTS update_customer_info;
+
+DELIMITER ;;
+
+CREATE PROCEDURE update_customer_info(
+                    `a_username` VARCHAR(50),
+                    `a_surname` VARCHAR(50),
+                    `a_lastname` VARCHAR(50),
+                    `a_adress` VARCHAR(50),
+                    `a_billing_adress` VARCHAR(50),
+                    `a_email` VARCHAR(50)
+)
+ BEGIN
+
+   UPDATE customer
+   SET
+      surname = a_surname,
+      lastname = a_lastname,
+      adress = a_adress,
+      billing_adress = a_billing_adress,
+      email = a_email
+    WHERE username = a_username;
+
+
+  END
+;;
+
+DELIMITER ;
