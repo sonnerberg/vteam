@@ -104,3 +104,5 @@ services:
     depends_on:
       - "admin-api"
       - "mariadb"
+      - "customerapp"
+      - "react"
