@@ -1,5 +1,7 @@
 // const table = require('../config/tables.json');
 const { queryDatabase } = require('../database/mariadb');
+const bcrypt = require('bcryptjs');
+const saltRounds = 10;
 
 exports.getUserInfo = async (req, res) => {
     const user = req.body.userName;
@@ -13,7 +15,7 @@ exports.getUserInfo = async (req, res) => {
 exports.updateUserInfo = async (req, res) => {
     // TODO
     const newUserInfo = {
-        ...req.body
+        ...req.body,
     };
     const required = [
         'surName',
@@ -47,6 +49,33 @@ exports.updateUserInfo = async (req, res) => {
         res.status(201).json({
             data: {
                 message: 'user info updated',
+            },
+        });
+    }
+};
+
+exports.updateUserPassword = async (req, res) => {
+    const user = {
+        ...req.body
+    };
+    const sql = 'CALL update_customer_password(?, ?)';
+    try {
+        const hashedPassword = await bcrypt.hashSync(user.password, saltRounds);
+        const data = await queryDatabase(sql, [user.userName, hashedPassword]);
+        console.log(data);
+        if (data.error) {
+            res.status(500).json(data);
+        } else {
+            res.status(201).json({
+                data: {
+                    message: 'password updated',
+                },
+            });
+        }
+    } catch (err) {
+        res.status(400).json({
+            error: {
+                message: 'bcrypt failed',
             },
         });
     }
