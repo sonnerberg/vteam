@@ -18,13 +18,14 @@ const LoginForm = (props) => {
   };
   const qs = new URLSearchParams(options);
   const fullRequest = `${githubURl}?${qs.toString()}`;
-  const [Github, setGithub] = useState();
+
+  //const [Github, setGithub] = useState();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(document.location.search);
 
     if (queryParams?.get("code")) {
-      setGithub(queryParams?.get("code"));
+      //setGithub(queryParams?.get("code"));
       (async () => {
         const tokenURl = "http://localhost:8082/auth/github";
         const queryParams = new URLSearchParams(document.location.search);
@@ -34,14 +35,18 @@ const LoginForm = (props) => {
         const qs = new URLSearchParams(options);
 
         const getTokenFromServer = await fetch(`${tokenURl}?${qs.toString()}`);
-        const data = await getTokenFromServer.json();
-        props.setUserToken(data);
-        props.setValue("map");
-        console.log("GITHUB ", Github);
+        const { data } = await getTokenFromServer.json();
         console.log("data ", data);
+
+        if (data.status === 200) {
+          console.log("STATUS OK");
+          props.setUserToken(data.token);
+        }
+        props.setValue("map");
+        // console.log("GITHUB ", Github);
       })();
     }
-  }, [Github]);
+  }, []);
 
   return (
     <div>
