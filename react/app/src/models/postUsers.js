@@ -29,7 +29,6 @@ const postUsers = {
         return result;
     },
     registerAdmin: async function registerAdmin(data, token) {
-        console.log(data);
         const response = await fetch(`${baseUrl}/v1/auth/register`, {
             body: JSON.stringify(data),
             headers: {
@@ -38,11 +37,6 @@ const postUsers = {
             },
             method: 'POST',
         });
-        console.log(response);
-
-        const result = await response.json();
-
-        return result;
     },
 };
 
