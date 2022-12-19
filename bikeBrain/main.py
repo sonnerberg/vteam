@@ -24,8 +24,8 @@ async def main():
             # result = await resp.json()
             print("Logged in")
 
-        nr_of_users = 72
-        nr_of_bikes = 3000
+        nr_of_users = 85
+        nr_of_bikes = 85
         users = []
         bikes = []
         start_time = time.time()
@@ -35,6 +35,8 @@ async def main():
 
         features = data["features"]
         travel_plans = []
+        index = 0
+        comp_id = 0
 
         # Create a list for each feature
         # in the travel_plans list
@@ -51,11 +53,15 @@ async def main():
         for i, feature in enumerate(features):
             # Check which index should be used based
             # on the journeys id
-            index = int(feature["properties"]["id"]) - 1
 
-            # Append the coordinates to the list at the correct
-            # index
-            travel_plans[index].append(feature["geometry"]["coordinates"])
+            # index = int(feature["properties"]["id"]) - 1
+            if feature["properties"]["COMP_ID"] == comp_id:
+                # Append the coordinates to the list at the correct
+                # index
+                travel_plans[index].append(feature["geometry"]["coordinates"])
+            else:
+                comp_id = feature["properties"]["COMP_ID"]
+                index = index + 1
 
         # Remove empty lists from travel_plans
         travel_plans = list(filter(None, travel_plans))
@@ -111,8 +117,11 @@ async def main():
 
         # Loop through users and begin journeys (unlock bikes)
         for user in users:
-            await user.begin_journey()
-
+            try:
+                await user.begin_journey()
+            except IOError as error:
+                if error.errno == errno.EPIPE:
+                    pass
         while run:
             try:
                 # Loop through users and move them according to plan (users move in intervals see UserClass.move)
@@ -124,7 +133,6 @@ async def main():
                     # Have all bikes report their position (will only send request if the right interval has passed)
                     await bike.report_position()
 
-                # PUT the report to db
             except IOError as error:
                 if error.errno == errno.EPIPE:
                     pass
