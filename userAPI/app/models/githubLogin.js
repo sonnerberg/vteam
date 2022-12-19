@@ -77,7 +77,8 @@ exports.loginWithGithubUser = async (githubUser) => {
         ...githubUser,
     };
 
-    const sql = `SELECT id
+    // const sql = `SELECT id
+    const sql = `SELECT username
     FROM ${table.user}
     WHERE username = ?`;
     const placeholder = [user.userName];
@@ -97,16 +98,16 @@ exports.loginWithGithubUser = async (githubUser) => {
         if (result.error) {
             return result;
         }
-        const bigIntInsertId = result.insertId;
-        const insertId = Number(bigIntInsertId);
-        const payload = {
-            userId: insertId,
-            userName: user.userName,
-        };
-        return createNewToken(payload);
+        // const bigIntInsertId = result.insertId;
+        // const insertId = Number(bigIntInsertId);
+        // const payload = {
+        // userId: insertId,
+        // userName: user.userName,
+        // };
+        // return createNewToken(payload);
     }
     const payload = {
-        userId: result[0].id,
+        // userId: result[0].id,
         userName: user.userName,
     };
     return createNewToken(payload);

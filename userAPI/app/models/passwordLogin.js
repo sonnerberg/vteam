@@ -14,7 +14,8 @@ exports.login = async (userName, password) => {
             },
         };
     }
-    const sql = `SELECT id, password
+    // const sql = `SELECT id, password
+    const sql = `SELECT password
     FROM ${table.user}
     WHERE username = ?`;
     const placeholder = [userName];
@@ -33,7 +34,7 @@ exports.login = async (userName, password) => {
         };
     }
     const payload = {
-        userId: result[0].id,
+        // userId: result[0].id,
         userName: userName,
     };
 
