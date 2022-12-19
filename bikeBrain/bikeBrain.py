@@ -26,8 +26,8 @@ class Brain:
         self._is_warning_battery = position["properties"]["batteryWarning"]
         self._is_battery_depleted = position["properties"]["batteryDepleted"]
 
-        self._battery_decrease = 5
-        self._breaking_probability = 3
+        self._battery_decrease = 1
+        self._breaking_probability = 1
 
         # These can be removed
         self._journey_log_start_position = position
@@ -112,7 +112,7 @@ class Brain:
         """Set current user"""
         self._current_user = user_id
         self._position["properties"]["username"] = user_id
-        print(self._position["properties"]["username"])
+        # print(self._position["properties"]["username"])
 
     def get_current_user(self):
         """Get current user"""
@@ -201,7 +201,7 @@ class Brain:
             await self.lock()
 
         if randrange(1, 100) <= self._breaking_probability:
-            print("Breaking tyre")
+            # print("Breaking tyre")
             self.set_speed(0)
             self.set_is_blocked(True)
             self.set_is_whole(False)
@@ -278,7 +278,7 @@ class Brain:
             ) as resp:
                 # result = await resp.json()
                 # print(resp)
-                print("Unlocked")
+                print(f"Unlocked {self.get_id()}")
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
 
