@@ -66,3 +66,26 @@ CREATE PROCEDURE update_customer_info(
 ;;
 
 DELIMITER ;
+
+-- Procedure update_customer_password()
+
+DROP PROCEDURE IF EXISTS update_customer_password;
+
+DELIMITER ;;
+
+CREATE PROCEDURE update_customer_password(
+                    `a_username` VARCHAR(50),
+                    `a_password` VARCHAR(250)
+)
+ BEGIN
+
+   UPDATE customer
+   SET
+      password = a_password
+    WHERE username = a_username;
+
+
+  END
+;;
+
+DELIMITER ;
