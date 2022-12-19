@@ -43,9 +43,9 @@ const Container = (props) => {
   }, [value]);
 
   let view;
-  if (value === "map") {
+  if (value === "map" && userToken) {
     view = <Map />;
-  } else if (value === "account") {
+  } else if (value === "account" && userToken) {
     view = <UserCard content={userData} />;
   } else if (value === "login") {
     view = (
@@ -68,7 +68,7 @@ const Container = (props) => {
         <Grid item xs={12}>
           {view}
         </Grid>
-        {userData && value === "map" ? (
+        {userToken && value === "map" ? (
           <Fab
             color="primary"
             aria-label="add"
