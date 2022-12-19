@@ -48,7 +48,7 @@ const UserFormCard = (props) => {
             <CardContent>
                 {rows.map((row) => (
                     <TextField
-                        disabled={row.name === 'id' ? true : false}
+                        disabled={row.name === 'username' ? true : false}
                         variant="outlined"
                         key={row.name}
                         label={row.name}

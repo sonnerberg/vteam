@@ -1,11 +1,12 @@
 const baseUrl = 'http://localhost:8081';
 
 const postUsers = {
-    postUsers: async function postUsers(data, userType) {
+    postUsers: async function postUsers(data, token) {
         const postData = JSON.stringify(data);
-        const response = await fetch(`${baseUrl}/${userType}/`, {
+        const response = await fetch(`${baseUrl}/customer`, {
             body: postData,
             headers: {
+                Authorization: `Bearer ${token}`,
                 'content-type': 'application/json',
             },
             method: 'POST',

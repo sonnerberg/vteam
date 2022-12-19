@@ -28,8 +28,31 @@ const TripCard = (props) => {
         } else if (property === 'endposition') {
             rows.push({
                 name: property,
-                value: `Long: ${props.content.endposition.coordinates[0]} Lat: ${props.content.endposition.coordinates[1]} `,
+                value: `Long: ${
+                    props.content.endposition.coordinates
+                        ? props.content.endposition.coordinates[0]
+                        : '-'
+                } Lat: ${
+                    props.content.endposition.coordinates
+                        ? props.content.endposition.coordinates[1]
+                        : '-'
+                } `,
             });
+        } else if (property === 'starttime') {
+            rows.push({
+                name: property,
+                value: new Date(props.content.starttime).toLocaleString(),
+            });
+        } else if (property === 'endtime') {
+            props.content.endtime
+                ? rows.push({
+                      name: property,
+                      value: new Date(props.content.endtime).toLocaleString(),
+                  })
+                : rows.push({
+                      name: property,
+                      value: '-',
+                  });
         } else
             rows.push({
                 name: property,
