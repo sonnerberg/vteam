@@ -24,9 +24,8 @@ async def main():
             # result = await resp.json()
             print("Logged in")
 
-        nr_of_users = 85
-        nr_of_bikes = 85
-
+        nr_of_users = 300
+        nr_of_bikes = 300
         users = []
         bikes = []
         start_time = time.time()
@@ -35,6 +34,42 @@ async def main():
             data = json.load(file)
 
         features = data["features"]
+
+        with open("punkter_for_resa2.geojson", encoding="utf-8") as file:
+            data = json.load(file)
+            features2 = data["features"]
+
+        for feature in features2:
+            features.append(feature)
+
+        with open("punkter_for_resa3.geojson", encoding="utf-8") as file:
+            data = json.load(file)
+            features3 = data["features"]
+
+        for feature in features3:
+            features.append(feature)
+
+        with open("punkter_for_resa4.geojson", encoding="utf-8") as file:
+            data = json.load(file)
+            features4 = data["features"]
+
+        for feature in features4:
+            features.append(feature)
+
+        with open("punkter_for_resa5.geojson", encoding="utf-8") as file:
+            data = json.load(file)
+            features5 = data["features"]
+
+        for feature in features5:
+            features.append(feature)
+
+        with open("punkter_for_resa6.geojson", encoding="utf-8") as file:
+            data = json.load(file)
+            features6 = data["features"]
+
+        for feature in features6:
+            features.append(feature)
+
         travel_plans = []
         index = 0
         comp_id = 0
