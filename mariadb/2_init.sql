@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 `password` VARCHAR(250),
 `email` VARCHAR(50) UNIQUE,
 `balance` INT,
-`status` VARCHAR(50),
+`status` ENUM('online', 'offline'),
 PRIMARY KEY (`username`))
 ENGINE = InnoDB
 CHARSET utf8
