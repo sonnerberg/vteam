@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `zones` (
 `position` POLYGON,
 `type` ENUM('speed', 'forbidden'),
 `speed_limit` INT,
+`feature_type` VARCHAR(50) DEFAULT 'zones',
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
 CHARSET utf8
