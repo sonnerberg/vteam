@@ -39,7 +39,10 @@ const Container = (props) => {
 
   useEffect(() => {
     console.log("USERTOKEN, ", userToken);
-    getUser();
+    (async () => {
+      await getUser();
+    })();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userToken]);
   useEffect(() => {
