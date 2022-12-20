@@ -1,9 +1,13 @@
 const { queryDatabase } = require('../database/mariadb');
 
 exports.getAllCities = async (req, res) => {
-    const sql = 'SELECT * FROM cities';
-    const data = await queryDatabase(sql);
-    res.json(sqlToGeoJson(data));
+    try {
+        const sql = 'SELECT * FROM cities';
+        const data = await queryDatabase(sql);
+        res.json(sqlToGeoJson(data));
+    } catch {
+        res.sendStatus(400);
+    }
 };
 
 const sqlToGeoJson = (sql) => {
