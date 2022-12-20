@@ -6,6 +6,7 @@ const customerRouter = require('./users');
 const bikesRouter = require('./bikes');
 const cityRouter = require('./cities');
 const parkingRouter = require('./parking');
+const zoneRouter = require('./zones');
 const router = express.Router();
 
 router.use(validateToken);
@@ -14,6 +15,7 @@ router.use(customerRouter);
 router.use(bikesRouter);
 router.use(cityRouter);
 router.use(parkingRouter);
+router.use(zoneRouter);
 
 router.get('/', (_, res) => res.send('welcome to v1 @ user-api'));
 
