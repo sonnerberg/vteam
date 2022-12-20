@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `scooter`;
 DROP TABLE IF EXISTS `zones`;
+DROP TABLE IF EXISTS `cities`;
 DROP TABLE IF EXISTS `geojson`;
 DROP TABLE IF EXISTS `bikes`;
 DROP TABLE IF EXISTS `customer2bike`;
@@ -29,6 +30,18 @@ CREATE TABLE IF NOT EXISTS `zones` (
 `position` POLYGON,
 `type` ENUM('speed', 'forbidden'),
 `speed_limit` INT,
+PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET utf8
+COLLATE utf8_swedish_ci
+;
+
+CREATE TABLE IF NOT EXISTS `cities` (
+`id` INT AUTO_INCREMENT,
+`geometry` POLYGON,
+`type` VARCHAR(50) DEFAULT 'Feature',
+`feature_type` VARCHAR(50) DEFAULT 'cities',
+`name` VARCHAR(50),
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
 CHARSET utf8
@@ -156,6 +169,24 @@ SET
 `position` = PolygonFromText(@col1),
 `type` = @col2,
 `speed_limit` = @col3
+;
+
+--
+-- Insert some cities.
+--
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/cities.csv'
+INTO TABLE cities
+CHARSET utf8
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1 LINES
+(@col1, @col2)
+SET
+`geometry` = PolygonFromText(@col1),
+`name` = @col2
 ;
 
 --
