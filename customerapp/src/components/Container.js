@@ -3,7 +3,6 @@ import {
   Grid,
   BottomNavigation,
   BottomNavigationAction,
-  Button,
   Fab,
 } from "@mui/material";
 import {
@@ -17,24 +16,29 @@ import {
 import Map from "./Map";
 import getUserData from "../models/getUserData";
 import UserCard from "./UserCard";
+import UserForm from "./UserForm";
+import BalanceForm from "./BalanceForm";
+import PrePaidForm from "./PrePaidForm";
 import LoginForm from "./LoginForm";
+import putUserData from "../models/putUserData";
 
 const Container = (props) => {
   const [value, setValue] = useState("login");
   const [userToken, setUserToken] = useState();
   const [userData, setUserData] = useState();
   const [scanQrCode, setScanQrCode] = useState(false);
+  const [accountView, setAccountView] = useState("userInfo");
 
   async function getUser() {
     //const user = {};
-    const user = await getUserData.getUser(1);
-
+    const user = await getUserData.getUser(1, userToken);
     setUserData(user);
   }
 
   useEffect(() => {
     console.log("USERTOKEN, ", userToken);
     getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userToken]);
   useEffect(() => {
     if (value === "logout") {
@@ -42,11 +46,62 @@ const Container = (props) => {
     }
   }, [value]);
 
+  async function saveUserInformation(newUserObject) {
+    await putUserData.putUser(newUserObject, userToken);
+    await getUser();
+    setAccountView("userInfo");
+  }
+
+  async function saveUserBalanceInformation(amount, username) {
+    await putUserData.putUserBalance(amount, username, userToken);
+    await getUser();
+    setAccountView("userInfo");
+  }
+
+  async function saveUserPrePaidInformation(prepaid, username) {
+    await putUserData.putUserPrepaid(prepaid, username, userToken);
+    await getUser();
+    setAccountView("userInfo");
+  }
+
   let view;
   if (value === "map" && userToken) {
     view = <Map />;
   } else if (value === "account" && userToken) {
-    view = <UserCard content={userData} />;
+    if (accountView === "userInfo") {
+      view = (
+        <UserCard
+          content={userData}
+          handleClickEditButton={() => setAccountView("editUser")}
+          handleClickEditBalanceButton={() => setAccountView("editBalance")}
+          handleClickEditPrePaidButton={() => setAccountView("editPrePaid")}
+        />
+      );
+    } else if (accountView === "editUser") {
+      view = (
+        <UserForm
+          content={userData}
+          handleClickSaveButton={saveUserInformation}
+          handleClickCancelButton={() => setAccountView("userInfo")}
+        />
+      );
+    } else if (accountView === "editBalance") {
+      view = (
+        <BalanceForm
+          username={userData.username}
+          handleClickSaveButton={saveUserBalanceInformation}
+          handleClickCancelButton={() => setAccountView("userInfo")}
+        />
+      );
+    } else if (accountView === "editPrePaid") {
+      view = (
+        <PrePaidForm
+          username={userData.username}
+          handleClickSaveButton={saveUserPrePaidInformation}
+          handleClickCancelButton={() => setAccountView("userInfo")}
+        />
+      );
+    }
   } else if (value === "login") {
     view = (
       <LoginForm
