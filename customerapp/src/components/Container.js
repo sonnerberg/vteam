@@ -25,13 +25,15 @@ import putUserData from "../models/putUserData";
 const Container = (props) => {
   const [value, setValue] = useState("login");
   const [userToken, setUserToken] = useState();
+  const [userName, setUserName] = useState();
   const [userData, setUserData] = useState();
   const [scanQrCode, setScanQrCode] = useState(false);
   const [accountView, setAccountView] = useState("userInfo");
 
   async function getUser() {
     //const user = {};
-    const user = await getUserData.getUser(1, userToken);
+    const user = await getUserData.getUser(userName, userToken);
+    console.log("User", user);
     setUserData(user);
   }
 
@@ -108,6 +110,7 @@ const Container = (props) => {
         setValue={setValue}
         setUserToken={setUserToken}
         setUserData={setUserData}
+        setUserName={setUserName}
         getUser={getUser}
       />
     );

@@ -1,15 +1,14 @@
-const baseUrl = "http://localhost:4000";
+const baseUrl = "http://localhost:8082/v1/user/update";
 
 const putUserData = {
   putUserData: async function putUserData(user, token) {
     const updatedUser = {
-      surname: user.surname,
-      lastname: user.lastname,
+      userName: user.username,
+      surName: user.surname,
+      lastName: user.lastname,
       adress: user.adress,
-      billing_adress: user.billing_adress,
+      billingAdress: user.billing_adress,
       email: user.email,
-      balance: user.balance,
-      status: user.status,
     };
     const putData = JSON.stringify(updatedUser);
     const response = await fetch(`${baseUrl}/users/${user.username}`, {
@@ -17,6 +16,7 @@ const putUserData = {
         "x-access-token": token,
       },
       body: putData,
+      method: "PUT",
     });
     const result = await response.json();
     console.log(result);
