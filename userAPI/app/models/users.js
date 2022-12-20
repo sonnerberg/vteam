@@ -9,7 +9,7 @@ exports.getUserInfo = async (req, res) => {
 
     const data = await queryDatabase(sql, [user]);
     // console.log(data[0]);
-    res.json(data[0]);
+    res.json(data[0][0]);
 };
 
 exports.updateUserInfo = async (req, res) => {
@@ -87,5 +87,7 @@ exports.getUserTrips = async (req, res) => {
 
     const data = await queryDatabase(sql, [user]);
     // console.log(data[0]);
-    res.json(data[0]);
+    res.json({
+        trips: data[0]
+    });
 };
