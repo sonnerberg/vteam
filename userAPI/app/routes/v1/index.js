@@ -5,6 +5,7 @@ const table = require('../../config/tables.json');
 const customerRouter = require('./users');
 const bikesRouter = require('./bikes');
 const cityRouter = require('./cities');
+const parkingRouter = require('./parking');
 const router = express.Router();
 
 router.use(validateToken);
@@ -12,6 +13,7 @@ router.use(validateToken);
 router.use(customerRouter);
 router.use(bikesRouter);
 router.use(cityRouter);
+router.use(parkingRouter);
 
 router.get('/', (_, res) => res.send('welcome to v1 @ user-api'));
 
