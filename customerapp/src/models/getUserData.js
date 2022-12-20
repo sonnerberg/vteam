@@ -20,7 +20,7 @@ const getUserData = {
     console.log(response);
     const result = await response.json();
     console.log(result);
-    return result[0];
+    return result;
   },
   getTripsByUserName: async function getTripsByUserName(username, token) {
     const data = {
