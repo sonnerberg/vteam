@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS `scooter`;
 DROP TABLE IF EXISTS `zones`;
 DROP TABLE IF EXISTS `cities`;
 DROP TABLE IF EXISTS `parking`;
+DROP TABLE IF EXISTS `charging`;
 DROP TABLE IF EXISTS `geojson`;
 DROP TABLE IF EXISTS `bikes`;
 DROP TABLE IF EXISTS `customer2bike`;
@@ -55,6 +56,17 @@ CREATE TABLE IF NOT EXISTS `parking` (
 `geometry` POLYGON,
 `type` VARCHAR(50) DEFAULT 'Feature',
 `feature_type` VARCHAR(50) DEFAULT 'parking-lots',
+PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET utf8
+COLLATE utf8_swedish_ci
+;
+
+CREATE TABLE IF NOT EXISTS `charging` (
+`id` INT AUTO_INCREMENT,
+`geometry` POINT,
+`type` VARCHAR(50) DEFAULT 'Feature',
+`feature_type` VARCHAR(50) DEFAULT 'charging-stations',
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
 CHARSET utf8
@@ -217,6 +229,23 @@ IGNORE 1 LINES
 (@col1, @col2)
 SET
 `geometry` = PolygonFromText(@col1)
+;
+
+--
+-- Insert some charging stations.
+--
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/charging.csv'
+INTO TABLE charging
+CHARSET utf8
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1 LINES
+(@col1)
+SET
+`geometry` = PointFromText(@col1)
 ;
 
 --
