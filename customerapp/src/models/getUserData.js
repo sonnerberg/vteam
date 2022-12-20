@@ -12,6 +12,7 @@ const getUserData = {
 
     const response = await fetch(`${baseUrl}`, {
       headers: {
+        "content-type": "application/json",
         "x-access-token": token,
       },
       body: bodyData,
@@ -31,6 +32,7 @@ const getUserData = {
 
     const response = await fetch(`${baseUrl}/trips/${username}`, {
       headers: {
+        "content-type": "application/json",
         "x-access-token": token,
       },
       body: bodyData,

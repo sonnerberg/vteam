@@ -13,6 +13,7 @@ const putUserData = {
     const putData = JSON.stringify(updatedUser);
     const response = await fetch(`${baseUrl}/users/${user.username}`, {
       headers: {
+        "content-type": "application/json",
         "x-access-token": token,
       },
       body: putData,
@@ -30,6 +31,7 @@ const putUserData = {
     const bodyData = JSON.stringify(data);
     const response = await fetch(`${baseUrl}/users/${username}`, {
       headers: {
+        "content-type": "application/json",
         "x-access-token": token,
       },
       body: bodyData,
@@ -46,6 +48,7 @@ const putUserData = {
     const bodyData = JSON.stringify(data);
     const response = await fetch(`${baseUrl}/users/${username}`, {
       headers: {
+        "content-type": "application/json",
         "x-access-token": token,
       },
       body: bodyData,
