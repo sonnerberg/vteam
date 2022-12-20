@@ -1,12 +1,14 @@
-const baseUrl = "localhost:8082/v1/user";
+const baseUrl = "http://localhost:8082/v1/user";
 
 const getUserData = {
   getUser: async function getUser(username, token) {
+    console.log(username);
     const data = {
       userName: username,
     };
 
     const bodyData = JSON.stringify(data);
+    console.log(bodyData);
 
     const response = await fetch(`${baseUrl}`, {
       headers: {
@@ -15,9 +17,10 @@ const getUserData = {
       body: bodyData,
       method: "POST",
     });
+    console.log(response);
     const result = await response.json();
-    console.log(result);
-    return result;
+    /*console.log(result);
+    return result[0]; */
   },
   getTripsByUserName: async function getTripsByUserName(username, token) {
     const data = {
