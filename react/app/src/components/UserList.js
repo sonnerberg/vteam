@@ -19,7 +19,8 @@ function renderRow(props) {
         console.log(data[index]);
         if (data.userType === 'users') {
             const trips = await getCustomerData.getTripsByUserName(
-                data[index].username
+                data[index].username,
+                data.token
             );
             if (trips) {
                 data.setUserTrips(trips);
@@ -32,23 +33,20 @@ function renderRow(props) {
         data.setShowUserFormCard(null);
 
         const handleClickSaveButton = async (newUserObject) => {
-            const result = await putUsers.putUsers(
-                newUserObject,
-                data.userType
-            );
-
-            /* data.setDetailCard(<UserCard content={newUserObject} />); */
+            if (data.userType === 'administrators') {
+                await putUsers.putAdmin(newUserObject, data.token);
+            } else if (data.userType === 'users') {
+                await putUsers.putUser(newUserObject, data.token);
+            }
 
             data.setDetailCard(null);
 
             data.setUserTrips(null);
 
-            //data.setUserFormCard(null);
             data.setShowUserFormCard(false);
 
+            // Get all users
             data.saveFunction();
-
-            console.log(result);
         };
 
         const handleClickChangeButton = () => {
@@ -69,12 +67,7 @@ function renderRow(props) {
                 <UserForm
                     content={data[index]}
                     cancelButton={cancelButton}
-                    /* setUserFormCard={data.setUserFormCard} */
-                    /* setShowUserFormCard={data.setShowUserFormCard}
-                    setDetailCard={data.setDetailCard} */
                     editButton={editButton}
-                    /* saveFunction={data.saveFunction}
-                    userType={data.userType} */
                     handleClickSaveButton={handleClickSaveButton}
                 />
             );
@@ -123,6 +116,8 @@ function UserList(props) {
         : props.userData.customerUserData;
 
     const userType = showAdmins ? 'administrators' : 'users';
+
+    data.token = token;
 
     data.setDetailCard = props.setDetailCard;
 
