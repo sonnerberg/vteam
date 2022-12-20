@@ -8,9 +8,9 @@ const {
 } = require('../../models/users.js');
 const route = '/user';
 
-router.get(`${route}/`, getUserInfo);
+router.post(`${route}/`, getUserInfo);
 router.put(`${route}/update`, updateUserInfo);
 router.put(`${route}/password`, updateUserPassword);
-router.get(`${route}/trips`, getUserTrips);
+router.post(`${route}/trips`, getUserTrips);
 
 module.exports = router;
