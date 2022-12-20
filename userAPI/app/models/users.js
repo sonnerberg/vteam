@@ -56,7 +56,7 @@ exports.updateUserInfo = async (req, res) => {
 
 exports.updateUserPassword = async (req, res) => {
     const user = {
-        ...req.body
+        ...req.body,
     };
     const sql = 'CALL update_customer_password(?, ?)';
     try {
@@ -79,4 +79,13 @@ exports.updateUserPassword = async (req, res) => {
             },
         });
     }
+};
+
+exports.getUserTrips = async (req, res) => {
+    const user = req.body.userName;
+    const sql = 'CALL get_all_trips_by_username(?)';
+
+    const data = await queryDatabase(sql, [user]);
+    // console.log(data[0]);
+    res.json(data[0]);
 };
