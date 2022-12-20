@@ -32,6 +32,7 @@ exports.createNewToken = (payload) => {
             status: 200,
             message: 'successful login',
             token: token,
+            user: payload.userName,
         },
     };
 };
