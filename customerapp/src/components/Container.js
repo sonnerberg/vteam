@@ -61,7 +61,7 @@ const Container = (props) => {
   }, [value]);
 
   async function saveUserInformation(newUserObject) {
-    await putUserData.putUser(newUserObject, userToken);
+    await putUserData.putUserData(newUserObject, userToken);
     await getUser();
     setAccountView("userInfo");
   }
