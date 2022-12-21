@@ -89,3 +89,26 @@ CREATE PROCEDURE update_customer_password(
 ;;
 
 DELIMITER ;
+
+-- Procedure update_customer_balance()
+
+DROP PROCEDURE IF EXISTS update_customer_balance;
+
+DELIMITER ;;
+
+CREATE PROCEDURE update_customer_balance(
+                    `a_username` VARCHAR(50),
+                    `a_value` INT
+)
+ BEGIN
+
+   UPDATE customer
+   SET
+      balance = balance + a_value
+    WHERE username = a_username;
+
+
+  END
+;;
+
+DELIMITER ;
