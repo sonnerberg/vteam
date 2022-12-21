@@ -21,6 +21,8 @@ import BalanceForm from "./BalanceForm";
 import PaymentServiceForm from "./PaymentServiceForm";
 import TripContainer from "./TripContainer";
 import LoginForm from "./LoginForm";
+import HireBikeForm from "./HireBikeForm";
+
 import putUserData from "../models/putUserData";
 
 const Container = (props) => {
@@ -28,9 +30,12 @@ const Container = (props) => {
   const [userToken, setUserToken] = useState();
   const [userName, setUserName] = useState();
   const [userData, setUserData] = useState();
+
   const [userTrips, setUserTrips] = useState();
   const [scanQrCode, setScanQrCode] = useState(false);
+
   const [accountView, setAccountView] = useState("userInfo");
+  const [openHireForm, setOpenHireForm] = useState(false);
 
   async function getUser() {
     //const user = {};
@@ -137,14 +142,21 @@ const Container = (props) => {
         setUserData={setUserData}
         setUserName={setUserName}
         getUser={getUser}
+        userToken={userToken}
       />
     );
   } else if (value === "logout") {
     view = <div> Tack för besöket</div>;
   }
 
-  if (scanQrCode) {
-    return <div>RELOAD</div>;
+  if (openHireForm) {
+    return (
+      <HireBikeForm
+        openHireForm={openHireForm}
+        setOpenHireForm={setOpenHireForm}
+        userName={userName}
+      />
+    );
   } else {
     return (
       <Grid container justify="center">
@@ -156,7 +168,7 @@ const Container = (props) => {
             color="primary"
             aria-label="add"
             onClick={() => {
-              setScanQrCode(true);
+              setOpenHireForm(true);
             }}
           >
             <ElectricScooter />
