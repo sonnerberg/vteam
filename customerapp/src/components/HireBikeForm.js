@@ -6,6 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import postBikeRent from "../models/postBikeRent";
 
 const HireBikeForm = (props) => {
   const [bikeId, setBikeId] = useState();
@@ -15,8 +16,15 @@ const HireBikeForm = (props) => {
   const handleChange = (e) => {
     setBikeId(e.target.value);
   };
-  const handleHire = () => {
+  const handleHire = async () => {
     console.log("DU HAR HYRT CYKEL NUMMER ", +bikeId);
+    console.log("POSTBIKERENT", postBikeRent.rentBike);
+    const returnstatement = await postBikeRent.rentBike(
+      props.username,
+      bikeId,
+      props.userToken
+    );
+    console.log("RETURNED FROM BACKEND", returnstatement);
     props.setOpenHireForm(false);
   };
 

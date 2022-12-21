@@ -117,6 +117,7 @@ const Container = (props) => {
         setUserData={setUserData}
         setUserName={setUserName}
         getUser={getUser}
+        userToken={userToken}
       />
     );
   } else if (value === "logout") {
@@ -128,6 +129,7 @@ const Container = (props) => {
       <HireBikeForm
         openHireForm={openHireForm}
         setOpenHireForm={setOpenHireForm}
+        userName={userName}
       />
     );
   } else {
