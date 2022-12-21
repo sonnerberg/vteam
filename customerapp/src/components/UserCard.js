@@ -43,7 +43,7 @@ const UserCard = (props) => {
     <CardButton
       buttonText={"Välj betaltjänst"}
       width={200}
-      handleClick={props.handleClickEditPrePaidButton}
+      handleClick={props.handleClickEditPaymentServiceButton}
     />
   );
 

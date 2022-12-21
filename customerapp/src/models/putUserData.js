@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:8082/v1/user/update";
+const baseUrl = "http://localhost:8082/v1/user";
 
 const putUserData = {
   putUserData: async function putUserData(user, token) {
@@ -11,7 +11,7 @@ const putUserData = {
       email: user.email,
     };
     const putData = JSON.stringify(updatedUser);
-    const response = await fetch(`${baseUrl}/users/${user.username}`, {
+    const response = await fetch(`${baseUrl}/update`, {
       headers: {
         "content-type": "application/json",
         "x-access-token": token,
@@ -26,32 +26,41 @@ const putUserData = {
 
   putUserBalance: async function putUserBalance(amount, username, token) {
     const data = {
-      amount: amount,
+      username: username,
+      balance: amount,
     };
     const bodyData = JSON.stringify(data);
-    const response = await fetch(`${baseUrl}/users/${username}`, {
+    const response = await fetch(`${baseUrl}/balance`, {
       headers: {
         "content-type": "application/json",
         "x-access-token": token,
       },
       body: bodyData,
+      method: "POST",
     });
-    const result = await response.json();
+    console.log(response);
+    /* const result = await response.json();
     console.log(result);
-    return result;
+    return result; */
   },
 
-  putUserPrepaid: async function putUserPrePaid(prepaid, username, token) {
+  putUserPaymentService: async function putUserPaymentService(
+    paymentService,
+    username,
+    token
+  ) {
     const data = {
-      prepaid: prepaid,
+      userName: username,
+      paymentService: paymentService,
     };
     const bodyData = JSON.stringify(data);
-    const response = await fetch(`${baseUrl}/users/${username}`, {
+    const response = await fetch(`${baseUrl}/paymentService`, {
       headers: {
         "content-type": "application/json",
         "x-access-token": token,
       },
       body: bodyData,
+      method: "PUT",
     });
     const result = await response.json();
     console.log(result);
