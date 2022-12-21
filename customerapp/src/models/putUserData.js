@@ -11,7 +11,7 @@ const putUserData = {
       email: user.email,
     };
     const putData = JSON.stringify(updatedUser);
-    const response = await fetch(`${baseUrl}/users/${user.username}`, {
+    const response = await fetch(`${baseUrl}`, {
       headers: {
         "content-type": "application/json",
         "x-access-token": token,
