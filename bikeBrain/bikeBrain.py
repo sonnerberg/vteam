@@ -42,7 +42,7 @@ class Brain:
         self._token = token
 
         seed(_id)
-        print("Bike created!")
+        # print("Bike created!")
 
     def get_id(self):
         """Gets _id"""
@@ -249,9 +249,10 @@ class Brain:
                 json=payload,
                 headers=headers,
             ) as resp:
-                # result = await resp.json()
-                # print(resp)
-                print("Moved")
+                data = await resp.read()
+                # result = json.loads(data)
+                print(data)
+                # print("Moved")
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
 
