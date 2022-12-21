@@ -8,6 +8,9 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import postBikeRent from "../models/postBikeRent";
 
+console.log("POSTBIKERENT IN BEGINNGING", typeof postBikeRent);
+console.log("GG", typeof TextField);
+
 const HireBikeForm = (props) => {
   const [bikeId, setBikeId] = useState();
   const handleClose = () => {
@@ -18,7 +21,7 @@ const HireBikeForm = (props) => {
   };
   const handleHire = async () => {
     console.log("DU HAR HYRT CYKEL NUMMER ", +bikeId);
-    console.log("POSTBIKERENT", postBikeRent.rentBike);
+    console.log("POSTBIKERENT", typeof postBikeRent);
     const returnstatement = await postBikeRent.rentBike(
       props.username,
       bikeId,

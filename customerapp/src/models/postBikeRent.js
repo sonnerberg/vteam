@@ -24,6 +24,7 @@ const postBikeRent = {
     console.log(result);
     return result;
   },
+  shit: "bajs",
 };
 
 export default postBikeRent;
