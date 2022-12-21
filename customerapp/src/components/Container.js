@@ -36,6 +36,7 @@ const Container = (props) => {
 
   const [accountView, setAccountView] = useState("userInfo");
   const [openHireForm, setOpenHireForm] = useState(false);
+  const [readyToHire, setReadyToHire] = useState(true);
 
   async function getUser() {
     //const user = {};
@@ -155,6 +156,9 @@ const Container = (props) => {
         openHireForm={openHireForm}
         setOpenHireForm={setOpenHireForm}
         userName={userName}
+        userToken={userToken}
+        readyToHire={readyToHire}
+        setReadyToHire={setReadyToHire}
       />
     );
   } else {

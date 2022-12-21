@@ -2,14 +2,12 @@ const baseUrl = "http://localhost:8082/v1/bikes/";
 
 const postBikeRent = {
   rentBike: async function rentBike(username, bikeId, token) {
-    console.log(username);
     const data = {
-      useraame: username,
+      username: username,
       id: bikeId,
     };
 
     const bodyData = JSON.stringify(data);
-    console.log(bodyData);
 
     const response = await fetch(`${baseUrl}rent`, {
       headers: {
@@ -19,12 +17,27 @@ const postBikeRent = {
       body: bodyData,
       method: "POST",
     });
-    console.log(response);
-    const result = await response.json();
-    console.log(result);
-    return result;
+
+    return response.status;
   },
-  shit: "bajs",
+  returnBike: async function returnBike(username, token) {
+    const data = {
+      username: username,
+    };
+
+    const bodyData = JSON.stringify(data);
+
+    const response = await fetch(`${baseUrl}return`, {
+      headers: {
+        "content-type": "application/json",
+        "x-access-token": token,
+      },
+      body: bodyData,
+      method: "POST",
+    });
+
+    return response.status;
+  },
 };
 
 export default postBikeRent;
