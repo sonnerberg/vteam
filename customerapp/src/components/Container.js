@@ -19,6 +19,7 @@ import UserCard from "./UserCard";
 import UserForm from "./UserForm";
 import BalanceForm from "./BalanceForm";
 import PrePaidForm from "./PrePaidForm";
+import TripContainer from "./TripContainer";
 import LoginForm from "./LoginForm";
 import putUserData from "../models/putUserData";
 
@@ -27,20 +28,28 @@ const Container = (props) => {
   const [userToken, setUserToken] = useState();
   const [userName, setUserName] = useState();
   const [userData, setUserData] = useState();
+  const [userTrips, setUserTrips] = useState();
   const [scanQrCode, setScanQrCode] = useState(false);
   const [accountView, setAccountView] = useState("userInfo");
 
   async function getUser() {
     //const user = {};
     const user = await getUserData.getUser(userName, userToken);
-    console.log("User", user);
+
     setUserData(user);
+  }
+
+  async function getUserTrips() {
+    const trips = await getUserData.getTripsByUserName(userName, userToken);
+    console.log("Trips", trips);
+    setUserTrips(trips);
   }
 
   useEffect(() => {
     console.log("USERTOKEN, ", userToken);
     (async () => {
       await getUser();
+      await getUserTrips();
     })();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,7 +72,7 @@ const Container = (props) => {
     setAccountView("userInfo");
   }
 
-  async function saveUserPrePaidInformation(prepaid, username) {
+  async function saveUserPaymentServiceInformation(prepaid, username) {
     await putUserData.putUserPrepaid(prepaid, username, userToken);
     await getUser();
     setAccountView("userInfo");
@@ -75,12 +84,21 @@ const Container = (props) => {
   } else if (value === "account" && userToken) {
     if (accountView === "userInfo") {
       view = (
-        <UserCard
-          content={userData}
-          handleClickEditButton={() => setAccountView("editUser")}
-          handleClickEditBalanceButton={() => setAccountView("editBalance")}
-          handleClickEditPrePaidButton={() => setAccountView("editPrePaid")}
-        />
+        <Grid container justify="center" columns={{ xs: 12, sm: 6, md: 6 }}>
+          <Grid item xxs={12} sm={6} md={6}>
+            <UserCard
+              content={userData}
+              handleClickEditButton={() => setAccountView("editUser")}
+              handleClickEditBalanceButton={() => setAccountView("editBalance")}
+              handleClickEditPaymentServiceButton={() =>
+                setAccountView("editPaymentService")
+              }
+            />
+            <Grid item xs={12} sm={6} md={6}>
+              <TripContainer trips={userTrips} />
+            </Grid>
+          </Grid>
+        </Grid>
       );
     } else if (accountView === "editUser") {
       view = (
@@ -98,11 +116,11 @@ const Container = (props) => {
           handleClickCancelButton={() => setAccountView("userInfo")}
         />
       );
-    } else if (accountView === "editPrePaid") {
+    } else if (accountView === "editPaymentService") {
       view = (
         <PrePaidForm
           username={userData.username}
-          handleClickSaveButton={saveUserPrePaidInformation}
+          handleClickSaveButton={saveUserPaymentServiceInformation}
           handleClickCancelButton={() => setAccountView("userInfo")}
         />
       );
