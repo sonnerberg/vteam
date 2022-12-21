@@ -7,15 +7,6 @@ const api = supertest(app);
 let token;
 let newAdminToken;
 
-test('there is a 200 response', async () => {
-    await api.get('/').expect(200);
-});
-
-test('there is a object response from db', async () => {
-    const response = await api.get('/mariadb');
-    expect(response.body[0]).toHaveProperty('Email');
-});
-
 test('unregistered user cannot log in', async () => {
     const user = {
         email: 'email@examples.com',
