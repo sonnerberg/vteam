@@ -12,6 +12,21 @@ exports.getUserInfo = async (req, res) => {
     res.json(data[0][0]);
 };
 
+exports.updateUserBalance = async (req, res) => {
+    try {
+        const { username, balance } = req.body;
+        const sql = 'CALL update_customer_balance(?,?);';
+        const { affectedRows } = await queryDatabase(sql, [username, balance]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            throw 'CannotRent';
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+};
+
 exports.updateUserInfo = async (req, res) => {
     // TODO
     const newUserInfo = {
@@ -88,6 +103,6 @@ exports.getUserTrips = async (req, res) => {
     const data = await queryDatabase(sql, [user]);
     // console.log(data[0]);
     res.json({
-        trips: data[0]
+        trips: data[0],
     });
 };
