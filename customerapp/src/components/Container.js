@@ -18,7 +18,7 @@ import getUserData from "../models/getUserData";
 import UserCard from "./UserCard";
 import UserForm from "./UserForm";
 import BalanceForm from "./BalanceForm";
-import PrePaidForm from "./PrePaidForm";
+import PaymentServiceForm from "./PaymentServiceForm";
 import TripContainer from "./TripContainer";
 import LoginForm from "./LoginForm";
 import putUserData from "../models/putUserData";
@@ -72,8 +72,12 @@ const Container = (props) => {
     setAccountView("userInfo");
   }
 
-  async function saveUserPaymentServiceInformation(prepaid, username) {
-    await putUserData.putUserPrepaid(prepaid, username, userToken);
+  async function saveUserPaymentServiceInformation(paymentService, username) {
+    await putUserData.putUserPaymentService(
+      paymentService,
+      username,
+      userToken
+    );
     await getUser();
     setAccountView("userInfo");
   }
@@ -118,7 +122,7 @@ const Container = (props) => {
       );
     } else if (accountView === "editPaymentService") {
       view = (
-        <PrePaidForm
+        <PaymentServiceForm
           username={userData.username}
           handleClickSaveButton={saveUserPaymentServiceInformation}
           handleClickCancelButton={() => setAccountView("userInfo")}

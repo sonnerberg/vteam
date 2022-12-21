@@ -17,7 +17,7 @@ import CardButton from "./CardButton";
 const PrePaidForm = (props) => {
   const rows = [];
 
-  const [prePaid, setPrePaid] = useState("none");
+  const [paymentService, setPaymentService] = useState("none");
 
   const cancelButton = (
     <CardButton
@@ -33,22 +33,27 @@ const PrePaidForm = (props) => {
       buttonText={"Spara"}
       size={"small"}
       width={25}
-      handleClick={() => props.handleClickSaveButton(prePaid, props.username)}
+      handleClick={() =>
+        props.handleClickSaveButton(paymentService, props.username)
+      }
     />
   );
 
   function changeHandler(event) {
     console.log(event.target.value);
-    setPrePaid(event.target.value);
+    setPaymentService(event.target.value);
   }
 
   return (
     <FormControl sx={{ margin: 2 }}>
-      <FormLabel id="prepaid-radio-buttons-group-label" sx={{ fontSize: 18 }}>
+      <FormLabel
+        id="paymentservice-radio-buttons-group-label"
+        sx={{ fontSize: 18 }}
+      >
         Välj betaltjänst
       </FormLabel>
       <RadioGroup
-        aria-labelledby="prepaid-radio-buttons-group-label"
+        aria-labelledby="paymentservice-radio-buttons-group-label"
         defaultValue="none"
         name="radio-buttons-group"
       >
