@@ -30,7 +30,7 @@ const getUserData = {
 
     const bodyData = JSON.stringify(data);
 
-    const response = await fetch(`${baseUrl}/trips/${username}`, {
+    const response = await fetch(`${baseUrl}/trips/`, {
       headers: {
         "content-type": "application/json",
         "x-access-token": token,
@@ -39,7 +39,7 @@ const getUserData = {
       method: "POST",
     });
     const result = await response.json();
-    return result.data;
+    return result.trips;
   },
 };
 
