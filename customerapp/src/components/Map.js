@@ -31,9 +31,8 @@ const Map = (props) => {
     allLayers.bikes.clearLayers();
     console.log(dataFromBackend.bikes);
     for (const bike of dataFromBackend.bikes) {
-      const bikeicon =
-        bike.position.properties.rented === 0 ? "scooterRented" : "scooter";
-      const newBike = L.geoJson(bike.position, {
+      const bikeicon = bike.rented === 0 ? "scooterRented" : "scooter";
+      const newBike = L.geoJson(bike, {
         pointToLayer: function (feature, latlng) {
           return L.marker(latlng, mapStyles[bikeicon]);
         },
@@ -45,7 +44,7 @@ const Map = (props) => {
   };
   useEffect(() => {
     (async () => {
-      dataFromBackend.cities = await getFeatures.getCities();
+      dataFromBackend.cities = await getFeatures.getCities(props.userToken);
 
       for (const city of dataFromBackend.cities) {
         allLayers.cities.addLayer(
@@ -60,8 +59,9 @@ const Map = (props) => {
   }, []);
   useEffect(() => {
     (async () => {
-      dataFromBackend.chargingStations =
-        await getFeatures.getChargingStations();
+      dataFromBackend.chargingStations = await getFeatures.getChargingStations(
+        props.userToken
+      );
 
       for (const charger of dataFromBackend.chargingStations) {
         allLayers.chargingStations.addLayer(
@@ -78,7 +78,9 @@ const Map = (props) => {
   }, []);
   useEffect(() => {
     (async () => {
-      dataFromBackend.parkingLots = await getFeatures.getParkingLots();
+      dataFromBackend.parkingLots = await getFeatures.getParkingLots(
+        props.userToken
+      );
 
       for (const parking of dataFromBackend.parkingLots) {
         allLayers.parkingLots.addLayer(
@@ -94,12 +96,7 @@ const Map = (props) => {
 
   useEffect(() => {
     (async () => {
-      dataFromBackend.workshops = await getFeatures.getWorkshops();
-    })();
-  }, []);
-  useEffect(() => {
-    (async () => {
-      dataFromBackend.zones = await getFeatures.getZones();
+      dataFromBackend.zones = await getFeatures.getZones(props.userToken);
 
       for (const zone of dataFromBackend.zones) {
         allLayers.zones.addLayer(
@@ -114,7 +111,7 @@ const Map = (props) => {
   }, []);
   useEffect(() => {
     (async () => {
-      dataFromBackend.bikes = await getFeatures.getBikes();
+      dataFromBackend.bikes = await getFeatures.getBikes(props.userToken);
     })();
   }, []);
   // This useEffect hook runs when the component is first mounted,
