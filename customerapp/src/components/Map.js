@@ -31,14 +31,15 @@ const Map = (props) => {
     allLayers.bikes.clearLayers();
     console.log(dataFromBackend.bikes);
     for (const bike of dataFromBackend.bikes) {
-      const bikeicon = bike.rented === 0 ? "scooterRented" : "scooter";
-      const newBike = L.geoJson(bike, {
-        pointToLayer: function (feature, latlng) {
-          return L.marker(latlng, mapStyles[bikeicon]);
-        },
-      });
-      if (bounds.contains(newBike.getBounds())) {
-        allLayers.bikes.addLayer(newBike);
+      if (bike.rented === 0) {
+        const newBike = L.geoJson(bike, {
+          pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, mapStyles["scooter"]);
+          },
+        });
+        if (bounds.contains(newBike.getBounds())) {
+          allLayers.bikes.addLayer(newBike);
+        }
       }
     }
   };
