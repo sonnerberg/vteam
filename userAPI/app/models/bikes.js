@@ -3,9 +3,11 @@ const { queryDatabase } = require('../database/mariadb');
 exports.getAvailableBikes = async (req, res) => {
     const sql = 'SELECT * FROM bikes WHERE rented=0';
     const data = await queryDatabase(sql);
-    res.json({
-        bikes: data,
-    });
+    // res.json({
+    //     bikes: data,
+    // });
+
+    res.status(200).json(sqlToGeoJson(data));
 };
 
 exports.rentBike = async (req, res) => {
@@ -36,4 +38,30 @@ exports.returnBike = async (req, res) => {
     } catch {
         res.sendStatus(400);
     }
+};
+
+const sqlToGeoJson = (sql) => {
+    const geoJson = sql.map((x) => {
+        return {
+            position: {
+                type: 'Feature',
+                geometry: x.geometry,
+                properties: {
+                    id: x.id,
+                    charging: x.charging,
+                    blocked: x.blocked,
+                    batteryWarning: x.battery_warning,
+                    batteryDepleted: x.battery_depleted,
+                    whole: x.whole,
+                    rented: x.rented,
+                    userId: x.user_id,
+                    username: x.username,
+                    featureType: 'bikes',
+                },
+            },
+        };
+    });
+    return {
+        data: geoJson,
+    };
 };
