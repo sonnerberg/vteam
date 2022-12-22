@@ -90,7 +90,7 @@ const Container = (props) => {
 
   let view;
   if (value === "map" && userToken) {
-    view = <Map />;
+    view = <Map userToken={userToken} />;
   } else if (value === "account" && userToken) {
     if (accountView === "userInfo") {
       view = (
