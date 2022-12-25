@@ -18,7 +18,7 @@ async def main():
     async with aiohttp.ClientSession() as session:
 
         # Log in to get token
-        payload = {"email": "email@examples.com", "password": "12345678"}
+        payload = {"email": "email@example.com", "password": "12345678"}
         async with session.post(
             "http://admin-api:3000/v1/admin/login",
             json=payload,
