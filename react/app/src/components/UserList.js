@@ -12,6 +12,7 @@ import UserForm from './UserForm';
 import putUsers from '../models/putUsers';
 import postUsers from '../models/postUsers';
 import getCustomerData from '../models/getCustomerData';
+import deleteUsers from '../models/deleteUsers';
 
 function renderRow(props) {
     const { index, style, data } = props;
@@ -49,6 +50,17 @@ function renderRow(props) {
             data.saveFunction();
         };
 
+        const handleClickDeleteButton = async () => {
+            if (data.userType === 'administrators') {
+                await deleteUsers.deleteAdmin(data[index].username, data.token);
+            } else if (data.userType === 'users') {
+                await deleteUsers.deleteCustomer(
+                    data[index].username,
+                    data.token
+                );
+            }
+        };
+
         const handleClickChangeButton = () => {
             const handleClickCancelButton = () => {
                 data.setUserFormCard(null);
@@ -77,6 +89,15 @@ function renderRow(props) {
             //data.setDetailCard(null);
         };
 
+        const deleteButton = (
+            <LayerButton
+                buttonText={'Ta bort'}
+                size={'small'}
+                width={100}
+                handleClick={handleClickDeleteButton}
+            />
+        );
+
         const editButton = (
             <LayerButton
                 buttonText={'Ändra'}
@@ -87,7 +108,11 @@ function renderRow(props) {
         );
 
         data.setDetailCard(
-            <UserCard content={data[index]} editButton={editButton} />
+            <UserCard
+                content={data[index]}
+                editButton={editButton}
+                deleteButton={deleteButton}
+            />
         );
     };
 
