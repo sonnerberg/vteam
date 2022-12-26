@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `cities` (
 `geometry` POLYGON,
 `type` VARCHAR(50) DEFAULT 'Feature',
 `feature_type` VARCHAR(50) DEFAULT 'cities',
-`name` VARCHAR(50),
+`name` VARCHAR(50) UNIQUE,
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
 CHARSET utf8
