@@ -117,6 +117,17 @@ const getBikesById = async (req, res) => {
     }
 };
 
+const insertMultipleBikes = async (req, res) => {
+    try {
+        const { numberOfBikes } = req.body;
+        const sql = 'CALL insert_multiple_bikes(?)';
+        const { 0: data } = await queryDatabase(sql, [numberOfBikes]);
+        res.json(data);
+    } catch {
+        res.sendStatus(400);
+    }
+};
+
 const sqlToGeoJson = (sql) => {
     const geoJson = sql.map((x) => {
         return {
@@ -151,4 +162,5 @@ module.exports = {
     getAllBikes,
     updateABike,
     insertANewBike,
+    insertMultipleBikes,
 };
