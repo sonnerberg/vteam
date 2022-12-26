@@ -4,14 +4,6 @@ const { queryDatabase } = require('../../database/mariadb');
 const { userSchema } = require('../utils');
 
 const auth = {
-    getAllAdmins: async function (req, res) {
-        const sql = 'CALL get_all_admins_except_super();';
-        const { 0: data } = await queryDatabase(sql);
-        res.json({
-            data,
-        });
-    },
-
     register: async function (req, res) {
         try {
             const { email, password } = req.body;
@@ -43,10 +35,6 @@ const auth = {
                 break;
             case 'NotSuperUser':
                 res.sendStatus(401);
-                break;
-
-            default:
-                res.sendStatus(500);
                 break;
             }
         }

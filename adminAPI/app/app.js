@@ -17,17 +17,21 @@ app.use('/v1', v1);
 //     }
 // });
 
-v1.stack.forEach(function (stack) {
-    stack.handle.stack.forEach((r) => {
-        if (r.route && r.route.path) {
-            console.log(
-                `${String(Object.keys(r.route.methods)).padEnd(
-                    4
-                )} http://localhost:8081/v1${r.route.path}`
-            );
-            console.log();
+if (process.env.NODE_ENV !== 'test') {
+    v1.stack.forEach(function (stack) {
+        if (stack.name === 'router') {
+            stack.handle.stack.forEach((r) => {
+                if (r.route && r.route.path) {
+                    console.log(
+                        `${String(Object.keys(r.route.methods)).padEnd(
+                            4
+                        )} http://localhost:8081/v1${r.route.path}`
+                    );
+                    console.log();
+                }
+            });
         }
     });
-});
+}
 
 module.exports = app;

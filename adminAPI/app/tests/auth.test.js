@@ -16,6 +16,15 @@ test('unregistered user cannot log in', async () => {
     await api.post('/v1/auth/login').send(user).expect(401);
 });
 
+test('superadmin cannot log in with short password', async () => {
+    const user = {
+        email: 'email@example.com',
+        password: '1234',
+    };
+
+    await api.post('/v1/auth/login').send(user).expect(401);
+});
+
 test('superadmin cannot log in with wrong password', async () => {
     const user = {
         email: 'email@example.com',
