@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 `username` VARCHAR(50),
 `password` VARCHAR(250),
 `email` VARCHAR(50) UNIQUE,
-`balance` INT,
+`balance` INT DEFAULT 0,
 `status` ENUM('online', 'offline'),
 PRIMARY KEY (`username`))
 ENGINE = InnoDB

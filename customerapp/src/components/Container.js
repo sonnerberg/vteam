@@ -3,7 +3,6 @@ import {
   Grid,
   BottomNavigation,
   BottomNavigationAction,
-  Button,
   Fab,
 } from "@mui/material";
 import {
@@ -17,24 +16,49 @@ import {
 import Map from "./Map";
 import getUserData from "../models/getUserData";
 import UserCard from "./UserCard";
+import UserForm from "./UserForm";
+import BalanceForm from "./BalanceForm";
+import PaymentServiceForm from "./PaymentServiceForm";
+import TripContainer from "./TripContainer";
 import LoginForm from "./LoginForm";
+import HireBikeForm from "./HireBikeForm";
+
+import putUserData from "../models/putUserData";
 
 const Container = (props) => {
   const [value, setValue] = useState("login");
   const [userToken, setUserToken] = useState();
+  const [userName, setUserName] = useState();
   const [userData, setUserData] = useState();
+
+  const [userTrips, setUserTrips] = useState();
   const [scanQrCode, setScanQrCode] = useState(false);
+
+  const [accountView, setAccountView] = useState("userInfo");
+  const [openHireForm, setOpenHireForm] = useState(false);
+  const [readyToHire, setReadyToHire] = useState(true);
 
   async function getUser() {
     //const user = {};
-    const user = await getUserData.getUser(1);
+    const user = await getUserData.getUser(userName, userToken);
 
     setUserData(user);
   }
 
+  async function getUserTrips() {
+    const trips = await getUserData.getTripsByUserName(userName, userToken);
+    console.log("Trips", trips);
+    setUserTrips(trips);
+  }
+
   useEffect(() => {
     console.log("USERTOKEN, ", userToken);
-    getUser();
+    (async () => {
+      await getUser();
+      await getUserTrips();
+    })();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userToken]);
   useEffect(() => {
     if (value === "logout") {
@@ -42,26 +66,101 @@ const Container = (props) => {
     }
   }, [value]);
 
+  async function saveUserInformation(newUserObject) {
+    await putUserData.putUserData(newUserObject, userToken);
+    await getUser();
+    setAccountView("userInfo");
+  }
+
+  async function saveUserBalanceInformation(amount, username) {
+    await putUserData.putUserBalance(amount, username, userToken);
+    await getUser();
+    setAccountView("userInfo");
+  }
+
+  async function saveUserPaymentServiceInformation(paymentService, username) {
+    await putUserData.putUserPaymentService(
+      paymentService,
+      username,
+      userToken
+    );
+    await getUser();
+    setAccountView("userInfo");
+  }
+
   let view;
   if (value === "map" && userToken) {
-    view = <Map />;
+    view = <Map userToken={userToken} />;
   } else if (value === "account" && userToken) {
-    view = <UserCard content={userData} />;
+    if (accountView === "userInfo") {
+      view = (
+        <Grid container justify="center" columns={{ xs: 12, sm: 6, md: 6 }}>
+          <Grid item xxs={12} sm={6} md={6}>
+            <UserCard
+              content={userData}
+              handleClickEditButton={() => setAccountView("editUser")}
+              handleClickEditBalanceButton={() => setAccountView("editBalance")}
+              handleClickEditPaymentServiceButton={() =>
+                setAccountView("editPaymentService")
+              }
+            />
+            <Grid item xs={12} sm={6} md={6}>
+              <TripContainer trips={userTrips} />
+            </Grid>
+          </Grid>
+        </Grid>
+      );
+    } else if (accountView === "editUser") {
+      view = (
+        <UserForm
+          content={userData}
+          handleClickSaveButton={saveUserInformation}
+          handleClickCancelButton={() => setAccountView("userInfo")}
+        />
+      );
+    } else if (accountView === "editBalance") {
+      view = (
+        <BalanceForm
+          username={userData.username}
+          handleClickSaveButton={saveUserBalanceInformation}
+          handleClickCancelButton={() => setAccountView("userInfo")}
+        />
+      );
+    } else if (accountView === "editPaymentService") {
+      view = (
+        <PaymentServiceForm
+          username={userData.username}
+          handleClickSaveButton={saveUserPaymentServiceInformation}
+          handleClickCancelButton={() => setAccountView("userInfo")}
+        />
+      );
+    }
   } else if (value === "login") {
     view = (
       <LoginForm
         setValue={setValue}
         setUserToken={setUserToken}
         setUserData={setUserData}
+        setUserName={setUserName}
         getUser={getUser}
+        userToken={userToken}
       />
     );
   } else if (value === "logout") {
     view = <div> Tack för besöket</div>;
   }
 
-  if (scanQrCode) {
-    return <div>RELOAD</div>;
+  if (openHireForm) {
+    return (
+      <HireBikeForm
+        openHireForm={openHireForm}
+        setOpenHireForm={setOpenHireForm}
+        userName={userName}
+        userToken={userToken}
+        readyToHire={readyToHire}
+        setReadyToHire={setReadyToHire}
+      />
+    );
   } else {
     return (
       <Grid container justify="center">
@@ -73,7 +172,7 @@ const Container = (props) => {
             color="primary"
             aria-label="add"
             onClick={() => {
-              setScanQrCode(true);
+              setOpenHireForm(true);
             }}
           >
             <ElectricScooter />

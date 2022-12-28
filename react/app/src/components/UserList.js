@@ -46,7 +46,7 @@ function renderRow(props) {
             data.setShowUserFormCard(false);
 
             // Get all users
-            data.saveFunction();
+            data.getUsers(data.token);
         };
 
         const handleClickChangeButton = () => {
@@ -125,23 +125,11 @@ function UserList(props) {
 
     data.setShowUserFormCard = props.setShowUserFormCard;
 
-    data.saveFunction = props.saveFunction;
+    data.getUsers = props.getUsers;
 
     data.userType = userType;
 
     data.setUserTrips = props.setUserTrips;
-
-    const newUserObject = {
-        surname: '',
-        lastname: '',
-        address: '',
-        'billing-address': '',
-        username: '',
-        pass: '',
-        email: '',
-        balance: 0,
-        status: '',
-    };
 
     const newAdminObject = {
         email: '',
@@ -167,7 +155,7 @@ function UserList(props) {
         data.setShowUserFormCard(false);
 
         // Get all users on save
-        data.saveFunction();
+        data.getUsers();
     };
 
     const handleClickNewButton = () => {
@@ -186,7 +174,7 @@ function UserList(props) {
         );
         const userFormCard = (
             <UserForm
-                content={showAdmins ? newAdminObject : newUserObject}
+                content={newAdminObject}
                 cancelButton={cancelButton}
                 handleClickSaveButton={handleClickSaveNewButton}
             />
@@ -210,12 +198,15 @@ function UserList(props) {
                     }
                 />
             </FormGroup>
-
-            <LayerButton
-                handleClick={handleClickNewButton}
-                buttonText={'Ny'}
-                sx={{ mr: 'auto' }}
-            />
+            {showAdmins ? (
+                <LayerButton
+                    handleClick={handleClickNewButton}
+                    buttonText={'Ny'}
+                    sx={{ mr: 'auto' }}
+                />
+            ) : (
+                <></>
+            )}
             <FixedSizeList
                 height={400}
                 width={360}

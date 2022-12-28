@@ -41,6 +41,7 @@ const LoginForm = (props) => {
         if (data.status === 200) {
           console.log("STATUS OK");
           props.setUserToken(data.token);
+          props.setUserName(data.user);
         }
         props.setValue("map");
         // console.log("GITHUB ", Github);
