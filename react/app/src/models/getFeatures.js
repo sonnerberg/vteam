@@ -10,7 +10,8 @@ const getFeatures = {
             },
         });
         const result = await response.json();
-        return result;
+        console.log('CITIES, ', result);
+        return result.data;
     },
     getChargingStations: async function getChargingStations(token) {
         const response = await fetch(`${backendUrl}/charging-stations`, {

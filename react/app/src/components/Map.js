@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 // eslint-disable-next-line
 import { Draw } from 'leaflet-draw';
+import 'leaflet-draw/dist/leaflet.draw.css';
+
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
