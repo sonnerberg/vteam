@@ -3,6 +3,9 @@ import getUserData from './models/getUserData';
 import UserList from './components/UserList';
 import TripContainer from './components/TripContainer';
 import SearchUser from './components/SearchUser';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { Switch } from '@mui/material';
 
 import { useEffect, useState } from 'react';
 
@@ -13,6 +16,7 @@ function AppUser(props) {
     const [userFormCard, setUserFormCard] = useState(null);
     const [showUserFormCard, setShowUserFormCard] = useState(false);
     const [userTrips, setUserTrips] = useState(null);
+    const [showAdmins, setShowAdmins] = useState(false);
 
     async function getUsers(token) {
         console.log('Getting users');
@@ -29,16 +33,43 @@ function AppUser(props) {
         })();
     }, []);
 
+    const onSwitchChange = () => {
+        setShowAdmins(!showAdmins);
+        setDetailCard(null);
+        setUserTrips(null);
+        setUserFormCard(null);
+    };
+
     return (
         <div className="App">
             <header className="App-header">
                 <div className="App-left">
-                    <SearchUser data={userData} setData={setFilteredData} />
+                    <FormGroup sx={{ margin: 1 }}>
+                        <FormControlLabel
+                            control={
+                                <Switch onChange={onSwitchChange}></Switch>
+                            }
+                            label={
+                                showAdmins
+                                    ? 'Växla till kunder'
+                                    : 'Växla till administratörer'
+                            }
+                        />
+                        {showAdmins ? (
+                            <></>
+                        ) : (
+                            <SearchUser
+                                data={userData}
+                                setData={setFilteredData}
+                                label={'Sök användare'}
+                            />
+                        )}
+                    </FormGroup>
                     {userData ? (
                         <UserList
                             userData={filteredData}
                             setDetailCard={setDetailCard}
-                            showAdmins={false}
+                            showAdmins={showAdmins}
                             setUserFormCard={setUserFormCard}
                             setShowUserFormCard={setShowUserFormCard}
                             getUsers={getUsers}

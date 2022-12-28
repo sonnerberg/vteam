@@ -2,10 +2,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { FixedSizeList } from 'react-window';
-import { useState } from 'react';
-import { Switch } from '@mui/material';
 import UserCard from './UserCard';
 import LayerButton from './LayerButton';
 import UserForm from './UserForm';
@@ -108,15 +105,15 @@ function renderRow(props) {
 }
 
 function UserList(props) {
-    const [showAdmins, setShowAdmins] = useState(props.showAdmins);
+    //const [showAdmins, setShowAdmins] = useState(props.showAdmins);
 
     const token = props.token;
 
-    const data = showAdmins
+    const data = props.showAdmins
         ? props.userData.adminUserData
         : props.userData.customerUserData;
 
-    const userType = showAdmins ? 'administrators' : 'users';
+    const userType = props.showAdmins ? 'administrators' : 'users';
 
     data.token = token;
 
@@ -135,13 +132,6 @@ function UserList(props) {
     const newAdminObject = {
         email: '',
         password: '',
-    };
-
-    const onSwitchChange = () => {
-        setShowAdmins(!showAdmins);
-        props.setDetailCard(null);
-        props.setUserTrips(null);
-        props.setUserFormCard(null);
     };
 
     const handleClickSaveNewButton = async (newUserObject) => {
@@ -190,15 +180,7 @@ function UserList(props) {
     return (
         <div>
             <FormGroup sx={{ margin: 1 }}>
-                <FormControlLabel
-                    control={<Switch onChange={onSwitchChange}></Switch>}
-                    label={
-                        showAdmins
-                            ? 'Växla till kunder'
-                            : 'Växla till administratörer'
-                    }
-                />
-                {showAdmins ? (
+                {props.showAdmins ? (
                     <LayerButton
                         handleClick={handleClickNewButton}
                         buttonText={'Ny'}
