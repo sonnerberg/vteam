@@ -12,7 +12,7 @@ import getFeatures from './models/getFeatures';
 
 import L from 'leaflet';
 
-function AppMap() {
+function AppMap(props) {
     const [showCities, setShowCities] = useState(true);
     const [showParkings, setShowParkings] = useState(true);
     const [showChargingStations, setShowChargingStations] = useState(true);
@@ -76,7 +76,7 @@ function AppMap() {
 
     useEffect(() => {
         (async () => {
-            dataFromBackend.cities = await getFeatures.getCities();
+            dataFromBackend.cities = await getFeatures.getCities(props.token);
 
             for (const city of dataFromBackend.cities) {
                 allLayers.cities.addLayer(
@@ -95,7 +95,7 @@ function AppMap() {
     useEffect(() => {
         (async () => {
             dataFromBackend.chargingStations =
-                await getFeatures.getChargingStations();
+                await getFeatures.getChargingStations(props.token);
 
             for (const charger of dataFromBackend.chargingStations) {
                 allLayers.chargingStations.addLayer(
@@ -114,7 +114,9 @@ function AppMap() {
     }, [triggerChargeRedraw]);
     useEffect(() => {
         (async () => {
-            dataFromBackend.parkingLots = await getFeatures.getParkingLots();
+            dataFromBackend.parkingLots = await getFeatures.getParkingLots(
+                props.token
+            );
 
             for (const parking of dataFromBackend.parkingLots) {
                 allLayers.parkingLots.addLayer(
@@ -131,19 +133,21 @@ function AppMap() {
     }, [triggerParkingRedraw]);
     useEffect(() => {
         (async () => {
-            dataFromBackend.bikes = await getFeatures.getBikes();
+            dataFromBackend.bikes = await getFeatures.getBikes(props.token);
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         (async () => {
-            dataFromBackend.workshops = await getFeatures.getWorkshops();
+            dataFromBackend.workshops = await getFeatures.getWorkshops(
+                props.token
+            );
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         (async () => {
-            dataFromBackend.zones = await getFeatures.getZones();
+            dataFromBackend.zones = await getFeatures.getZones(props.token);
 
             for (const zone of dataFromBackend.zones) {
                 allLayers.zones.addLayer(
@@ -182,6 +186,7 @@ function AppMap() {
                         drawnItems={drawnItems}
                         dataFromBackend={dataFromBackend}
                         setTriggerNewObject={setTriggerNewObject}
+                        token={props.token}
                     />
                 </div>
             </div>

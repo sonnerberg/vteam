@@ -28,7 +28,11 @@ function App() {
                     showUser={showUserUI}
                     setShowUser={setShowUserUI}
                 />
-                {showUserUI ? <AppUser token={token} /> : <AppMap />}
+                {showUserUI ? (
+                    <AppUser token={token} />
+                ) : (
+                    <AppMap token={token} />
+                )}
             </div>
         );
     } else {

@@ -19,11 +19,12 @@ const postFeatures = {
 
         return result;
     },
-    postToGetBikes: async function postToGetBikes(bboxAsGeoJson) {
+    postToGetBikes: async function postToGetBikes(token, bboxAsGeoJson) {
         const postData = JSON.stringify(bboxAsGeoJson);
         const response = await fetch(`${backendUrl}/bikes/within`, {
             body: postData,
             headers: {
+                Authorization: `Bearer ${token}`,
                 'content-type': 'application/json',
             },
             method: 'POST',
