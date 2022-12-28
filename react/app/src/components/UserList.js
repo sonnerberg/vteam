@@ -17,6 +17,7 @@ function renderRow(props) {
     const { index, style, data } = props;
     const handleClick = async () => {
         console.log(data[index]);
+        console.log('Clicked on', data[index].username);
         if (data.userType === 'users') {
             const trips = await getCustomerData.getTripsByUserName(
                 data[index].username,
@@ -95,7 +96,7 @@ function renderRow(props) {
         <ListItem style={style} key={index} component="div" disablePadding>
             <ListItemButton onClick={handleClick}>
                 <ListItemText
-                    primary={`${index} - ${
+                    primary={`${
                         data[index].username
                             ? data[index].username
                             : data[index].email
@@ -197,16 +198,18 @@ function UserList(props) {
                             : 'Växla till administratörer'
                     }
                 />
+                {showAdmins ? (
+                    <LayerButton
+                        handleClick={handleClickNewButton}
+                        buttonText={'Ny'}
+                        sx={{ mr: 'auto' }}
+                        width={5}
+                    />
+                ) : (
+                    <></>
+                )}
             </FormGroup>
-            {showAdmins ? (
-                <LayerButton
-                    handleClick={handleClickNewButton}
-                    buttonText={'Ny'}
-                    sx={{ mr: 'auto' }}
-                />
-            ) : (
-                <></>
-            )}
+
             <FixedSizeList
                 height={400}
                 width={360}
