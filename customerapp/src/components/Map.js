@@ -29,10 +29,9 @@ const Map = (props) => {
   //only points within bounds so we filter in frontend for now...
   const loadScooters = (bounds) => {
     allLayers.bikes.clearLayers();
-    console.log(dataFromBackend.bikes);
     for (const bike of dataFromBackend.bikes) {
-      if (bike.rented === 0) {
-        const newBike = L.geoJson(bike, {
+      if (bike.position.properties.rented === 0) {
+        const newBike = L.geoJson(bike.position, {
           pointToLayer: function (feature, latlng) {
             return L.marker(latlng, mapStyles["scooter"]);
           },

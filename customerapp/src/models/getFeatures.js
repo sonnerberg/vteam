@@ -39,8 +39,12 @@ const getFeatures = {
       },
       method: "get",
     });
+    console.log("RESPONSE BIKES ", response);
+
     const result = await response.json();
-    return result.bikes;
+    console.log("RESULT BIKES ", result);
+
+    return result.data;
   },
 
   getZones: async function getZones(token) {
