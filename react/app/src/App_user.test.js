@@ -1,31 +1,10 @@
-import { Experimental_CssVarsProvider } from '@mui/material';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event/';
 import App_user from './App_user';
 import getUserData from './models/getUserData';
 import getCustomerData from './models/getCustomerData';
-
-const filteredData = {
-    customerUserData: [
-        {
-            id: 1,
-            surname: 'John',
-            lastname: 'Doe',
-            address: 'Gymnastikggatan 55 632 20 Eskilstuna',
-            'billing-adress': 'Gymnastikggatan 55 632 20 Eskilstuna',
-            username: 'john1@somemail.com',
-            pass: '',
-            email: 'john@somemail.com',
-            balance: 1000,
-            status: 'online',
-        },
-    ],
-    adminUserData: [
-        {
-            email: 'admin@example.com',
-        },
-    ],
-};
+import postUsers from './models/postUsers';
+import putUsers from './models/putUsers';
 
 const users = [
     {
@@ -77,8 +56,8 @@ test('App_user renders list of usernames', async () => {
 });
 
 test('Clicking username renders card with info', async () => {
-    getUserData.getUsers = jest.fn().mockReturnValue(Promise.resolve(users));
-    getUserData.getAdmins = jest.fn().mockReturnValue(Promise.resolve(admins));
+    getUserData.getUsers = jest.fn().mockReturnValue(users);
+    getUserData.getAdmins = jest.fn().mockReturnValue(admins);
     getCustomerData.getTripsByUserName = jest.fn().mockReturnValue(trips);
     render(<App_user token={token} />);
     const listItem = await screen.findByText(/john1@somemail.com/i);
@@ -104,22 +83,85 @@ test('Clicking username renders card with info', async () => {
     //screen.debug(null, 20000);
 });
 
+test('Clicking change renders form', async () => {
+    getUserData.getUsers = jest.fn().mockReturnValue(users);
+    getUserData.getAdmins = jest.fn().mockReturnValue(admins);
+    getCustomerData.getTripsByUserName = jest.fn().mockReturnValue(trips);
+    render(<App_user token={token} />);
+    const listItem = await screen.findByText(/john1@somemail.com/i);
+    const user = userEvent.setup();
+    await user.click(listItem);
+    const changeButton = await screen.findByText('Ändra');
+    await user.click(changeButton);
+    const cancelButton = await screen.findByText('Avbryt');
+    const saveButton = await screen.findByText('Spara');
+    expect(cancelButton).toBeInTheDocument();
+    expect(saveButton).toBeInTheDocument();
+});
+
+test('Changing user calls the model', async () => {
+    getUserData.getUsers = jest.fn().mockReturnValue(users);
+    getUserData.getAdmins = jest.fn().mockReturnValue(admins);
+    getCustomerData.getTripsByUserName = jest.fn().mockReturnValue(trips);
+    putUsers.putUser = jest.fn();
+    render(<App_user token={token} />);
+    const listItem = await screen.findByText(/john1@somemail.com/i);
+    const user = userEvent.setup();
+    await user.click(listItem);
+    const changeButton = await screen.findByText('Ändra');
+    await user.click(changeButton);
+    const saveButton = await screen.findByText('Spara');
+    await user.click(saveButton);
+    const formfield1 = await screen.findByText(/email/i);
+    await user.type(formfield1, 'user2@example.com');
+    expect(putUsers.putUser).toHaveBeenCalledTimes(1);
+});
+
 test('Clicking switch renders new label', async () => {
     getUserData.getUsers = jest.fn().mockReturnValue(Promise.resolve(users));
     getUserData.getAdmins = jest.fn().mockReturnValue(Promise.resolve(admins));
-    getCustomerData.getTripsByUserName = jest.fn().mockReturnValue(trips);
     render(<App_user token={token} />);
-
-    const userSwitch = await screen.findByLabelText(
-        'Växla till administratörer'
-    );
-
+    const listItem = await screen.findByText(/john1@somemail.com/i);
+    const userSwitch = await screen.findByText('Växla till administratörer');
     const user = userEvent.setup();
-
     await user.click(userSwitch);
-
-    const newLabel = await screen.findByLabelText('Växla till kunder');
-
+    const newLabel = await screen.findByText('Växla till kunder');
     expect(newLabel).toBeInTheDocument();
+});
+
+test('Clicking new admin renders form', async () => {
+    getUserData.getUsers = jest.fn().mockReturnValue(Promise.resolve(users));
+    getUserData.getAdmins = jest.fn().mockReturnValue(Promise.resolve(admins));
+    render(<App_user token={token} />);
+    const listItem = await screen.findByText(/john1@somemail.com/i);
+    const userSwitch = await screen.findByText('Växla till administratörer');
+    const user = userEvent.setup();
+    await user.click(userSwitch);
+    const button = await screen.findByText('Ny');
+    await user.click(button);
+    const form = await screen.findAllByText(/email/i);
+
+    expect(form[0]).toBeInTheDocument();
+});
+
+test('Creating new admin calls the model', async () => {
+    getUserData.getUsers = jest.fn().mockReturnValue(Promise.resolve(users));
+    getUserData.getAdmins = jest.fn().mockReturnValue(Promise.resolve(admins));
+    postUsers.registerAdmin = jest.fn();
+    render(<App_user token={token} />);
+    const listItem = await screen.findByText(/john1@somemail.com/i);
+    const userSwitch = await screen.findByText('Växla till administratörer');
+    const user = userEvent.setup();
+    await user.click(userSwitch);
+    const button = await screen.findByText('Ny');
+    await user.click(button);
+    const form1 = await screen.findByLabelText(/email/i);
+    const form2 = await screen.findByLabelText(/password/i);
+    await user.type(form1, 'admin2@example.com');
+    await user.type(form2, '12345678');
+    const save = await screen.findByText('Spara');
+    await user.click(save);
+
+    expect(postUsers.registerAdmin).toHaveBeenCalledTimes(1);
     //screen.debug(null, 20000);
 });
