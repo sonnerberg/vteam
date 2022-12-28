@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import L from "leaflet";
+import "leaflet/dist/leaflet";
 import mapModel from "../models/mapModel";
 import mapStyles from "../models/mapStyles";
 import allLayers from "../models/allLayers.js";
 import getFeatures from "../models/getFeatures";
-
-require("../../node_modules/leaflet/dist/leaflet.css");
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import "leaflet.markercluster/dist/leaflet.markercluster";
 
 const Map = (props) => {
   const [points, setPoints] = useState({});
@@ -28,6 +29,8 @@ const Map = (props) => {
   //we dont have 1000 scooters in mock-backend + mock-backend cant handle returning
   //only points within bounds so we filter in frontend for now...
   const loadScooters = (bounds) => {
+    const markers = L.markerClusterGroup();
+
     allLayers.bikes.clearLayers();
     for (const bike of dataFromBackend.bikes) {
       if (bike.position.properties.rented === 0) {
@@ -37,7 +40,8 @@ const Map = (props) => {
           },
         });
         if (bounds.contains(newBike.getBounds())) {
-          allLayers.bikes.addLayer(newBike);
+          markers.addLayer(newBike);
+          allLayers.bikes.addLayer(markers);
         }
       }
     }
