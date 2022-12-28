@@ -180,3 +180,18 @@ END;
 ;;
 
 DELIMITER ;
+
+DELIMITER ;;
+
+CREATE PROCEDURE insert_multiple_bikes(number_of_bikes INT)
+  BEGIN
+    SET @x = 0;
+    REPEAT
+      SET @x = @x + 1;
+      INSERT INTO bikes VALUES ();
+    UNTIL @x >= number_of_bikes
+    END REPEAT;
+  END
+;;
+
+DELIMITER ;

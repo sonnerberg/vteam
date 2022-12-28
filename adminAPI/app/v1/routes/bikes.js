@@ -12,6 +12,7 @@ router.post(`${routeName}/new`, bikes.insertANewBike);
 router.post(`${routeName}/return`, bikes.returnBike);
 router.post(`${routeName}/rent`, bikes.rentBike);
 router.post(`${routeName}/within`, bikes.getBikesWithinPolygon);
+router.post(`${routeName}/multiple`, bikes.insertMultipleBikes);
 
 router.put(`${routeName}/:id`, bikes.updateABike);
 
