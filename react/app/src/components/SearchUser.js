@@ -22,5 +22,11 @@ export default function SearchUser(props) {
         }
     };
 
-    return <TextField label={props.label} onChange={handleChange} />;
+    return (
+        <TextField
+            sx={{ width: 350, mt: 2 }}
+            label={props.label}
+            onChange={handleChange}
+        />
+    );
 }
