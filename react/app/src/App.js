@@ -41,7 +41,11 @@ function App() {
                         }
                     />
                 </FormGroup>
-                {showUserUI ? <AppUser token={token} /> : <AppMap />}
+                {showUserUI ? (
+                    <AppUser token={token} />
+                ) : (
+                    <AppMap token={token} />
+                )}
             </div>
         );
     } else {

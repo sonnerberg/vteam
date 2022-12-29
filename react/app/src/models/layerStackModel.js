@@ -12,7 +12,13 @@ const layerStackBuilder = (props) => {
 
         props.setNewObjectContainer(container.getAttribute('id'));
     };
-
+    const handleSearchButtonClick = (e) => {
+        //props.setTriggerNewObject(true);
+        const button = e.target;
+        const container = button.closest('.MuiGrid-container');
+        console.log('SÖKKNAPPEN SÄGER ', container.getAttribute('id'));
+        props.setOpenSearchForm(true);
+    };
     const cityAccordion = (
         <LayerAccordion
             title={'Städer'}
@@ -143,7 +149,12 @@ const layerStackBuilder = (props) => {
     );
 
     const searchButton = (
-        <LayerButton buttonText={'Sök'} size={'small'} width={25} />
+        <LayerButton
+            buttonText={'Sök'}
+            size={'small'}
+            width={25}
+            handleClick={handleSearchButtonClick}
+        />
     );
 
     const buttonGroup = (

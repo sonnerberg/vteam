@@ -2,19 +2,22 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 // eslint-disable-next-line
 import { Draw } from 'leaflet-draw';
+import 'leaflet-draw/dist/leaflet.draw.css';
+
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster/dist/leaflet.markercluster';
 import mapModel from '../models/mapModel';
 import mapStyles from '../models/mapStyles';
 import allLayers from '../models/allLayers';
 import postFeatures from '../models/postFeatures';
-require('../../node_modules/leaflet/dist/leaflet.css');
-require('../../node_modules/leaflet-draw/dist/leaflet.draw.css');
 
 const Map = (props) => {
     // eslint-disable-next-line
     const [points, setPoints] = useState({});
 
     // Create our map ref:
-    const mapRef = useRef(null);
+    const mapRef = props.mapRef;
     // Create the tile ref. NOT SURE IF WE NEED THIS! COME BACK AND DELETE IF NOT!:
     const tileRef = useRef(null);
 
@@ -84,6 +87,8 @@ const Map = (props) => {
     useEffect(() => {
         async function fetchData() {
             const bounds = mapRef.current.getBounds();
+            const markers = L.markerClusterGroup();
+
             const sw = bounds.getSouthWest();
             const ne = bounds.getNorthEast();
 
@@ -99,21 +104,33 @@ const Map = (props) => {
                     ],
                 ],
             };
-            const bikes = await postFeatures.postToGetBikes(boundsAsGeoJson);
+            const bikes = await postFeatures.postToGetBikes(
+                props.token,
+                boundsAsGeoJson
+            );
 
             allLayers.bikes.clearLayers();
 
             for (const bike of bikes) {
-                const bikeicon =
-                    bike.position.properties.rented === 0
-                        ? 'scooterRented'
-                        : 'scooter';
-                const newBike = L.geoJson(bike.position, {
-                    pointToLayer: function (feature, latlng) {
-                        return L.marker(latlng, mapStyles[bikeicon]);
-                    },
-                });
-                allLayers.bikes.addLayer(newBike);
+                if (bike.position.properties.rented === 0) {
+                    const newBike = L.geoJson(bike.position, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, mapStyles['scooterRented']);
+                        },
+                    });
+
+                    markers.addLayer(newBike);
+
+                    allLayers.bikes.addLayer(markers);
+                } else {
+                    const newBike = L.geoJson(bike.position, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, mapStyles['scooter']);
+                        },
+                    });
+
+                    allLayers.bikes.addLayer(newBike);
+                }
             }
         }
 
