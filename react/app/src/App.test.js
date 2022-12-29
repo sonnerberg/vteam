@@ -2,10 +2,12 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event/';
 import App from './App';
 import postUsers from './models/postUsers';
-/* import getUserData from './models/getUserData';
+import getUserData from './models/getUserData';
 import getCustomerData from './models/getCustomerData';
 import getFeatures from './models/getFeatures';
 import postFeatures from './models/postFeatures';
+import deleteFeatures from './models/deleteFeatures';
+import putFeatures from './models/putFeatures';
 
 const cities = [
     {
@@ -94,6 +96,12 @@ const users = [
         email: 'john@somemail.com',
         balance: 1000,
         status: 'online',
+    },
+];
+
+const admins = [
+    {
+        email: 'admin@somemail.com',
     },
 ];
 
@@ -264,7 +272,7 @@ const points = [
             coordinates: [16.421932290387552, 59.33861036474191],
         },
     },
-]; */
+];
 
 test('renders text', () => {
     render(<App />);
@@ -287,42 +295,3 @@ test('login', async () => {
     const cityAccordion = await screen.findByText('Städer');
     expect(cityAccordion).toBeInTheDocument();
 });
-
-/* test('Clicking top switch', async () => {
-    getFeatures.getCities = jest.fn().mockReturnValue(cities);
-    getFeatures.getChargingStations = jest
-        .fn()
-        .mockReturnValue(chargingStations);
-    getFeatures.getParkingLots = jest.fn().mockReturnValue(parkingLots);
-
-    getFeatures.getWorkshops = jest.fn().mockReturnValue(workshops);
-    getFeatures.getZones = jest.fn().mockReturnValue(zones);
-    getFeatures.getBikes = jest.fn().mockReturnValue(bikes);
-
-    postUsers.logInAdmin = jest
-        .fn()
-        .mockReturnValue({ data: { token: '1', email: 'test@test.se' } });
-
-    getUserData.getUsers = jest.fn().mockReturnValue(users);
-
-    getUserData.getAdmins = jest.fn().mockReturnValue(users);
-
-    getCustomerData.getTripsByUserName = jest.fn().mockReturnValue(trips);
-
-    getCustomerData.getTrips = jest.fn().mockReturnValue(trips);
-
-    postFeatures.postToGetBikes = jest.fn().mockReturnValue(bikes);
-    render(<App />);
-
-    const logInButton = screen.getByText('Logga in');
-    const user = userEvent.setup();
-
-    await user.click(logInButton);
-
-    const topSwitch = await screen.findByLabelText('Växla till användarvy');
-
-    await user.click(topSwitch);
-
-    const changedSwitch = await screen.findByLabelText('Växla till kartvy');
-    expect(changedSwitch).toBeInTheDocument();
-}); */
