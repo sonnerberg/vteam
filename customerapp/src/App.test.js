@@ -1,9 +1,17 @@
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 
-test("renders learn react link", () => {
+test("renders links", () => {
   render(<App />);
-  // const linkElement = screen.getByText(/learn react/i);
-  const linkElement = screen.getByText(/karta/i);
-  expect(linkElement).toBeInTheDocument();
+  const map = screen.getByText(/karta/i);
+  const account = screen.getByText(/konto/i);
+  expect(map).toBeInTheDocument();
+  expect(account).toBeInTheDocument();
 });
+
+/* test("login", async () => {
+  render(<App />);
+  const login = screen.getByText(/ta mig till github/i);
+  const user = userEvent.setup();
+  await user.click(login);
+}); */
