@@ -68,6 +68,18 @@ const getFeatures = {
         console.log('RESULT ', result);
         return result.data;
     },
+    getBikeById: async function getBikes(token, id) {
+        const response = await fetch(`${backendUrl}/bikes/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+        });
+        console.log('RESPONSE ', response);
+        const result = await response.json();
+        console.log('RESULT ', result);
+        return result.data;
+    },
 };
 
 export default getFeatures;

@@ -17,7 +17,7 @@ const Map = (props) => {
     const [points, setPoints] = useState({});
 
     // Create our map ref:
-    const mapRef = useRef(null);
+    const mapRef = props.mapRef;
     // Create the tile ref. NOT SURE IF WE NEED THIS! COME BACK AND DELETE IF NOT!:
     const tileRef = useRef(null);
 

@@ -1,6 +1,7 @@
 import './App_layerstack.css';
 import { useEffect, useState, useRef } from 'react';
 import LayerStack from './components/LayerStack';
+import SearchBikeForm from './components/SearchBikeForm';
 import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
 //import LayerFormCard from './components/LayerFormCard';
@@ -28,6 +29,9 @@ function AppMap(props) {
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
     const [triggerNewObject, setTriggerNewObject] = useState(false);
     const [newObjectContainer, setNewObjectContainer] = useState(null);
+    const [searchId, setSearchId] = useState();
+    const [openSearchForm, setOpenSearchForm] = useState(false);
+    const mapRef = useRef(null);
 
     useEffect(() => {
         const props = {
@@ -55,6 +59,8 @@ function AppMap(props) {
             setTriggerNewObject: setTriggerNewObject,
             newObjectContainer: newObjectContainer,
             setNewObjectContainer: setNewObjectContainer,
+            openSearchForm: openSearchForm,
+            setOpenSearchForm: setOpenSearchForm,
         };
 
         const containerArray = layerStackBuilder(props);
@@ -174,6 +180,14 @@ function AppMap(props) {
                         triggerCityRedraw={triggerCityRedraw}
                         setTriggerCityRedraw={setTriggerCityRedraw}
                     />
+                    {openSearchForm ? (
+                        <SearchBikeForm
+                            openSearchForm={openSearchForm}
+                            setOpenSearchForm={setOpenSearchForm}
+                            token={props.token}
+                            mapRef={mapRef}
+                        />
+                    ) : null}
                 </div>
                 <div className="App-right-Map">
                     <Map
@@ -187,6 +201,7 @@ function AppMap(props) {
                         dataFromBackend={dataFromBackend}
                         setTriggerNewObject={setTriggerNewObject}
                         token={props.token}
+                        mapRef={mapRef}
                     />
                 </div>
             </div>
