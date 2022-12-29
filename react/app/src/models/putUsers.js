@@ -12,7 +12,7 @@ const putUsers = {
             status: user.status,
         };
         const putData = JSON.stringify(updatedUser);
-        const response = await fetch(`${baseUrl}/customer/${user.username}`, {
+        await fetch(`${baseUrl}/customer/${user.username}`, {
             body: putData,
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -27,7 +27,7 @@ const putUsers = {
             email: user.email,
         };
         const putData = JSON.stringify(updatedUser);
-        const response = await fetch(`${baseUrl}/admin/${user.email}`, {
+        await fetch(`${baseUrl}/admin/${user.email}`, {
             body: putData,
             headers: {
                 Authorization: `Bearer ${token}`,

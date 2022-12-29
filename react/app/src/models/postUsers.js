@@ -30,7 +30,7 @@ const postUsers = {
         return result;
     },
     registerAdmin: async function registerAdmin(data, token) {
-        const response = await fetch(`${baseUrl}/v1/auth/register`, {
+        await fetch(`${baseUrl}/v1/auth/register`, {
             body: JSON.stringify(data),
             headers: {
                 Authorization: `Bearer ${token}`,
