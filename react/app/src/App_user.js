@@ -31,7 +31,7 @@ function AppUser(props) {
         (async () => {
             await getUsers(props.token);
         })();
-    }, []);
+    }, [props.token]);
 
     const onSwitchChange = () => {
         setShowAdmins(!showAdmins);
