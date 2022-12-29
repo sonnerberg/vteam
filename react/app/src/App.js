@@ -4,6 +4,8 @@ import AppUser from './App_user';
 import LoginForm from './components/LoginForm';
 import ToplevelSwitch from './components/ToplevelSwitch';
 import postUsers from './models/postUsers';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { useState } from 'react';
 
@@ -24,10 +26,21 @@ function App() {
     if (token) {
         return (
             <div>
-                <ToplevelSwitch
-                    showUser={showUserUI}
-                    setShowUser={setShowUserUI}
-                />
+                <FormGroup sx={{ margin: 1 }}>
+                    <FormControlLabel
+                        control={
+                            <ToplevelSwitch
+                                showUser={showUserUI}
+                                setShowUser={setShowUserUI}
+                            />
+                        }
+                        label={
+                            showUserUI
+                                ? 'Växla till kartvy'
+                                : 'Växla till användarvy'
+                        }
+                    />
+                </FormGroup>
                 {showUserUI ? <AppUser token={token} /> : <AppMap />}
             </div>
         );
