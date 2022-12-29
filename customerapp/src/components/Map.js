@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import "leaflet/dist/leaflet";
+import L from "leaflet";
+//import "leaflet/dist/leaflet";
 import mapModel from "../models/mapModel";
 import mapStyles from "../models/mapStyles";
 import allLayers from "../models/allLayers.js";
