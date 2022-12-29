@@ -12,6 +12,7 @@ import LayerNewFormCard from './LayerNewFormCard';
 import createAccordionUtils from '../models/layerAccordionUtils';
 import layerAttributes from '../models/layerAttributes';
 import L from 'leaflet';
+import postFeatures from '../models/postFeatures';
 
 /**
  *
@@ -80,13 +81,16 @@ const LayerAccordion = (props) => {
                     );
                 };
 
-                const handleClickStopBikeButton = () => {
-                    setShowFormCard(true);
-                    props.setActivateDraw(true);
-
-                    props.drawnItems.current.addLayer(
-                        L.GeoJSON.geometryToLayer(data.position)
+                const handleClickStopBikeButton = async () => {
+                    //setShowFormCard(true);
+                    //props.setActivateDraw(true);
+                    console.log('TOKEN ', props.token);
+                    const stopBike = await postFeatures.postToStopBike(
+                        props.token,
+                        data.position.username
                     );
+
+                    console.log('STOPBIKE', stopBike);
                 };
 
                 const editButton = (

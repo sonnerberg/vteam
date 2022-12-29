@@ -34,6 +34,22 @@ const postFeatures = {
 
         return result.data;
     },
+    postToStopBike: async function postToStopBike(token, username) {
+        const postData = JSON.stringify(username);
+        const response = await fetch(`${backendUrl}/bikes/return`, {
+            body: postData,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+            method: 'POST',
+        });
+
+        const result = await response.json();
+        console.log('STOP BIKE', result);
+
+        return result.data;
+    },
 };
 
 export default postFeatures;
