@@ -42,7 +42,7 @@ class Brain:
         self._token = token
 
         seed(_id)
-        # print("Bike created!")
+        print(self._token)
 
     def get_id(self):
         """Gets _id"""
@@ -229,7 +229,7 @@ class Brain:
             self.set_start_time(time.time())
 
             # Header
-            headers = {"Authorization": "Bearer {token}"}
+            headers = {"Authorization": f"Bearer {self._token}"}
             position = self.get_position()
             payload = {
                 "whole": self.get_is_whole(),
@@ -242,7 +242,7 @@ class Brain:
                 "coordinates": position["geometry"]["coordinates"],
             }
 
-            # print(payload)
+            # print(headers)
 
             async with self._session.put(
                 f"http://admin-api:3000/v1/bikes/{self.get_id()}",
@@ -270,7 +270,7 @@ class Brain:
 
             payload = {"username": str(self.get_current_user()), "id": self.get_id()}
 
-            headers = {"Authorization": "Bearer {token}"}
+            headers = {"Authorization": f"Bearer {self._token}"}
 
             async with self._session.post(
                 "http://admin-api:3000/v1/bikes/rent",
@@ -295,7 +295,7 @@ class Brain:
 
         payload = {"username": str(self.get_current_user())}
 
-        headers = {"Authorization": "Bearer {token}"}
+        headers = {"Authorization": f"Bearer {self._token}"}
 
         async with self._session.post(
             "http://admin-api:3000/v1/bikes/return",
