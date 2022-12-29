@@ -80,6 +80,15 @@ const LayerAccordion = (props) => {
                     );
                 };
 
+                const handleClickStopBikeButton = () => {
+                    setShowFormCard(true);
+                    props.setActivateDraw(true);
+
+                    props.drawnItems.current.addLayer(
+                        L.GeoJSON.geometryToLayer(data.position)
+                    );
+                };
+
                 const editButton = (
                     <LayerButton
                         buttonText={'Ändra'}
@@ -88,8 +97,24 @@ const LayerAccordion = (props) => {
                         handleClick={handleClickChangeButton}
                     />
                 );
+
+                const stopBikeButton = (
+                    <LayerButton
+                        buttonText={'Stoppa cykeln'}
+                        size={'small'}
+                        width={25}
+                        handleClick={handleClickStopBikeButton}
+                    />
+                );
                 const newCard = (
-                    <LayerCard content={data} button={editButton} />
+                    <LayerCard
+                        content={data}
+                        button={
+                            props.dad === 'scooter'
+                                ? [editButton, stopBikeButton]
+                                : [editButton]
+                        }
+                    />
                 );
                 const newFormCard = (
                     <LayerFormCard
