@@ -1,14 +1,17 @@
 const baseUrl = 'http://localhost:4000';
-const backendUrl = 'http://localhost:8081/v1/';
+const backendUrl = 'http://localhost:8081/v1';
 
 const postFeatures = {
-    postFeatures: async function postFeatures(data) {
+    postFeatures: async function postFeatures(data, token) {
         const postData = JSON.stringify(data);
+        console.log('POSTDATA IN BACKEND ', postData);
         const response = await fetch(
-            `${baseUrl}/${data.position.properties.featureType}`,
+            `${backendUrl}/${data.position.properties.featureType}`,
             {
                 body: postData,
                 headers: {
+                    Authorization: `Bearer ${token}`,
+
                     'content-type': 'application/json',
                 },
                 method: 'POST',
