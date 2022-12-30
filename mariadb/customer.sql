@@ -112,3 +112,47 @@ CREATE PROCEDURE update_customer_balance(
 ;;
 
 DELIMITER ;
+
+-- Procedure set_customer_klarna()
+
+DROP PROCEDURE IF EXISTS set_customer_klarna;
+
+DELIMITER ;;
+
+CREATE PROCEDURE set_customer_klarna(
+                    `a_username` VARCHAR(50)
+)
+ BEGIN
+
+   UPDATE customer
+   SET
+      klarna = true
+    WHERE username = a_username;
+
+
+  END
+;;
+
+DELIMITER ;
+
+-- Procedure remove_customer_klarna()
+
+DROP PROCEDURE IF EXISTS remove_customer_klarna;
+
+DELIMITER ;;
+
+CREATE PROCEDURE remove_customer_klarna(
+                    `a_username` VARCHAR(50)
+)
+ BEGIN
+
+   UPDATE customer
+   SET
+      klarna = false
+    WHERE username = a_username;
+
+
+  END
+;;
+
+DELIMITER ;
