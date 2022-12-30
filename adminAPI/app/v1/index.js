@@ -5,6 +5,7 @@ const tripsRouter = require('./routes/trips');
 const adminRouter = require('./routes/admin');
 const customerRouter = require('./routes/customer');
 const citiesRouter = require('./routes/cities');
+const zonesRouter = require('./routes/zones');
 const { authMiddleware } = require('./middleware/authMiddleware');
 
 const router = express.Router();
@@ -17,7 +18,8 @@ router.use(
     tripsRouter,
     adminRouter,
     customerRouter,
-    citiesRouter
+    citiesRouter,
+    zonesRouter
 );
 
 module.exports = router;

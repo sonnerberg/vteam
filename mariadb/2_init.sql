@@ -29,7 +29,7 @@ COLLATE utf8_swedish_ci
 
 CREATE TABLE IF NOT EXISTS `zones` (
 `id` INT AUTO_INCREMENT,
-`position` POLYGON,
+`geometry` POLYGON,
 `type` ENUM('speed', 'forbidden'),
 `speed_limit` INT,
 `feature_type` VARCHAR(50) DEFAULT 'zones',
@@ -192,7 +192,7 @@ LINES
 IGNORE 1 LINES
 (@col1, @col2, @col3)
 SET
-`position` = PolygonFromText(@col1),
+`geometry` = PolygonFromText(@col1),
 `type` = @col2,
 `speed_limit` = @col3
 ;

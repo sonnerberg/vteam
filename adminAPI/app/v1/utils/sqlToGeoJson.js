@@ -17,6 +17,8 @@ const sqlToGeoJson = (sql) => {
                     username: x.username,
                     name: x.name,
                     featureType: x.feature_type,
+                    type: x.type,
+                    speedLimit: x.speed_limit,
                 },
             },
         };
