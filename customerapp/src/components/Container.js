@@ -47,7 +47,6 @@ const Container = (props) => {
 
   async function getUserTrips() {
     const trips = await getUserData.getTripsByUserName(userName, userToken);
-    console.log("Trips", trips);
     setUserTrips(trips);
   }
 

@@ -15,10 +15,7 @@ import TableRow from "@mui/material/TableRow";
 const TripCard = (props) => {
   const rows = [];
 
-  console.log(props.content);
-
   for (const property in props.content) {
-    console.log("trip property", property);
     if (property === "startposition") {
       rows.push({
         name: property,

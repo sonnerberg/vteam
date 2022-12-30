@@ -40,7 +40,6 @@ const PrePaidForm = (props) => {
   );
 
   function changeHandler(event) {
-    console.log(event.target.value);
     setPaymentService(event.target.value);
   }
 
