@@ -27,6 +27,36 @@ exports.updateUserBalance = async (req, res) => {
     }
 };
 
+exports.setUserKlarna = async (req, res) => {
+    try {
+        const { username } = req.body;
+        const sql = 'CALL set_customer_klarna(?);';
+        const { affectedRows } = await queryDatabase(sql, [username]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            throw 'CannotRent';
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+};
+
+exports.setUserCredit = async (req, res) => {
+    try {
+        const { username } = req.body;
+        const sql = 'CALL remove_customer_klarna(?);';
+        const { affectedRows } = await queryDatabase(sql, [username]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            throw 'CannotRent';
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+};
+
 exports.updateUserInfo = async (req, res) => {
     // TODO
     const newUserInfo = {
