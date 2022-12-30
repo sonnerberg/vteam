@@ -158,6 +158,7 @@ const Container = (props) => {
       userToken={userToken}
       readyToHire={readyToHire}
       setReadyToHire={setReadyToHire}
+      setUserTrips={setUserTrips}
     />
   );
 
