@@ -32,7 +32,7 @@ const Container = (props) => {
   const [userData, setUserData] = useState();
 
   const [userTrips, setUserTrips] = useState();
-  const [scanQrCode, setScanQrCode] = useState(false);
+  //const [scanQrCode, setScanQrCode] = useState(false);
 
   const [accountView, setAccountView] = useState("userInfo");
   const [openHireForm, setOpenHireForm] = useState(false);

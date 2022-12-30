@@ -15,7 +15,7 @@ import CardButton from "./CardButton";
  * @returns {React.ReactElement} - The form
  */
 const PrePaidForm = (props) => {
-  const rows = [];
+  //const rows = [];
 
   const [paymentService, setPaymentService] = useState("none");
 

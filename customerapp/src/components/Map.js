@@ -10,6 +10,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
 
 const Map = (props) => {
+  // eslint-disable-next-line
   const [points, setPoints] = useState({});
   const dataFromBackend = {};
 
@@ -61,6 +62,7 @@ const Map = (props) => {
     })();
 
     return () => allLayers.cities.clearLayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     (async () => {
@@ -80,6 +82,7 @@ const Map = (props) => {
     })();
 
     return () => allLayers.chargingStations.clearLayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     (async () => {
@@ -97,6 +100,7 @@ const Map = (props) => {
     })();
 
     return () => allLayers.parkingLots.clearLayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -113,11 +117,13 @@ const Map = (props) => {
     })();
 
     return () => allLayers.zones.clearLayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     (async () => {
       dataFromBackend.bikes = await getFeatures.getBikes(props.userToken);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // This useEffect hook runs when the component is first mounted,
   // empty array in the end means only runs at first load of app
@@ -156,6 +162,7 @@ const Map = (props) => {
     //maybe build a counter that gets updated for every time this effect runs to understand if the app is recreating
     //the map many times?
     return () => mapRef.current.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // This useEffect runs when state for show<Feature> changes (true to false or vice versa)
