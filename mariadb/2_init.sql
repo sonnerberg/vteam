@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 `balance` INT DEFAULT 0,
 `status` ENUM('online', 'offline'),
 `klarna` BOOLEAN DEFAULT 0,
+`deleted` BOOLEAN DEFAULT 0,
 PRIMARY KEY (`username`))
 ENGINE = InnoDB
 CHARSET utf8

@@ -156,3 +156,25 @@ CREATE PROCEDURE remove_customer_klarna(
 ;;
 
 DELIMITER ;
+
+-- Procedure delete_customer()
+
+DROP PROCEDURE IF EXISTS delete_customer;
+
+DELIMITER ;;
+
+CREATE PROCEDURE delete_customer(
+                    `a_username` VARCHAR(50)
+)
+ BEGIN
+
+   UPDATE customer
+   SET
+      deleted = true
+    WHERE username = a_username;
+
+
+  END
+;;
+
+DELIMITER ;
