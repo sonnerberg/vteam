@@ -7,14 +7,14 @@ import postUsers from './models/postUsers';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
+import { green } from '@mui/material/colors';
 
 import { useState } from 'react';
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: red[500],
+            main: green[500],
         },
     },
 });
