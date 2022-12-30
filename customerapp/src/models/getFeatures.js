@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:4000";
+//const baseUrl = "http://localhost:4000";
 const backendUrl = "http://localhost:8082/v1/";
 
 const getFeatures = {

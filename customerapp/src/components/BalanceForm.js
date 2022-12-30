@@ -16,9 +16,6 @@ const BalanceForm = (props) => {
   const [errorAmount, setErrorAmount] = useState(false);
   const [errorCreditCard, setErrorCreditCard] = useState(false);
 
-  console.log("Erroramount", errorAmount);
-  console.log("Errorcredit", errorCreditCard);
-
   //console.log('formcard props.content', props.content);
 
   rows.push({ name: "credit card", value: "" });
@@ -43,8 +40,6 @@ const BalanceForm = (props) => {
   );
 
   function changeHandler(event) {
-    console.log("Number: ", Number(event.target.value));
-    console.log("Length: ", event.target.length);
     if (event.target.name === "amount") {
       setErrorAmount(false);
       setAmount(event.target.value);
@@ -54,7 +49,6 @@ const BalanceForm = (props) => {
         setAmount(0);
       }
       if (Number(event.target.value) < 0) {
-        console.log("Amount too low", amount);
         setErrorAmount(true);
         setAmount(0);
       }
