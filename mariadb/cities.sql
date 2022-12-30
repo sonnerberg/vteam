@@ -66,3 +66,24 @@ CREATE PROCEDURE update_city(
 ;;
 
 DELIMITER ;
+
+-- Procedure delete_city_by_name()
+
+DROP PROCEDURE IF EXISTS delete_city_by_name;
+
+DELIMITER ;;
+
+CREATE PROCEDURE delete_city_by_name(
+                    `a_name` VARCHAR(50)
+)
+ BEGIN
+
+   DELETE
+     FROM cities
+    WHERE name = a_name;
+
+
+  END
+;;
+
+DELIMITER ;

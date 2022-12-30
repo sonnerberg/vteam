@@ -52,9 +52,21 @@ async function getCitiesByName(req, res) {
     res.json(sqlToGeoJson(data));
 }
 
+async function deleteCityByName(req, res) {
+    const { name } = req.params;
+    const sql = 'CALL delete_city_by_name(?);';
+    const { affectedRows } = await queryDatabase(sql, [name]);
+    if (affectedRows) {
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(204);
+    }
+}
+
 module.exports = {
     getAllCities,
     getCitiesByName,
     insertCity,
     updateCity,
+    deleteCityByName,
 };
