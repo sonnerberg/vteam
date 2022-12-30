@@ -12,6 +12,21 @@ exports.getUserInfo = async (req, res) => {
     res.json(data[0][0]);
 };
 
+exports.deleteUser = async (req, res) => {
+    try {
+        const { username } = req.body;
+        const sql = 'CALL delete_customer(?);';
+        const { affectedRows } = await queryDatabase(sql, [username]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            throw 'CannotRent';
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+};
+
 exports.updateUserBalance = async (req, res) => {
     try {
         const { username, balance } = req.body;
