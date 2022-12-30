@@ -17,7 +17,6 @@ const insertNewBike = async (sql, placeholder) => {
             status: 200,
             message: 'bike added',
             id: Number(data[0][0].id),
-            token: 'asdf',
         },
     };
 };
