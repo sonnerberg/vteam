@@ -26,7 +26,7 @@ CREATE PROCEDURE get_customer_by_username(
 )
  BEGIN
 
-   SELECT surname,lastname,adress,billing_adress,username,email,balance,status
+   SELECT surname,lastname,adress,billing_adress,username,email,balance,status,klarna
      FROM customer
     WHERE username = a_username;
 
