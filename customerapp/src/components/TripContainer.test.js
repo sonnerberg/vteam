@@ -30,7 +30,7 @@ test("renders", async () => {
 
   render(<TripContainer trips={[trip]} />);
 
-  const time = await screen.findAllByText(/12:33:49/i);
+  const time = await screen.findAllByText(/2022/i);
 
   expect(time[0]).toBeInTheDocument();
 });
