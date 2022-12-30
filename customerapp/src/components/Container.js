@@ -4,6 +4,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Fab,
+  Paper,
 } from "@mui/material";
 import {
   ManageAccounts,
@@ -22,6 +23,7 @@ import PaymentServiceForm from "./PaymentServiceForm";
 import TripContainer from "./TripContainer";
 import LoginForm from "./LoginForm";
 import HireBikeForm from "./HireBikeForm";
+import backgroundImage from "../images/electric-scooter-green.png";
 
 import putUserData from "../models/putUserData";
 
@@ -37,6 +39,12 @@ const Container = (props) => {
   const [accountView, setAccountView] = useState("userInfo");
   const [openHireForm, setOpenHireForm] = useState(false);
   const [readyToHire, setReadyToHire] = useState(true);
+
+  const styles = {
+    paperContainer: {
+      backgroundImage: `url(${backgroundImage})`,
+    },
+  };
 
   async function getUser() {
     //const user = {};
@@ -175,53 +183,55 @@ const Container = (props) => {
     );
   } else {*/
   return (
-    <Grid container justify="center">
-      <Grid item xs={12}>
-        {openHireForm ? hireForm : null}
-        {view}
-      </Grid>
-      {userToken && value === "map" ? (
-        <Fab
-          color="primary"
-          aria-label="add"
-          onClick={() => {
-            setOpenHireForm(true);
-          }}
-        >
-          <ElectricScooter />
-        </Fab>
-      ) : null}
+    <Paper style={styles.paperContainer}>
+      <Grid container justify="center">
+        <Grid item xs={12}>
+          {openHireForm ? hireForm : null}
+          {view}
+        </Grid>
+        {userToken && value === "map" ? (
+          <Fab
+            color="primary"
+            aria-label="add"
+            onClick={() => {
+              setOpenHireForm(true);
+            }}
+          >
+            <ElectricScooter />
+          </Fab>
+        ) : null}
 
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-          console.log("VALUE IS ", value);
-        }}
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-      >
-        <BottomNavigationAction label="Karta" icon={<Layers />} value="map" />
-        <BottomNavigationAction
-          label="Konto"
-          icon={<ManageAccounts />}
-          value="account"
-        />
-        {userToken ? (
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+            console.log("VALUE IS ", value);
+          }}
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        >
+          <BottomNavigationAction label="Karta" icon={<Layers />} value="map" />
           <BottomNavigationAction
-            label="Logga ut"
-            icon={<Logout />}
-            value="logout"
+            label="Konto"
+            icon={<ManageAccounts />}
+            value="account"
           />
-        ) : (
-          <BottomNavigationAction
-            label="Logga in"
-            icon={<Login />}
-            value="login"
-          />
-        )}
-      </BottomNavigation>
-    </Grid>
+          {userToken ? (
+            <BottomNavigationAction
+              label="Logga ut"
+              icon={<Logout />}
+              value="logout"
+            />
+          ) : (
+            <BottomNavigationAction
+              label="Logga in"
+              icon={<Login />}
+              value="login"
+            />
+          )}
+        </BottomNavigation>
+      </Grid>
+    </Paper>
   );
   // }
 };
