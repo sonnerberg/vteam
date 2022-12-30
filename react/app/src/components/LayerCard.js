@@ -46,7 +46,9 @@ const LayerCard = (props) => {
                 </Table>
             </CardContent>
             <CardActions>
-                <div>{props.button}</div>
+                {props.button?.map((button, index) => (
+                    <div key={index}>{button}</div>
+                ))}{' '}
             </CardActions>
         </Card>
     );

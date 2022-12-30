@@ -94,6 +94,7 @@ const layerStackBuilder = (props) => {
             setTriggerNewObject={props.setTriggerNewObject}
             newObjectContainer={props.newObjectContainer}
             setNewObjectContainer={props.setNewObjectContainer}
+            token={props.token}
         />
     );
 
