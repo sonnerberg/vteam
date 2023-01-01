@@ -152,6 +152,11 @@ class Brain:
         """Sets i_charging"""
         self._is_charging = status
         self._position["properties"]["charging"] = status
+        if status is True:
+            self.set_is_blocked(True)
+        if status is False:
+            if self.get_is_whole():
+                self.set_is_blocked(True)
 
     def get_is_blocked(self):
         """Gets is_blocked"""
@@ -194,11 +199,11 @@ class Brain:
         """Check health"""
         if self.get_battery_capacity() < 20:
             self.set_is_warning_battery(True)
-        elif self.get_battery_capacity() <= 0:
+        if self.get_battery_capacity() <= 0:
+            await self.lock()
             self.set_speed(0)
             self.set_is_blocked(True)
             self.set_is_battery_depleted(True)
-            await self.lock()
 
         if randrange(1, 100) <= self._breaking_probability:
             # print("Breaking tyre")
@@ -240,6 +245,7 @@ class Brain:
                 "charging": bool(position["properties"]["charging"]),
                 "blocked": bool(position["properties"]["blocked"]),
                 "coordinates": position["geometry"]["coordinates"],
+                "speed": self.get_speed(),
             }
 
             # print(headers)
@@ -291,6 +297,7 @@ class Brain:
         """Lock"""
         self.set_is_locked(True)
         self.set_rented(False)
+        self.set_speed(0)
         self.set_report_interval(self._default_report_interval)
 
         payload = {"username": str(self.get_current_user())}
