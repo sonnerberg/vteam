@@ -1,0 +1,45 @@
+const supertest = require('supertest');
+const app = require('../app');
+const { closePool } = require('../database/mariadb');
+
+const api = supertest(app);
+
+let token;
+
+const newUser = {
+    surName: 'Hello',
+    lastName: 'World',
+    adress: 'Home',
+    billingAdress: 'Away',
+    userName: 'test',
+    password: 'pass',
+    email: 'hello@world.com',
+};
+
+const loginInfo = {
+    userName: 'test',
+    password: 'pass',
+};
+
+test('create new user', async () => {
+    await api
+        .post('/auth/register')
+        .send(newUser)
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+});
+
+test('login with new user and get token', async () => {
+    const result = await api
+        .post('/auth/login')
+        .send(loginInfo)
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+
+    token = JSON.parse(result.text).data.token;
+    console.log(token);
+});
+
+afterAll(() => {
+    closePool();
+});

@@ -46,7 +46,7 @@ exports.login = async (userName, password) => {
             },
         };
     }
-    console.log(payload);
+    // console.log(payload);
     return createNewToken(payload);
 };
 
