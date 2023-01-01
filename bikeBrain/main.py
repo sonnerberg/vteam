@@ -86,7 +86,7 @@ async def main():
             json_response = response.json()
             # print(json_response)
             _id = json_response["data"]["id"]
-            bike_token = json_response["data"]["token"]
+            # bike_token = json_response["data"]["token"]
 
             # Get the new bike
             response = requests.get(
