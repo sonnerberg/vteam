@@ -1,19 +1,21 @@
 const { queryDatabase } = require('../../database/mariadb');
 const { sqlToGeoJson } = require('../utils');
 
-async function updateCity(req, res) {
+async function updateZone(req, res) {
     let parsedCoordinates = '';
-    const { name } = req.params;
-    const { coordinates } = req.body;
+    const { id } = req.params;
+    const { coordinates, type, speedLimit } = req.body;
     coordinates[0].forEach((coordinate) => {
         parsedCoordinates += coordinate.toString().replace(',', ' ');
         parsedCoordinates += ',';
     });
     parsedCoordinates = parsedCoordinates.slice(0, -1);
-    const sql = 'CALL update_city(?,?);';
+    const sql = 'CALL update_zone(?,?,?,?);';
     const { affectedRows } = await queryDatabase(sql, [
-        name,
+        id,
         parsedCoordinates,
+        type,
+        speedLimit,
     ]);
     if (affectedRows) {
         res.sendStatus(200);
@@ -21,18 +23,19 @@ async function updateCity(req, res) {
         res.sendStatus(400);
     }
 }
-async function insertCity(req, res) {
+async function insertZone(req, res) {
     let parsedCoordinates = '';
-    const { coordinates, name } = req.body;
+    const { coordinates, type, speedLimit } = req.body;
     coordinates[0].forEach((coordinate) => {
         parsedCoordinates += coordinate.toString().replace(',', ' ');
         parsedCoordinates += ',';
     });
     parsedCoordinates = parsedCoordinates.slice(0, -1);
-    const sql = 'CALL insert_city(?,?);';
+    const sql = 'CALL insert_zone(?, ?, ?);';
     const { affectedRows } = await queryDatabase(sql, [
-        name,
         parsedCoordinates,
+        type,
+        speedLimit,
     ]);
     if (affectedRows) {
         res.sendStatus(200);
@@ -40,22 +43,22 @@ async function insertCity(req, res) {
         res.sendStatus(400);
     }
 }
-async function getAllCities(_, res) {
-    const sql = 'CALL get_all_cities();';
+async function getAllZones(_, res) {
+    const sql = 'CALL get_all_zones();';
     const { 0: data } = await queryDatabase(sql);
     res.json(sqlToGeoJson(data));
 }
-async function getCitiesByName(req, res) {
-    const { name } = req.params;
-    const sql = 'CALL get_all_cities_by_name(?);';
-    const { 0: data } = await queryDatabase(sql, [name]);
+async function getZonesByid(req, res) {
+    const { id } = req.params;
+    const sql = 'CALL get_all_zones_by_id(?);';
+    const { 0: data } = await queryDatabase(sql, [id]);
     res.json(sqlToGeoJson(data));
 }
 
-async function deleteCityByName(req, res) {
-    const { name } = req.params;
-    const sql = 'CALL delete_city_by_name(?);';
-    const { affectedRows } = await queryDatabase(sql, [name]);
+async function deleteZoneByid(req, res) {
+    const { id } = req.params;
+    const sql = 'CALL delete_zone_by_id(?);';
+    const { affectedRows } = await queryDatabase(sql, [id]);
     if (affectedRows) {
         res.sendStatus(200);
     } else {
@@ -64,9 +67,9 @@ async function deleteCityByName(req, res) {
 }
 
 module.exports = {
-    getAllCities,
-    getCitiesByName,
-    insertCity,
-    updateCity,
-    deleteCityByName,
+    getAllZones,
+    getZonesByid,
+    insertZone,
+    updateZone,
+    deleteZoneByid,
 };

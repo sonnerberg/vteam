@@ -15,7 +15,7 @@ import CardButton from "./CardButton";
  * @returns {React.ReactElement} - The form
  */
 const PrePaidForm = (props) => {
-  const rows = [];
+  //const rows = [];
 
   const [paymentService, setPaymentService] = useState("none");
 
@@ -40,7 +40,6 @@ const PrePaidForm = (props) => {
   );
 
   function changeHandler(event) {
-    console.log(event.target.value);
     setPaymentService(event.target.value);
   }
 

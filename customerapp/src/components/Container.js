@@ -4,6 +4,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Fab,
+  Paper,
 } from "@mui/material";
 import {
   ManageAccounts,
@@ -22,6 +23,7 @@ import PaymentServiceForm from "./PaymentServiceForm";
 import TripContainer from "./TripContainer";
 import LoginForm from "./LoginForm";
 import HireBikeForm from "./HireBikeForm";
+import backgroundImage from "../images/electric-scooter-green.png";
 
 import putUserData from "../models/putUserData";
 
@@ -32,11 +34,17 @@ const Container = (props) => {
   const [userData, setUserData] = useState();
 
   const [userTrips, setUserTrips] = useState();
-  const [scanQrCode, setScanQrCode] = useState(false);
+  //const [scanQrCode, setScanQrCode] = useState(false);
 
   const [accountView, setAccountView] = useState("userInfo");
   const [openHireForm, setOpenHireForm] = useState(false);
   const [readyToHire, setReadyToHire] = useState(true);
+
+  const styles = {
+    paperContainer: {
+      backgroundImage: `url(${backgroundImage})`,
+    },
+  };
 
   async function getUser() {
     //const user = {};
@@ -47,7 +55,6 @@ const Container = (props) => {
 
   async function getUserTrips() {
     const trips = await getUserData.getTripsByUserName(userName, userToken);
-    console.log("Trips", trips);
     setUserTrips(trips);
   }
 
@@ -150,7 +157,19 @@ const Container = (props) => {
     view = <div> Tack för besöket</div>;
   }
 
-  if (openHireForm) {
+  const hireForm = (
+    <HireBikeForm
+      openHireForm={openHireForm}
+      setOpenHireForm={setOpenHireForm}
+      userName={userName}
+      userToken={userToken}
+      readyToHire={readyToHire}
+      setReadyToHire={setReadyToHire}
+      setUserTrips={setUserTrips}
+    />
+  );
+
+  /*  if (openHireForm) {
     return (
       <HireBikeForm
         openHireForm={openHireForm}
@@ -161,10 +180,12 @@ const Container = (props) => {
         setReadyToHire={setReadyToHire}
       />
     );
-  } else {
-    return (
+  } else {*/
+  return (
+    <Paper style={styles.paperContainer}>
       <Grid container justify="center">
         <Grid item xs={12}>
+          {openHireForm ? hireForm : null}
           {view}
         </Grid>
         {userToken && value === "map" ? (
@@ -209,8 +230,9 @@ const Container = (props) => {
           )}
         </BottomNavigation>
       </Grid>
-    );
-  }
+    </Paper>
+  );
+  // }
 };
 export default Container;
 

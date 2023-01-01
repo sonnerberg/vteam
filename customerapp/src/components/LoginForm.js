@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect /* , useState */ } from "react";
 import {
   Button,
-  TextField,
+  /* TextField, */
   Grid,
   Paper,
   Typography,
-  Link,
+  /* Link, */
 } from "@mui/material";
 
 const LoginForm = (props) => {
@@ -47,6 +47,7 @@ const LoginForm = (props) => {
         // console.log("GITHUB ", Github);
       })();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -94,7 +95,7 @@ const LoginForm = (props) => {
   );
 };
 
-const SendCodeToServer = () => {
+/* const SendCodeToServer = () => {
   const tokenURl = "http://localhost:8082/auth/github";
   const queryParams = new URLSearchParams(document.location.search);
   const options = {
@@ -113,7 +114,9 @@ const SendCodeToServer = () => {
       <button onClick={getTokenFromServer}>send code to server</button>
     </div>
   );
-}; /*
+};  */
+
+/*
 const LoginForm = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();

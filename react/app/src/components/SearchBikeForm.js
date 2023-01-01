@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import L from 'leaflet';
+import eventBus from '../models/eventBus';
+
 import Button from '@mui/material/Button';
 
 import TextField from '@mui/material/TextField';
@@ -18,7 +20,27 @@ const SearchBikeForm = (props) => {
     const handleChange = (e) => {
         setBikeId(e.target.value);
     };
-    const handleHire = async () => {
+    const handleSearch = async () => {
+        const returnstatement = await getFeatures.getBikeById(
+            props.token,
+            bikeId
+        );
+
+        props.mapRef.current.setView(
+            [
+                returnstatement[0].position.geometry.coordinates[1],
+                returnstatement[0].position.geometry.coordinates[0],
+            ],
+            16
+        );
+        props.setOpenSearchForm(false);
+
+        eventBus.dispatch('bikeClicked', {
+            position: returnstatement[0].position,
+        });
+    };
+
+    const handleStop = async () => {
         const returnstatement = await getFeatures.getBikeById(
             props.token,
             bikeId
@@ -55,7 +77,7 @@ const SearchBikeForm = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Avbryt</Button>
-                    <Button onClick={handleHire}>Sök</Button>
+                    <Button onClick={handleSearch}>Sök</Button>
                 </DialogActions>
             </Dialog>
         </div>

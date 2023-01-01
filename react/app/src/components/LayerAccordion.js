@@ -12,6 +12,7 @@ import LayerNewFormCard from './LayerNewFormCard';
 import createAccordionUtils from '../models/layerAccordionUtils';
 import layerAttributes from '../models/layerAttributes';
 import L from 'leaflet';
+import postFeatures from '../models/postFeatures';
 
 /**
  *
@@ -80,6 +81,18 @@ const LayerAccordion = (props) => {
                     );
                 };
 
+                const handleClickStopBikeButton = async () => {
+                    //setShowFormCard(true);
+                    //props.setActivateDraw(true);
+                    console.log('TOKEN ', props.token);
+                    const stopBike = await postFeatures.postToStopBike(
+                        props.token,
+                        data.position.username
+                    );
+
+                    console.log('STOPBIKE', stopBike);
+                };
+
                 const editButton = (
                     <LayerButton
                         buttonText={'Ändra'}
@@ -88,8 +101,24 @@ const LayerAccordion = (props) => {
                         handleClick={handleClickChangeButton}
                     />
                 );
+
+                const stopBikeButton = (
+                    <LayerButton
+                        buttonText={'Stoppa cykeln'}
+                        size={'small'}
+                        width={25}
+                        handleClick={handleClickStopBikeButton}
+                    />
+                );
                 const newCard = (
-                    <LayerCard content={data} button={editButton} />
+                    <LayerCard
+                        content={data}
+                        button={
+                            props.dad === 'scooter'
+                                ? [editButton, stopBikeButton]
+                                : [editButton]
+                        }
+                    />
                 );
                 const newFormCard = (
                     <LayerFormCard

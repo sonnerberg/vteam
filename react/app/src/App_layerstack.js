@@ -32,6 +32,7 @@ function AppMap(props) {
     const [searchId, setSearchId] = useState();
     const [openSearchForm, setOpenSearchForm] = useState(false);
     const mapRef = useRef(null);
+    const token = props.token;
 
     useEffect(() => {
         const props = {
@@ -61,6 +62,7 @@ function AppMap(props) {
             setNewObjectContainer: setNewObjectContainer,
             openSearchForm: openSearchForm,
             setOpenSearchForm: setOpenSearchForm,
+            token: token,
         };
 
         const containerArray = layerStackBuilder(props);

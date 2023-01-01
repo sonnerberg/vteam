@@ -20,7 +20,7 @@ const putUserData = {
       method: "PUT",
     });
     const result = await response.json();
-    console.log(result);
+
     return result;
   },
 
@@ -30,7 +30,7 @@ const putUserData = {
       balance: amount,
     };
     const bodyData = JSON.stringify(data);
-    const response = await fetch(`${baseUrl}/balance`, {
+    await fetch(`${baseUrl}/balance`, {
       headers: {
         "content-type": "application/json",
         "x-access-token": token,
@@ -38,10 +38,6 @@ const putUserData = {
       body: bodyData,
       method: "POST",
     });
-    console.log(response);
-    /* const result = await response.json();
-    console.log(result);
-    return result; */
   },
 
   putUserPaymentService: async function putUserPaymentService(

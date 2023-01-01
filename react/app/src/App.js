@@ -6,8 +6,18 @@ import ToplevelSwitch from './components/ToplevelSwitch';
 import postUsers from './models/postUsers';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { green } from '@mui/material/colors';
 
 import { useState } from 'react';
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: green[500],
+        },
+    },
+});
 
 function App() {
     const [showUserUI, setShowUserUI] = useState(false);
@@ -26,36 +36,40 @@ function App() {
     if (token) {
         return (
             <div>
-                <FormGroup sx={{ margin: 1 }}>
-                    <FormControlLabel
-                        control={
-                            <ToplevelSwitch
-                                showUser={showUserUI}
-                                setShowUser={setShowUserUI}
-                            />
-                        }
-                        label={
-                            showUserUI
-                                ? 'Växla till kartvy'
-                                : 'Växla till användarvy'
-                        }
-                    />
-                </FormGroup>
-                {showUserUI ? (
-                    <AppUser token={token} />
-                ) : (
-                    <AppMap token={token} />
-                )}
+                <ThemeProvider theme={theme}>
+                    <FormGroup sx={{ margin: 1 }}>
+                        <FormControlLabel
+                            control={
+                                <ToplevelSwitch
+                                    showUser={showUserUI}
+                                    setShowUser={setShowUserUI}
+                                />
+                            }
+                            label={
+                                showUserUI
+                                    ? 'Växla till kartvy'
+                                    : 'Växla till användarvy'
+                            }
+                        />
+                    </FormGroup>
+                    {showUserUI ? (
+                        <AppUser token={token} />
+                    ) : (
+                        <AppMap token={token} />
+                    )}
+                </ThemeProvider>
             </div>
         );
     } else {
         return (
             <div className="topdiv">
-                <LoginForm
-                    logInAdmin={logInAdmin}
-                    setPwd={setPwd}
-                    setUser={setUser}
-                />
+                <ThemeProvider theme={theme}>
+                    <LoginForm
+                        logInAdmin={logInAdmin}
+                        setPwd={setPwd}
+                        setUser={setUser}
+                    />
+                </ThemeProvider>
             </div>
         );
     }
