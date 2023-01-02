@@ -33,6 +33,8 @@ jobs:
         run: docker exec react bash -c "CI=true npm test -- --coverage"
       - name: Test customerapp
         run: docker exec customerapp bash -c "CI=true npm test -- --coverage"
+      - name: Test bikebrain
+        run: docker exec bike-brain2 bash -c "python3 -m unittest"
       - name: Create coverage folder
         run: mkdir -v ./coverage
       - name: Get lcov.info
