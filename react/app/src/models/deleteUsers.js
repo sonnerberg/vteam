@@ -1,7 +1,5 @@
 const baseUrl = 'http://localhost:8081/v1/';
 
-//TODO connect to real backend
-
 const deleteUsers = {
     deleteCustomers: async function deleteCustomers(username, token) {
         const data = {
