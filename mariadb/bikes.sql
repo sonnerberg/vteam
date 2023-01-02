@@ -139,6 +139,25 @@ CREATE PROCEDURE set_scooter_rented(
 
 DELIMITER ;
 
+-- Procedure check_if_scooter_is_rented()
+
+DROP PROCEDURE IF EXISTS check_if_scooter_is_rented;
+
+DELIMITER ;;
+
+CREATE PROCEDURE check_if_scooter_is_rented(
+  `an_id` INTEGER
+)
+
+ BEGIN
+
+    SELECT rented FROM bikes WHERE id = an_id;
+
+  END
+;;
+
+DELIMITER ;
+
 -- Procedure get_all_scooters()
 
 DROP PROCEDURE IF EXISTS get_all_scooters;

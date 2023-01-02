@@ -29,6 +29,10 @@ const insertANewBike = async (req, res) => {
 };
 
 const updateABike = async (req, res) => {
+    // TODO: Check if bike is rented
+    const { body } = req;
+    const { id } = req.params;
+    const { 0: { 0: { rented }, }, } = await queryDatabase('CALL check_if_scooter_is_rented(?)', [id]);
     const allowedFields = {
         coordinates: 'geometry',
         charging: 'charging',
@@ -38,19 +42,21 @@ const updateABike = async (req, res) => {
         battery_depleted: 'battery_depleted',
     };
 
+    console.log('rented', rented);
     let updateFields = [];
     let params = [];
     let sql = 'UPDATE bikes SET ';
 
-    const { body } = req;
     for (const field in allowedFields) {
         if (body[field] !== undefined) {
             if (field === 'coordinates') {
-                updateFields.push(
-                    allowedFields[field] +
-                        ' = ST_PointFromText(CONCAT(\'POINT(\', ?, \' \', ?, \')\'))'
-                );
-                params.push(body[field][0], body[field][1]);
+                if (rented) {
+                    updateFields.push(
+                        allowedFields[field] +
+                            ' = ST_PointFromText(CONCAT(\'POINT(\', ?, \' \', ?, \')\'))'
+                    );
+                    params.push(body[field][0], body[field][1]);
+                }
             } else {
                 updateFields.push(allowedFields[field] + ' = ?');
                 params.push(body[field]);
@@ -61,7 +67,7 @@ const updateABike = async (req, res) => {
 
     sql += ' WHERE id = ?';
 
-    params.push(req.params.id);
+    params.push(id);
     sql += ';';
     const { affectedRows } = await queryDatabase(sql, params);
     if (affectedRows) {
