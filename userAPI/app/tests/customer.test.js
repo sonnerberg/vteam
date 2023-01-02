@@ -50,14 +50,30 @@ test('get info of logged in user', async () => {
         .expect('Content-Type', /application\/json/);
 });
 
-test('update userinfo', async () => {
+test('update userinfo with missing fields', async () => {
     await api
-        .post('/v1/user/update:w')
+        .put('/v1/user/update')
+        .set('x-access-token', token)
+        .send({
+            userName: newUser.userName,
+            surName: 'goodbye',
+            lastName: 'World',
+            adress: 'Home',
+            billingAdress: 'Away',
+            email: 'hello@world.com',
+        })
+        .expect(201)
+        .expect('Content-Type', /application\/json/);
+});
+
+test('update userinfo with correct fields', async () => {
+    await api
+        .put('/v1/user/update')
         .set('x-access-token', token)
         .send({
             userName: newUser.userName,
         })
-        .expect(200)
+        .expect(400)
         .expect('Content-Type', /application\/json/);
 });
 
