@@ -52,6 +52,21 @@ const customer = {
             res.sendStatus(404);
         }
     },
+
+    deleteUser: async (req, res) => {
+        try {
+            const { username } = req.params;
+            const sql = 'CALL delete_customer(?);';
+            const { affectedRows } = await queryDatabase(sql, [username]);
+            if (affectedRows) {
+                res.sendStatus(200);
+            } else {
+                throw 'CannotRent';
+            }
+        } catch {
+            res.sendStatus(400);
+        }
+    },
 };
 
 module.exports = customer;
