@@ -77,6 +77,48 @@ test('update userinfo with correct fields', async () => {
         .expect('Content-Type', /application\/json/);
 });
 
+test('update user balance', async () => {
+    await api
+        .post('/v1/user/balance')
+        .set('x-access-token', token)
+        .send({
+            username: newUser.userName,
+            balance: 200,
+        })
+        .expect(200);
+});
+
+test('update user payment to klarna', async () => {
+    await api
+        .post('/v1/user/klarna')
+        .set('x-access-token', token)
+        .send({
+            username: newUser.userName,
+        })
+        .expect(200);
+});
+
+test('update user payment to balance', async () => {
+    await api
+        .post('/v1/user/credit')
+        .set('x-access-token', token)
+        .send({
+            username: newUser.userName,
+        })
+        .expect(200);
+});
+
+test('get all trips for logged in user', async () => {
+    await api
+        .post('/v1/user/trips')
+        .set('x-access-token', token)
+        .send({
+            userName: newUser.userName,
+        })
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+});
+
 test('401 if token is not valid', async () => {
     await api
         .post('/v1/user')
