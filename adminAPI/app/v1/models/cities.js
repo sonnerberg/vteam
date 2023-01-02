@@ -1,15 +1,10 @@
 const { queryDatabase } = require('../../database/mariadb');
-const { sqlToGeoJson } = require('../utils');
+const { sqlToGeoJson, parseCoordinates } = require('../utils');
 
 async function updateCity(req, res) {
-    let parsedCoordinates = '';
     const { name } = req.params;
     const { coordinates } = req.body;
-    coordinates[0].forEach((coordinate) => {
-        parsedCoordinates += coordinate.toString().replace(',', ' ');
-        parsedCoordinates += ',';
-    });
-    parsedCoordinates = parsedCoordinates.slice(0, -1);
+    const parsedCoordinates = parseCoordinates(coordinates);
     const sql = 'CALL update_city(?,?);';
     const { affectedRows } = await queryDatabase(sql, [
         name,
@@ -22,13 +17,8 @@ async function updateCity(req, res) {
     }
 }
 async function insertCity(req, res) {
-    let parsedCoordinates = '';
     const { coordinates, name } = req.body;
-    coordinates[0].forEach((coordinate) => {
-        parsedCoordinates += coordinate.toString().replace(',', ' ');
-        parsedCoordinates += ',';
-    });
-    parsedCoordinates = parsedCoordinates.slice(0, -1);
+    const parsedCoordinates = parseCoordinates(coordinates);
     const sql = 'CALL insert_city(?,?);';
     const { affectedRows } = await queryDatabase(sql, [
         name,
