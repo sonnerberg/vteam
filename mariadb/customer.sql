@@ -7,8 +7,9 @@ DELIMITER ;;
 CREATE PROCEDURE get_all_customers()
  BEGIN
 
-    SELECT surname,lastname,adress,billing_adress,username,email,balance,status
-    FROM customer;
+    SELECT surname,lastname,adress,billing_adress,username,email,balance,status,klarna
+    FROM customer
+    WHERE deleted = 0;
 
   END
 ;;
