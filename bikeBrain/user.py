@@ -20,9 +20,9 @@ class User:
         """Get journey start time"""
         return self._journey_start_time
 
-    def set_journey_start_time(self, time):
+    def set_journey_start_time(self, a_time):
         """Set journey start time"""
-        self._journey_start_time = time
+        self._journey_start_time = a_time
 
     def set_move_interval(self):
         """Sets move interval based on speed and distance to next position"""
@@ -43,7 +43,7 @@ class User:
             if not self.bike.get_is_blocked():
                 current_time = time.time()
                 if current_time - self.get_journey_start_time() > self._move_interval:
-                    # print("user moving")
+                    print("user moving")
                     if self._travel_plan_index < len(self._travel_plan):
                         await self.bike.move(self._travel_plan[self._travel_plan_index])
                         self._travel_plan_index = self._travel_plan_index + 1
