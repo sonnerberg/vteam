@@ -37,7 +37,39 @@ test('login with new user and get token', async () => {
         .expect('Content-Type', /application\/json/);
 
     token = JSON.parse(result.text).data.token;
-    console.log(token);
+});
+
+test('get info of logged in user', async () => {
+    await api
+        .post('/v1/user')
+        .set('x-access-token', token)
+        .send({
+            userName: newUser.userName,
+        })
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+});
+
+test('update userinfo', async () => {
+    await api
+        .post('/v1/user/update:w')
+        .set('x-access-token', token)
+        .send({
+            userName: newUser.userName,
+        })
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+});
+
+test('401 if token is not valid', async () => {
+    await api
+        .post('/v1/user')
+        .set('x-access-token', 'nih')
+        .send({
+            userName: newUser.userName,
+        })
+        .expect(401)
+        .expect('Content-Type', /application\/json/);
 });
 
 afterAll(() => {
