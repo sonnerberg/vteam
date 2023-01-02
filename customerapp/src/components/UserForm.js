@@ -65,6 +65,8 @@ const UserFormCard = (props) => {
                 ? true
                 : row.name === "id"
                 ? true
+                : row.name === "klarna"
+                ? true
                 : false
             }
             required={true}
