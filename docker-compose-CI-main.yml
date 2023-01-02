@@ -35,17 +35,6 @@ services:
       GITHUB_SECRET: ${GITHUB_SECRET}
       JWT_USER_SECRET: ${JWT_USER_SECRET}
 
-  #  auth-react:
-  #    image: node:latest
-  #    container_name: auth-react
-  #    working_dir: /code/app
-  #    command: bash -c "npm install && npm start"
-  #    volumes:
-  #      - ./authFrontend/app:/code/app
-  #    ports:
-  #      - 3000:3000
-  #    restart: on-failure
-
   mariadb:
     container_name: mariadb
     image: mariadb:latest
@@ -83,13 +72,16 @@ services:
       - 3100:3000
     restart: on-failure
 
-  # bike-brain:
-  #   container_name: bike-brain2
-  #   build:
-  #     context: ./bikeBrain
-  #     dockerfile: ./Dockerfile.bike
-  #   working_dir: /brain/app
-  #   command: python3 main.py
-  #   depends_on:
-  #     - "admin-api"
-  #     - "mariadb"
+  bike-brain:
+    container_name: bike-brain2
+    tty: true
+    build:
+      context: ./bikeBrain
+      dockerfile: ./Dockerfile.bike
+    working_dir: /brain/app
+    restart: on-failure
+    depends_on:
+      - "admin-api"
+      - "mariadb"
+      - "customerapp"
+      - "react"

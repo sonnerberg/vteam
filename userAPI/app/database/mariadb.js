@@ -17,7 +17,7 @@ exports.queryDatabase = async (sql, placeholder = []) => {
         const rows = await conn.query(sql, placeholder);
         return rows;
     } catch (err) {
-        console.log(err.text);
+        // console.log(err.text);
         return {
             error: {
                 status: 500,

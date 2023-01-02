@@ -9,6 +9,7 @@ import UserForm from './UserForm';
 import putUsers from '../models/putUsers';
 import postUsers from '../models/postUsers';
 import getCustomerData from '../models/getCustomerData';
+import deleteUsers from '../models/deleteUsers';
 
 function renderRow(props) {
     const { index, style, data } = props;
@@ -47,6 +48,29 @@ function renderRow(props) {
             data.getUsers(data.token);
         };
 
+        const handleClickDeleteButton = async () => {
+            if (data.userType === 'administrators') {
+                await deleteUsers.deleteAdmins(
+                    data[index].username,
+                    data.token
+                );
+            } else if (data.userType === 'users') {
+                await deleteUsers.deleteCustomers(
+                    data[index].username,
+                    data.token
+                );
+            }
+
+            data.setDetailCard(null);
+
+            data.setUserTrips(null);
+
+            data.setShowUserFormCard(false);
+
+            // Get all users
+            data.getUsers(data.token);
+        };
+
         const handleClickChangeButton = () => {
             const handleClickCancelButton = () => {
                 data.setUserFormCard(null);
@@ -61,6 +85,7 @@ function renderRow(props) {
                     handleClick={handleClickCancelButton}
                 />
             );
+
             const userFormCard = (
                 <UserForm
                     content={data[index]}
@@ -75,6 +100,15 @@ function renderRow(props) {
             //data.setDetailCard(null);
         };
 
+        const deleteButton = (
+            <LayerButton
+                buttonText={'Ta bort'}
+                size={'small'}
+                width={100}
+                handleClick={handleClickDeleteButton}
+            />
+        );
+
         const editButton = (
             <LayerButton
                 buttonText={'Ändra'}
@@ -84,9 +118,17 @@ function renderRow(props) {
             />
         );
 
-        data.setDetailCard(
-            <UserCard content={data[index]} editButton={editButton} />
-        );
+        if (data.userType === 'users') {
+            data.setDetailCard(
+                <UserCard
+                    content={data[index]}
+                    editButton={editButton}
+                    deleteButton={deleteButton}
+                />
+            );
+        } else if (data.userType === 'administrators') {
+            data.setDetailCard(<UserCard content={data[index]} />);
+        }
     };
 
     return (
@@ -146,7 +188,7 @@ function UserList(props) {
         data.setShowUserFormCard(false);
 
         // Get all users on save
-        data.getUsers();
+        data.getUsers(props.token);
     };
 
     const handleClickNewButton = () => {

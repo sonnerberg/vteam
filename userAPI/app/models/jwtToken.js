@@ -6,7 +6,7 @@ const expiresIn = '24h';
 // middleware to check token
 exports.validateToken = (req, res, next) => {
     const token = req.headers['x-access-token'];
-    console.log(token);
+    // console.log(token);
 
     // jwt.verify(token, secret, function (err, decoded) {
     jwt.verify(token, secret, function (err) {
