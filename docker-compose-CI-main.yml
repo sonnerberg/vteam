@@ -83,13 +83,17 @@ services:
       - 3100:3000
     restart: on-failure
 
-  # bike-brain:
-  #   container_name: bike-brain2
-  #   build:
-  #     context: ./bikeBrain
-  #     dockerfile: ./Dockerfile.bike
-  #   working_dir: /brain/app
-  #   command: python3 main.py
-  #   depends_on:
-  #     - "admin-api"
-  #     - "mariadb"
+  bike-brain:
+    container_name: bike-brain2
+    tty: true
+    build:
+      context: ./bikeBrain
+      dockerfile: ./Dockerfile.bike
+    working_dir: /brain/app
+    restart: on-failure
+    command: python3 -m unittest
+    depends_on:
+      - "admin-api"
+      - "mariadb"
+      - "customerapp"
+      - "react"
