@@ -19,7 +19,6 @@ function AppUser(props) {
     const [showAdmins, setShowAdmins] = useState(false);
 
     async function getUsers(token) {
-        console.log('Getting users');
         const users = {};
         users.customerUserData = await getUserData.getUsers(token);
         users.adminUserData = await getUserData.getAdmins(token);
