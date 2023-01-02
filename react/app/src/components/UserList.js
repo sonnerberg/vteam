@@ -127,9 +127,7 @@ function renderRow(props) {
                 />
             );
         } else if (data.userType === 'administrators') {
-            data.setDetailCard(
-                <UserCard content={data[index]} deleteButton={deleteButton} />
-            );
+            data.setDetailCard(<UserCard content={data[index]} />);
         }
     };
 
