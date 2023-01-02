@@ -95,12 +95,13 @@ services:
 
   bike-brain:
     container_name: bike-brain2
+    tty: true
     build:
       context: ./bikeBrain
       dockerfile: ./Dockerfile.bike
     working_dir: /brain/app
     restart: on-failure
-    command: python3 main.py
+    #command: python3 main.py
     depends_on:
       - "admin-api"
       - "mariadb"
