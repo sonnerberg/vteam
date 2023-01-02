@@ -2,7 +2,7 @@ const express = require('express');
 const zones = require('../models/zones');
 
 const router = express.Router();
-const routeName = '/zones';
+const routeName = '/zone';
 
 router.get(`${routeName}/`, zones.getAllZones);
 router.get(`${routeName}/:id`, zones.getZonesByid);
