@@ -12,11 +12,56 @@ exports.getUserInfo = async (req, res) => {
     res.json(data[0][0]);
 };
 
+exports.deleteUser = async (req, res) => {
+    try {
+        const { username } = req.body;
+        const sql = 'CALL delete_customer(?);';
+        const { affectedRows } = await queryDatabase(sql, [username]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            throw 'CannotRent';
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+};
+
 exports.updateUserBalance = async (req, res) => {
     try {
         const { username, balance } = req.body;
         const sql = 'CALL update_customer_balance(?,?);';
         const { affectedRows } = await queryDatabase(sql, [username, balance]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            throw 'CannotRent';
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+};
+
+exports.setUserKlarna = async (req, res) => {
+    try {
+        const { username } = req.body;
+        const sql = 'CALL set_customer_klarna(?);';
+        const { affectedRows } = await queryDatabase(sql, [username]);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            throw 'CannotRent';
+        }
+    } catch {
+        res.sendStatus(400);
+    }
+};
+
+exports.setUserCredit = async (req, res) => {
+    try {
+        const { username } = req.body;
+        const sql = 'CALL remove_customer_klarna(?);';
+        const { affectedRows } = await queryDatabase(sql, [username]);
         if (affectedRows) {
             res.sendStatus(200);
         } else {

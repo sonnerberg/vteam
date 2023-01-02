@@ -19,12 +19,13 @@ async def main():
 
         # Log in to get token
         payload = {"email": "email@example.com", "password": "12345678"}
-        async with session.post(
-            "http://admin-api:3000/v1/admin/login",
-            json=payload,
-        ) as resp:
-            # result = await resp.json()
-            print("Logged in")
+        response = requests.post("http://admin-api:3000/v1/auth/login", json=payload)
+
+        result = response.json()
+
+        admin_token = result["data"]["token"]
+        print("Logged in")
+
         # nr_of_users = 300
         # nr_of_bikes = 300
         users = []
@@ -69,7 +70,7 @@ async def main():
             longitude = coordinates[1]
 
             # create header with admin token
-            headers = {"Authorization": "Bearer {token}"}
+            headers = {"Authorization": f"Bearer {admin_token}"}
             payload = {"latitude": latitude, "longitude": longitude}
 
             response = requests.post(
@@ -79,22 +80,24 @@ async def main():
                 timeout=100000,
             )
 
+            print("Bike created")
+
             # Get the new bike id and token
             json_response = response.json()
             # print(json_response)
             _id = json_response["data"]["id"]
-            bike_token = json_response["data"]["token"]
+            # bike_token = json_response["data"]["token"]
 
             # Get the new bike
             response = requests.get(
-                f"http://admin-api:3000/v1/bikes/{_id}", timeout=100000
+                f"http://admin-api:3000/v1/bikes/{_id}", headers=headers, timeout=100000
             )
 
             position = response.json()["data"][0]["position"]
 
-            # Create bike
+            # Create bike replace token when backend is ready for bike_token
             bikes.append(
-                bikeBrain.Brain(_id, session, bike_token, start_time, position)
+                bikeBrain.Brain(_id, session, admin_token, start_time, position)
             )
 
         # Create users and append them to the user list,

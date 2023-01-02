@@ -7,8 +7,9 @@ DELIMITER ;;
 CREATE PROCEDURE get_all_customers()
  BEGIN
 
-    SELECT surname,lastname,adress,billing_adress,username,email,balance,status
-    FROM customer;
+    SELECT surname,lastname,adress,billing_adress,username,email,balance,status,klarna
+    FROM customer
+    WHERE deleted = 0;
 
   END
 ;;
@@ -26,7 +27,7 @@ CREATE PROCEDURE get_customer_by_username(
 )
  BEGIN
 
-   SELECT surname,lastname,adress,billing_adress,username,email,balance,status
+   SELECT surname,lastname,adress,billing_adress,username,email,balance,status,klarna
      FROM customer
     WHERE username = a_username;
 
@@ -105,6 +106,72 @@ CREATE PROCEDURE update_customer_balance(
    UPDATE customer
    SET
       balance = balance + a_value
+    WHERE username = a_username;
+
+
+  END
+;;
+
+DELIMITER ;
+
+-- Procedure set_customer_klarna()
+
+DROP PROCEDURE IF EXISTS set_customer_klarna;
+
+DELIMITER ;;
+
+CREATE PROCEDURE set_customer_klarna(
+                    `a_username` VARCHAR(50)
+)
+ BEGIN
+
+   UPDATE customer
+   SET
+      klarna = true
+    WHERE username = a_username;
+
+
+  END
+;;
+
+DELIMITER ;
+
+-- Procedure remove_customer_klarna()
+
+DROP PROCEDURE IF EXISTS remove_customer_klarna;
+
+DELIMITER ;;
+
+CREATE PROCEDURE remove_customer_klarna(
+                    `a_username` VARCHAR(50)
+)
+ BEGIN
+
+   UPDATE customer
+   SET
+      klarna = false
+    WHERE username = a_username;
+
+
+  END
+;;
+
+DELIMITER ;
+
+-- Procedure delete_customer()
+
+DROP PROCEDURE IF EXISTS delete_customer;
+
+DELIMITER ;;
+
+CREATE PROCEDURE delete_customer(
+                    `a_username` VARCHAR(50)
+)
+ BEGIN
+
+   UPDATE customer
+   SET
+      deleted = true
     WHERE username = a_username;
 
 

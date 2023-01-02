@@ -1,4 +1,5 @@
 const { queryDatabase } = require('../../database/mariadb');
+const { sqlToGeoJson } = require('../utils/');
 
 const insertNewBike = async (sql, placeholder) => {
     const data = await queryDatabase(sql, placeholder);
@@ -16,7 +17,6 @@ const insertNewBike = async (sql, placeholder) => {
             status: 200,
             message: 'bike added',
             id: Number(data[0][0].id),
-            token: 'asdf',
         },
     };
 };
@@ -126,32 +126,6 @@ const insertMultipleBikes = async (req, res) => {
     } catch {
         res.sendStatus(400);
     }
-};
-
-const sqlToGeoJson = (sql) => {
-    const geoJson = sql.map((x) => {
-        return {
-            position: {
-                type: 'Feature',
-                geometry: x.geometry,
-                properties: {
-                    id: x.id,
-                    charging: x.charging,
-                    blocked: x.blocked,
-                    batteryWarning: x.battery_warning,
-                    batteryDepleted: x.battery_depleted,
-                    whole: x.whole,
-                    rented: x.rented,
-                    userId: x.user_id,
-                    username: x.username,
-                    featureType: 'bikes',
-                },
-            },
-        };
-    });
-    return {
-        data: geoJson,
-    };
 };
 
 module.exports = {
