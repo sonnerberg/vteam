@@ -80,7 +80,6 @@ services:
       dockerfile: ./Dockerfile.bike
     working_dir: /brain/app
     restart: on-failure
-    command: python3 -m unittest
     depends_on:
       - "admin-api"
       - "mariadb"
