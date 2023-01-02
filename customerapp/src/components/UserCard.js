@@ -18,12 +18,12 @@ const UserCard = (props) => {
 
   for (const property in props.content) {
     if (property === "klarna") {
-      if (props.content[property] == 0) {
+      if (props.content[property] === 0) {
         rows.push({
           name: property,
           value: "Nej",
         });
-      } else if (props.content[property] == 1)
+      } else if (props.content[property] === 1)
         rows.push({
           name: property,
           value: "Ja",
