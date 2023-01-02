@@ -50,7 +50,6 @@ const UserFormCard = (props) => {
     function changeHandler(event) {
         let newObject = { ...newUserObject };
 
-        console.log(newObject);
         newObject[event.target.name] = event.target.value;
 
         setNewUserObject({ ...newUserObject, ...newObject });

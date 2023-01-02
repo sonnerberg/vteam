@@ -14,8 +14,6 @@ import deleteUsers from '../models/deleteUsers';
 function renderRow(props) {
     const { index, style, data } = props;
     const handleClick = async () => {
-        console.log(data[index]);
-        console.log('Clicked on', data[index].username);
         if (data.userType === 'users') {
             const trips = await getCustomerData.getTripsByUserName(
                 data[index].username,
