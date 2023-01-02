@@ -12,7 +12,7 @@ class User:
         self._travel_plan = travel_plan
         self._travel_plan_index = 0
         self._journey_start_time = 0
-        self._move_interval = 1
+        self._move_interval = 0.3
 
         seed(self._id)
 
