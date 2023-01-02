@@ -17,11 +17,24 @@ const UserFormCard = (props) => {
   //console.log('formcard props.content', props.content);
 
   for (const property in props.content) {
-    if (property !== "pass")
-      rows.push({
-        name: property,
-        value: props.content[property],
-      });
+    if (property === "klarna") {
+      if (props.content[property] === 0) {
+        rows.push({
+          name: property,
+          value: "Nej",
+        });
+      } else if (props.content[property] === 1)
+        rows.push({
+          name: property,
+          value: "Ja",
+        });
+    } else {
+      if (property !== "pass")
+        rows.push({
+          name: property,
+          value: props.content[property],
+        });
+    }
   }
 
   const cancelButton = (
