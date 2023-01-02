@@ -47,6 +47,7 @@ const UserCard = (props) => {
             </CardContent>
             <CardActions>
                 <div>{props.editButton}</div>
+                <div>{props.deleteButton}</div>
             </CardActions>
         </Card>
     );
