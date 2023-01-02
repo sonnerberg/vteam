@@ -1,6 +1,5 @@
 const express = require('express');
 const bikes = require('../models/bikes');
-// const { authMiddleware } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 const routeName = '/bikes';
@@ -13,8 +12,8 @@ router.post(`${routeName}/new`, bikes.insertANewBike);
 router.post(`${routeName}/return`, bikes.returnBike);
 router.post(`${routeName}/rent`, bikes.rentBike);
 router.post(`${routeName}/within`, bikes.getBikesWithinPolygon);
+router.post(`${routeName}/multiple`, bikes.insertMultipleBikes);
 
 router.put(`${routeName}/:id`, bikes.updateABike);
-router.put(`${routeName}/position`, bikes.updateABikesPosition);
 
 module.exports = router;

@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
+//import "leaflet/dist/leaflet";
 import mapModel from "../models/mapModel";
 import mapStyles from "../models/mapStyles";
 import allLayers from "../models/allLayers.js";
 import getFeatures from "../models/getFeatures";
-
-require("../../node_modules/leaflet/dist/leaflet.css");
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import "leaflet.markercluster/dist/leaflet.markercluster";
 
 const Map = (props) => {
+  // eslint-disable-next-line
   const [points, setPoints] = useState({});
   const dataFromBackend = {};
 
@@ -28,17 +31,19 @@ const Map = (props) => {
   //we dont have 1000 scooters in mock-backend + mock-backend cant handle returning
   //only points within bounds so we filter in frontend for now...
   const loadScooters = (bounds) => {
+    const markers = L.markerClusterGroup();
+
     allLayers.bikes.clearLayers();
-    console.log(dataFromBackend.bikes);
     for (const bike of dataFromBackend.bikes) {
-      if (bike.rented === 0) {
-        const newBike = L.geoJson(bike, {
+      if (bike.position.properties.rented === 0) {
+        const newBike = L.geoJson(bike.position, {
           pointToLayer: function (feature, latlng) {
             return L.marker(latlng, mapStyles["scooter"]);
           },
         });
         if (bounds.contains(newBike.getBounds())) {
-          allLayers.bikes.addLayer(newBike);
+          markers.addLayer(newBike);
+          allLayers.bikes.addLayer(markers);
         }
       }
     }
@@ -57,6 +62,7 @@ const Map = (props) => {
     })();
 
     return () => allLayers.cities.clearLayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     (async () => {
@@ -76,6 +82,7 @@ const Map = (props) => {
     })();
 
     return () => allLayers.chargingStations.clearLayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     (async () => {
@@ -93,6 +100,7 @@ const Map = (props) => {
     })();
 
     return () => allLayers.parkingLots.clearLayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -109,11 +117,13 @@ const Map = (props) => {
     })();
 
     return () => allLayers.zones.clearLayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     (async () => {
       dataFromBackend.bikes = await getFeatures.getBikes(props.userToken);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // This useEffect hook runs when the component is first mounted,
   // empty array in the end means only runs at first load of app
@@ -152,6 +162,7 @@ const Map = (props) => {
     //maybe build a counter that gets updated for every time this effect runs to understand if the app is recreating
     //the map many times?
     return () => mapRef.current.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // This useEffect runs when state for show<Feature> changes (true to false or vice versa)

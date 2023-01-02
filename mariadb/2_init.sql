@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS `customer` (
 `email` VARCHAR(50) UNIQUE,
 `balance` INT DEFAULT 0,
 `status` ENUM('online', 'offline'),
+`klarna` BOOLEAN DEFAULT 0,
+`deleted` BOOLEAN DEFAULT 0,
 PRIMARY KEY (`username`))
 ENGINE = InnoDB
 CHARSET utf8
@@ -29,7 +31,7 @@ COLLATE utf8_swedish_ci
 
 CREATE TABLE IF NOT EXISTS `zones` (
 `id` INT AUTO_INCREMENT,
-`position` POLYGON,
+`geometry` POLYGON,
 `type` ENUM('speed', 'forbidden'),
 `speed_limit` INT,
 `feature_type` VARCHAR(50) DEFAULT 'zones',
@@ -44,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `cities` (
 `geometry` POLYGON,
 `type` VARCHAR(50) DEFAULT 'Feature',
 `feature_type` VARCHAR(50) DEFAULT 'cities',
-`name` VARCHAR(50),
+`name` VARCHAR(50) UNIQUE,
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
 CHARSET utf8
@@ -86,7 +88,7 @@ COLLATE utf8_swedish_ci
 
 CREATE TABLE IF NOT EXISTS `bikes` (
 `id` INT AUTO_INCREMENT,
-`geometry` POINT,
+`geometry` POINT DEFAULT ST_GEOMFROMTEXT('POINT(16.561585332666066 59.4341908404751)'),
 `whole` BOOLEAN DEFAULT 1,
 `charging` BOOLEAN DEFAULT 0,
 `blocked` BOOLEAN DEFAULT 0,
@@ -94,6 +96,7 @@ CREATE TABLE IF NOT EXISTS `bikes` (
 `battery_depleted` BOOLEAN DEFAULT 0,
 `rented` BOOLEAN DEFAULT 0,
 `username` VARCHAR(50),
+`feature_type` VARCHAR(50) DEFAULT 'bikes',
 FOREIGN KEY(`username`) REFERENCES customer(`username`),
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -191,7 +194,7 @@ LINES
 IGNORE 1 LINES
 (@col1, @col2, @col3)
 SET
-`position` = PolygonFromText(@col1),
+`geometry` = PolygonFromText(@col1),
 `type` = @col2,
 `speed_limit` = @col3
 ;

@@ -28,29 +28,40 @@ const customer = {
             status: 'status',
         };
 
-        try {
-            let updateFields = [];
-            let params = [];
-            let sql = 'UPDATE customer SET ';
+        let updateFields = [];
+        let params = [];
+        let sql = 'UPDATE customer SET ';
 
-            const { body } = req;
-            for (const field in allowedFields) {
-                if (body[field] !== undefined) {
-                    updateFields.push(allowedFields[field] + ' = ?');
-                    params.push(body[field]);
-                }
+        const { body } = req;
+        for (const field in allowedFields) {
+            if (body[field] !== undefined) {
+                updateFields.push(allowedFields[field] + ' = ?');
+                params.push(body[field]);
             }
-            sql += updateFields.join(', ');
+        }
+        sql += updateFields.join(', ');
 
-            sql += ' WHERE username = ?';
+        sql += ' WHERE username = ?';
 
-            params.push(req.params.username);
-            sql += ';';
-            const { affectedRows } = await queryDatabase(sql, params);
+        params.push(req.params.username);
+        sql += ';';
+        const { affectedRows } = await queryDatabase(sql, params);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    },
+
+    deleteUser: async (req, res) => {
+        try {
+            const { username } = req.params;
+            const sql = 'CALL delete_customer(?);';
+            const { affectedRows } = await queryDatabase(sql, [username]);
             if (affectedRows) {
                 res.sendStatus(200);
             } else {
-                res.sendStatus(404);
+                throw 'CannotRent';
             }
         } catch {
             res.sendStatus(400);

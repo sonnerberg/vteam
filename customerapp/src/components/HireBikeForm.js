@@ -9,6 +9,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import postBikeRent from "../models/postBikeRent.js";
+import getUserData from "../models/getUserData.js";
 
 const HireBikeForm = (props) => {
   const [bikeId, setBikeId] = useState();
@@ -29,7 +30,15 @@ const HireBikeForm = (props) => {
       console.log("NOT READY TO HIRE");
       props.setReadyToHire((prev) => !prev);
       props.setOpenHireForm(false);
+      const updatedTrips = await getUserData.getTripsByUserName(
+        props.userName,
+        props.userToken
+      );
+      console.log("USERTRIPS ", updatedTrips);
+      props.setUserTrips(updatedTrips);
     }
+
+    props.setOpenHireForm(false);
   };
 
   const handleReturn = async () => {
@@ -41,6 +50,12 @@ const HireBikeForm = (props) => {
     if (returnstatement === 200) {
       props.setReadyToHire((prev) => !prev);
       props.setOpenHireForm(false);
+      const updatedTrips = await getUserData.getTripsByUserName(
+        props.userName,
+        props.userToken
+      );
+      console.log("USERTRIPS ", updatedTrips);
+      props.setUserTrips(updatedTrips);
     }
   };
 

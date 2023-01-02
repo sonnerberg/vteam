@@ -6,6 +6,8 @@ import json
 import requests
 import aiohttp
 import user as UserClass
+import glob
+import os
 import bikeBrain
 
 # pylint: disable=locally-disabled, too-many-locals
@@ -16,106 +18,59 @@ async def main():
     async with aiohttp.ClientSession() as session:
 
         # Log in to get token
-        payload = {"email": "email@examples.com", "password": "12345678"}
-        async with session.post(
-            "http://admin-api:3000/v1/admin/login",
-            json=payload,
-        ) as resp:
-            # result = await resp.json()
-            print("Logged in")
+        payload = {"email": "email@example.com", "password": "12345678"}
+        response = requests.post("http://admin-api:3000/v1/auth/login", json=payload)
 
-        nr_of_users = 300
-        nr_of_bikes = 300
+        result = response.json()
+
+        admin_token = result["data"]["token"]
+        print("Logged in")
+
+        # nr_of_users = 300
+        # nr_of_bikes = 300
         users = []
         bikes = []
         start_time = time.time()
 
-        with open("punkter_for_resa.geojson", encoding="utf-8") as file:
-            data = json.load(file)
-
-        features = data["features"]
-
-        with open("punkter_for_resa2.geojson", encoding="utf-8") as file:
-            data = json.load(file)
-            features2 = data["features"]
-
-        for feature in features2:
-            features.append(feature)
-
-        with open("punkter_for_resa3.geojson", encoding="utf-8") as file:
-            data = json.load(file)
-            features3 = data["features"]
-
-        for feature in features3:
-            features.append(feature)
-
-        with open("punkter_for_resa4.geojson", encoding="utf-8") as file:
-            data = json.load(file)
-            features4 = data["features"]
-
-        for feature in features4:
-            features.append(feature)
-
-        with open("punkter_for_resa5.geojson", encoding="utf-8") as file:
-            data = json.load(file)
-            features5 = data["features"]
-
-        for feature in features5:
-            features.append(feature)
-
-        with open("punkter_for_resa6.geojson", encoding="utf-8") as file:
-            data = json.load(file)
-            features6 = data["features"]
-
-        for feature in features6:
-            features.append(feature)
-
         travel_plans = []
+        travel_plans.append([])
         index = 0
-        comp_id = 0
 
-        # Create a list for each feature
-        # in the travel_plans list
-        # This makes no presumptions about the
-        # nr of points in a journey but the list
-        # will probably be too long as there is
-        # one "row" for each feature (a journey could be just)
-        # one point, therefore this gets cleaned up below
-        for i in range(len(features)):
-            travel_plans.append([])
+        file_list = glob.glob(os.path.join(os.getcwd(), "trips", "*.geojson"))
 
-        # Append the coordinates to the
-        # list at the right index in travel_plans
-        for i, feature in enumerate(features):
-            # Check which index should be used based
-            # on the journeys id
+        for file_path in file_list:
+            comp_id = 0
+            with open(file_path, encoding="utf-8") as file:
+                data = json.load(file)
+                features = data["features"]
 
-            # index = int(feature["properties"]["id"]) - 1
-            if feature["properties"]["COMP_ID"] == comp_id:
-                # Append the coordinates to the list at the correct
-                # index
-                travel_plans[index].append(feature["geometry"]["coordinates"])
-            else:
-                comp_id = feature["properties"]["COMP_ID"]
-                index = index + 1
-
+                for feature in features:
+                    if feature["properties"]["COMP_ID"] == comp_id:
+                        travel_plans[index].append(feature["geometry"]["coordinates"])
+                    else:
+                        index = index + 1
+                        travel_plans.append([])
+                        comp_id = feature["properties"]["COMP_ID"]
+                        travel_plans[index].append(feature["geometry"]["coordinates"])
         # Remove empty lists from travel_plans
         travel_plans = list(filter(None, travel_plans))
 
         # Set start positions (coordinates) for bikes
-        for i in range(nr_of_bikes):
+        for i, travel_plan in enumerate(travel_plans):
             # Get the coordinates for the starting point
             # from the travel_plans list
             coordinates = [16.0, 59.0]
             if i < len(travel_plans):
-                coordinates = travel_plans[i][0]
+                coordinates = travel_plan[0]
+
+            # print(coordinates)
 
             # Post bike to db
             latitude = coordinates[0]
             longitude = coordinates[1]
 
             # create header with admin token
-            headers = {"Authorization": "Bearer {token}"}
+            headers = {"Authorization": f"Bearer {admin_token}"}
             payload = {"latitude": latitude, "longitude": longitude}
 
             response = requests.post(
@@ -125,28 +80,30 @@ async def main():
                 timeout=100000,
             )
 
+            print("Bike created")
+
             # Get the new bike id and token
             json_response = response.json()
             # print(json_response)
             _id = json_response["data"]["id"]
-            bike_token = json_response["data"]["token"]
+            # bike_token = json_response["data"]["token"]
 
             # Get the new bike
             response = requests.get(
-                f"http://admin-api:3000/v1/bikes/{_id}", timeout=100000
+                f"http://admin-api:3000/v1/bikes/{_id}", headers=headers, timeout=100000
             )
 
             position = response.json()["data"][0]["position"]
 
-            # Create bike
+            # Create bike replace token when backend is ready for bike_token
             bikes.append(
-                bikeBrain.Brain(_id, session, bike_token, start_time, position)
+                bikeBrain.Brain(_id, session, admin_token, start_time, position)
             )
 
         # Create users and append them to the user list,
         # users get id:s from 1 -
-        for i in range(nr_of_users):
-            users.append(UserClass.User(i + 1, bikes[i], travel_plans[i]))
+        for i, travel_plan in enumerate(travel_plans):
+            users.append(UserClass.User(i + 1, bikes[i], travel_plan))
 
         # Decides if program loop runs
         run = True

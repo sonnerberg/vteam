@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:4000";
+//const baseUrl = "http://localhost:4000";
 const backendUrl = "http://localhost:8082/v1/";
 
 const getFeatures = {
@@ -39,8 +39,12 @@ const getFeatures = {
       },
       method: "get",
     });
+    console.log("RESPONSE BIKES ", response);
+
     const result = await response.json();
-    return result.bikes;
+    console.log("RESULT BIKES ", result);
+
+    return result.data;
   },
 
   getZones: async function getZones(token) {

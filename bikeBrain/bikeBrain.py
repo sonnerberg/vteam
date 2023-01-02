@@ -26,7 +26,7 @@ class Brain:
         self._is_warning_battery = position["properties"]["batteryWarning"]
         self._is_battery_depleted = position["properties"]["batteryDepleted"]
 
-        self._battery_decrease = 1
+        self._battery_decrease = 0.01
         self._breaking_probability = 1
 
         # These can be removed
@@ -42,7 +42,7 @@ class Brain:
         self._token = token
 
         seed(_id)
-        print("Bike created!")
+        print(self._token)
 
     def get_id(self):
         """Gets _id"""
@@ -152,6 +152,11 @@ class Brain:
         """Sets i_charging"""
         self._is_charging = status
         self._position["properties"]["charging"] = status
+        if status is True:
+            self.set_is_blocked(True)
+        if status is False:
+            if self.get_is_whole():
+                self.set_is_blocked(True)
 
     def get_is_blocked(self):
         """Gets is_blocked"""
@@ -194,11 +199,11 @@ class Brain:
         """Check health"""
         if self.get_battery_capacity() < 20:
             self.set_is_warning_battery(True)
-        elif self.get_battery_capacity() <= 0:
+        if self.get_battery_capacity() <= 0:
+            await self.lock()
             self.set_speed(0)
             self.set_is_blocked(True)
             self.set_is_battery_depleted(True)
-            await self.lock()
 
         if randrange(1, 100) <= self._breaking_probability:
             # print("Breaking tyre")
@@ -229,7 +234,7 @@ class Brain:
             self.set_start_time(time.time())
 
             # Header
-            headers = {"Authorization": "Bearer {token}"}
+            headers = {"Authorization": f"Bearer {self._token}"}
             position = self.get_position()
             payload = {
                 "whole": self.get_is_whole(),
@@ -240,18 +245,20 @@ class Brain:
                 "charging": bool(position["properties"]["charging"]),
                 "blocked": bool(position["properties"]["blocked"]),
                 "coordinates": position["geometry"]["coordinates"],
+                "speed": self.get_speed(),
             }
 
-            # print(payload)
+            # print(headers)
 
             async with self._session.put(
                 f"http://admin-api:3000/v1/bikes/{self.get_id()}",
                 json=payload,
                 headers=headers,
             ) as resp:
-                # result = await resp.json()
-                # print(resp)
-                print("Moved")
+                data = await resp.read()
+                # result = json.loads(data)
+                print(data)
+                # print("Moved")
                 # handle result eg. set status to blocked depending on
                 # selfs status or position
 
@@ -269,7 +276,7 @@ class Brain:
 
             payload = {"username": str(self.get_current_user()), "id": self.get_id()}
 
-            headers = {"Authorization": "Bearer {token}"}
+            headers = {"Authorization": f"Bearer {self._token}"}
 
             async with self._session.post(
                 "http://admin-api:3000/v1/bikes/rent",
@@ -290,11 +297,12 @@ class Brain:
         """Lock"""
         self.set_is_locked(True)
         self.set_rented(False)
+        self.set_speed(0)
         self.set_report_interval(self._default_report_interval)
 
         payload = {"username": str(self.get_current_user())}
 
-        headers = {"Authorization": "Bearer {token}"}
+        headers = {"Authorization": f"Bearer {self._token}"}
 
         async with self._session.post(
             "http://admin-api:3000/v1/bikes/return",

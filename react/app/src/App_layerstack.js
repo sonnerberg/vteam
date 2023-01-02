@@ -1,6 +1,7 @@
 import './App_layerstack.css';
 import { useEffect, useState, useRef } from 'react';
 import LayerStack from './components/LayerStack';
+import SearchBikeForm from './components/SearchBikeForm';
 import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
 //import LayerFormCard from './components/LayerFormCard';
@@ -12,7 +13,7 @@ import getFeatures from './models/getFeatures';
 
 import L from 'leaflet';
 
-function AppMap() {
+function AppMap(props) {
     const [showCities, setShowCities] = useState(true);
     const [showParkings, setShowParkings] = useState(true);
     const [showChargingStations, setShowChargingStations] = useState(true);
@@ -28,6 +29,10 @@ function AppMap() {
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
     const [triggerNewObject, setTriggerNewObject] = useState(false);
     const [newObjectContainer, setNewObjectContainer] = useState(null);
+    const [searchId, setSearchId] = useState();
+    const [openSearchForm, setOpenSearchForm] = useState(false);
+    const mapRef = useRef(null);
+    const token = props.token;
 
     useEffect(() => {
         const props = {
@@ -55,6 +60,9 @@ function AppMap() {
             setTriggerNewObject: setTriggerNewObject,
             newObjectContainer: newObjectContainer,
             setNewObjectContainer: setNewObjectContainer,
+            openSearchForm: openSearchForm,
+            setOpenSearchForm: setOpenSearchForm,
+            token: token,
         };
 
         const containerArray = layerStackBuilder(props);
@@ -76,7 +84,7 @@ function AppMap() {
 
     useEffect(() => {
         (async () => {
-            dataFromBackend.cities = await getFeatures.getCities();
+            dataFromBackend.cities = await getFeatures.getCities(props.token);
 
             for (const city of dataFromBackend.cities) {
                 allLayers.cities.addLayer(
@@ -95,7 +103,7 @@ function AppMap() {
     useEffect(() => {
         (async () => {
             dataFromBackend.chargingStations =
-                await getFeatures.getChargingStations();
+                await getFeatures.getChargingStations(props.token);
 
             for (const charger of dataFromBackend.chargingStations) {
                 allLayers.chargingStations.addLayer(
@@ -114,7 +122,9 @@ function AppMap() {
     }, [triggerChargeRedraw]);
     useEffect(() => {
         (async () => {
-            dataFromBackend.parkingLots = await getFeatures.getParkingLots();
+            dataFromBackend.parkingLots = await getFeatures.getParkingLots(
+                props.token
+            );
 
             for (const parking of dataFromBackend.parkingLots) {
                 allLayers.parkingLots.addLayer(
@@ -131,19 +141,21 @@ function AppMap() {
     }, [triggerParkingRedraw]);
     useEffect(() => {
         (async () => {
-            dataFromBackend.bikes = await getFeatures.getBikes();
+            dataFromBackend.bikes = await getFeatures.getBikes(props.token);
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         (async () => {
-            dataFromBackend.workshops = await getFeatures.getWorkshops();
+            dataFromBackend.workshops = await getFeatures.getWorkshops(
+                props.token
+            );
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         (async () => {
-            dataFromBackend.zones = await getFeatures.getZones();
+            dataFromBackend.zones = await getFeatures.getZones(props.token);
 
             for (const zone of dataFromBackend.zones) {
                 allLayers.zones.addLayer(
@@ -170,6 +182,14 @@ function AppMap() {
                         triggerCityRedraw={triggerCityRedraw}
                         setTriggerCityRedraw={setTriggerCityRedraw}
                     />
+                    {openSearchForm ? (
+                        <SearchBikeForm
+                            openSearchForm={openSearchForm}
+                            setOpenSearchForm={setOpenSearchForm}
+                            token={props.token}
+                            mapRef={mapRef}
+                        />
+                    ) : null}
                 </div>
                 <div className="App-right-Map">
                     <Map
@@ -182,6 +202,8 @@ function AppMap() {
                         drawnItems={drawnItems}
                         dataFromBackend={dataFromBackend}
                         setTriggerNewObject={setTriggerNewObject}
+                        token={props.token}
+                        mapRef={mapRef}
                     />
                 </div>
             </div>
