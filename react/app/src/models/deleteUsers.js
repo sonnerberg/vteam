@@ -6,18 +6,16 @@ const deleteUsers = {
             username: username,
         };
         const bodyData = JSON.stringify(data);
-        const response = await fetch(`${baseUrl}`, {
+        const response = await fetch(`${baseUrl}customer/delete/${username}`, {
             body: bodyData,
             headers: {
                 'content-type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            method: 'DELETE',
+            method: 'PUT',
         });
 
-        const result = await response.json();
-
-        return result;
+        console.log(response);
     },
     deleteAdmins: async function deleteAdmins(username, token) {
         const data = {
@@ -30,7 +28,7 @@ const deleteUsers = {
                 'content-type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            method: 'DELETE',
+            method: 'PUT',
         });
 
         const result = await response.json();
