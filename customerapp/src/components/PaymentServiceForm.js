@@ -61,11 +61,7 @@ const PrePaidForm = (props) => {
           control={<Radio onChange={changeHandler} />}
           label="Ingen"
         />
-        <FormControlLabel
-          value="paypal"
-          control={<Radio onChange={changeHandler} />}
-          label="PayPal"
-        />
+
         <FormControlLabel
           value="klarna"
           control={<Radio onChange={changeHandler} />}

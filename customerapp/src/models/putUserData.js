@@ -46,21 +46,28 @@ const putUserData = {
     token
   ) {
     const data = {
-      userName: username,
-      paymentService: paymentService,
+      username: username,
     };
     const bodyData = JSON.stringify(data);
-    const response = await fetch(`${baseUrl}/paymentService`, {
-      headers: {
-        "content-type": "application/json",
-        "x-access-token": token,
-      },
-      body: bodyData,
-      method: "PUT",
-    });
-    const result = await response.json();
-    console.log(result);
-    return result;
+    if (paymentService === "klarna" || paymentService === "paypal") {
+      await fetch(`${baseUrl}/klarna`, {
+        headers: {
+          "content-type": "application/json",
+          "x-access-token": token,
+        },
+        body: bodyData,
+        method: "POST",
+      });
+    } else if (paymentService === "none") {
+      await fetch(`${baseUrl}/credit`, {
+        headers: {
+          "content-type": "application/json",
+          "x-access-token": token,
+        },
+        body: bodyData,
+        method: "POST",
+      });
+    }
   },
 };
 
