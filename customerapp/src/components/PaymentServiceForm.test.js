@@ -29,9 +29,9 @@ test("saving form calls the save function", async () => {
 
   const user = userEvent.setup();
 
-  const payPal = await screen.findByLabelText(/PayPal/i);
+  const klarna = await screen.findByLabelText(/Klarna/i);
 
-  await user.click(payPal);
+  await user.click(klarna);
 
   const save = await screen.findByText("Spara");
 
