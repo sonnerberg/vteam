@@ -50,13 +50,25 @@ function renderRow(props) {
 
         const handleClickDeleteButton = async () => {
             if (data.userType === 'administrators') {
-                await deleteUsers.deleteAdmin(data[index].username, data.token);
+                await deleteUsers.deleteAdmins(
+                    data[index].username,
+                    data.token
+                );
             } else if (data.userType === 'users') {
-                await deleteUsers.deleteCustomer(
+                await deleteUsers.deleteCustomers(
                     data[index].username,
                     data.token
                 );
             }
+
+            data.setDetailCard(null);
+
+            data.setUserTrips(null);
+
+            data.setShowUserFormCard(false);
+
+            // Get all users
+            data.getUsers(data.token);
         };
 
         const handleClickChangeButton = () => {
@@ -73,6 +85,7 @@ function renderRow(props) {
                     handleClick={handleClickCancelButton}
                 />
             );
+
             const userFormCard = (
                 <UserForm
                     content={data[index]}
@@ -105,13 +118,19 @@ function renderRow(props) {
             />
         );
 
-        data.setDetailCard(
-            <UserCard
-                content={data[index]}
-                editButton={editButton}
-                deleteButton={deleteButton}
-            />
-        );
+        if (data.userType === 'users') {
+            data.setDetailCard(
+                <UserCard
+                    content={data[index]}
+                    editButton={editButton}
+                    deleteButton={deleteButton}
+                />
+            );
+        } else if (data.userType === 'administrators') {
+            data.setDetailCard(
+                <UserCard content={data[index]} deleteButton={deleteButton} />
+            );
+        }
     };
 
     return (
@@ -171,7 +190,7 @@ function UserList(props) {
         data.setShowUserFormCard(false);
 
         // Get all users on save
-        data.getUsers();
+        data.getUsers(props.token);
     };
 
     const handleClickNewButton = () => {
