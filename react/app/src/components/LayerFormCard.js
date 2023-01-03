@@ -51,7 +51,9 @@ const LayerFormCard = (props) => {
     };
 
     const handleClickDeleteButton = async () => {
-        await deleteFeatures.deleteFeatures(newFeatureObject);
+        await deleteFeatures.deleteFeatures(newFeatureObject, props.token);
+        props.setTriggerRedraw(true);
+        props.drawnItems.current.clearLayers(); //? should this be here
         props.setShowFormCard(false);
         props.setCard(null);
     };
