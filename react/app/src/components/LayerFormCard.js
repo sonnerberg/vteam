@@ -38,13 +38,16 @@ const LayerFormCard = (props) => {
         const newGeoJson =
             props.drawnItems.current.toGeoJSON().features[0].geometry;
 
-        await putFeatures.putFeatures({
-            ...newFeatureObject,
-            position: {
-                ...newFeatureObject.position,
-                geometry: newGeoJson,
+        await putFeatures.putFeatures(
+            {
+                ...newFeatureObject,
+                position: {
+                    ...newFeatureObject.position,
+                    geometry: newGeoJson,
+                },
             },
-        });
+            props.token
+        );
         props.setShowFormCard(false);
         props.setTriggerRedraw(true);
         props.drawnItems.current.clearLayers();
