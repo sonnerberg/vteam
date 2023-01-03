@@ -54,7 +54,7 @@ const getFeatures = {
         const result = await response.json();
         console.log('result ZONES ', result);
         //EV SKA DETTA ERSÄTTAS AV RESULT.DATA SENARE? BIKES LEVERERAS SÅ
-        return result;
+        return result.data;
     },
     getBikes: async function getBikes(token) {
         const response = await fetch(`${backendUrl}/bikes`, {

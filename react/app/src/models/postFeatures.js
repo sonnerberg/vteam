@@ -1,14 +1,27 @@
 const baseUrl = 'http://localhost:4000';
-const backendUrl = 'http://localhost:8081/v1/';
+const backendUrl = 'http://localhost:8081/v1';
 
 const postFeatures = {
-    postFeatures: async function postFeatures(data) {
+    postFeatures: async function postFeatures(data, token) {
         const postData = JSON.stringify(data);
+        const body = JSON.stringify({
+            coordinates: data.position.geometry.coordinates,
+            name: data.position.properties.name,
+        });
+        console.log('POSTDATA IN BACKEND ', postData);
+        console.log(
+            'POSTDATA 2 IN BACKEND ',
+            data.position.geometry.coordinates
+        );
+        console.log('POSTDATA 3 IN BACKEND ', data.position.properties.name);
+
         const response = await fetch(
-            `${baseUrl}/${data.position.properties.featureType}`,
+            `${backendUrl}/${data.position.properties.featureType}`,
             {
-                body: postData,
+                body: body,
                 headers: {
+                    Authorization: `Bearer ${token}`,
+
                     'content-type': 'application/json',
                 },
                 method: 'POST',

@@ -57,6 +57,7 @@ const LayerAccordion = (props) => {
                     drawnItems={props.drawnItems}
                     triggerRedraw={props.triggerRedraw}
                     setTriggerRedraw={props.setTriggerRedraw}
+                    token={props.token}
                 />
             );
             setCard(newFormCard);
