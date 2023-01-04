@@ -14,6 +14,24 @@ CREATE PROCEDURE get_all_zones()
 
 DELIMITER ;
 
+-- Procedure get_all_forbidden_zones()
+
+DROP PROCEDURE IF EXISTS get_all_forbidden_zones;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_all_forbidden_zones()
+ BEGIN
+
+   SELECT geometry
+     FROM zones
+    WHERE `type` = 'forbidden';
+
+
+  END
+;;
+
+DELIMITER ;
 -- Procedure get_all_zones_by_id()
 
 DROP PROCEDURE IF EXISTS get_all_zones_by_id;

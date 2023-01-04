@@ -101,6 +101,24 @@ CREATE PROCEDURE get_scooter_by_id(
 
 DELIMITER ;
 
+-- Procedure set_scooter_returned_by_id()
+
+DROP PROCEDURE IF EXISTS set_scooter_returned_by_id;
+
+DELIMITER ;;
+
+CREATE PROCEDURE set_scooter_returned_by_id(
+    `an_id` INTEGER
+    )
+
+ BEGIN
+
+    DELETE FROM customer2bike WHERE bike_id = `an_id`;
+
+  END
+;;
+
+DELIMITER ;
 -- Procedure set_scooter_returned()
 
 DROP PROCEDURE IF EXISTS set_scooter_returned;
@@ -169,6 +187,27 @@ CREATE PROCEDURE get_all_scooters()
  BEGIN
 
     SELECT * FROM bikes;
+
+  END
+;;
+
+DELIMITER ;
+
+-- Procedure scooter_in_forbidden_zone()
+  -- TODO: Select less information than *
+
+DROP PROCEDURE IF EXISTS scooter_in_forbidden_zone;
+
+DELIMITER ;;
+
+CREATE PROCEDURE scooter_in_forbidden_zone(
+    `a_list_of_coordinates` VARCHAR(5000),
+    `a_point` VARCHAR(100)
+    )
+
+ BEGIN
+
+     SELECT ST_Contains(ST_GeomFromText(CONCAT('MULTIPOLYGON((', a_list_of_coordinates, '))')), ST_GeomFromText(CONCAT('POINT(', a_point, ')'))) AS 'scooter_in_forbidden_zone';
 
   END
 ;;
