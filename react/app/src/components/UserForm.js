@@ -19,10 +19,23 @@ const UserFormCard = (props) => {
     //console.log('formcard props.content', props.content);
 
     for (const property in props.content) {
-        rows.push({
-            name: property,
-            value: props.content[property],
-        });
+        if (property === 'klarna') {
+            if (props.content[property] === 0) {
+                rows.push({
+                    name: property,
+                    value: 'Nej',
+                });
+            } else if (props.content[property] === 1)
+                rows.push({
+                    name: property,
+                    value: 'Ja',
+                });
+        } else {
+            rows.push({
+                name: property,
+                value: props.content[property],
+            });
+        }
     }
 
     const saveButton = (
@@ -37,7 +50,6 @@ const UserFormCard = (props) => {
     function changeHandler(event) {
         let newObject = { ...newUserObject };
 
-        console.log(newObject);
         newObject[event.target.name] = event.target.value;
 
         setNewUserObject({ ...newUserObject, ...newObject });
@@ -48,7 +60,13 @@ const UserFormCard = (props) => {
             <CardContent>
                 {rows.map((row) => (
                     <TextField
-                        disabled={row.name === 'username' ? true : false}
+                        disabled={
+                            row.name === 'username'
+                                ? true
+                                : row.name === 'klarna'
+                                ? true
+                                : false
+                        }
                         variant="outlined"
                         key={row.name}
                         label={row.name}

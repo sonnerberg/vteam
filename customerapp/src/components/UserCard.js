@@ -17,10 +17,23 @@ const UserCard = (props) => {
   const rows = [];
 
   for (const property in props.content) {
-    rows.push({
-      name: property,
-      value: props.content[property],
-    });
+    if (property === "klarna") {
+      if (props.content[property] === 0) {
+        rows.push({
+          name: property,
+          value: "Nej",
+        });
+      } else if (props.content[property] === 1)
+        rows.push({
+          name: property,
+          value: "Ja",
+        });
+    } else {
+      rows.push({
+        name: property,
+        value: props.content[property],
+      });
+    }
   }
 
   const editButton = (

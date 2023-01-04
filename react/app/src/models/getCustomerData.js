@@ -4,7 +4,6 @@ const getCustomerData = {
     getTrips: async function getTrips(token) {
         const response = await fetch(`${baseUrl}/trips`);
         const result = await response.json();
-        console.log(result);
         return result;
     },
 

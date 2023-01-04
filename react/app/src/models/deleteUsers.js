@@ -14,8 +14,6 @@ const deleteUsers = {
             },
             method: 'PUT',
         });
-
-        console.log(response);
     },
     deleteAdmins: async function deleteAdmins(username, token) {
         const data = {
