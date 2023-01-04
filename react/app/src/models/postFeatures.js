@@ -5,6 +5,7 @@ const postFeatures = {
     postFeatures: async function postFeatures(data, token) {
         let dataToPost = {};
         dataToPost.coordinates = data.position.geometry.coordinates;
+        console.log('Coordinates to post', dataToPost.coordinates);
         for (const property in data.position.properties) {
             if (property !== 'featureType' && property !== 'id') {
                 dataToPost[property] = data.position.properties[property];
@@ -49,20 +50,18 @@ const postFeatures = {
         return result.data;
     },
     postToStopBike: async function postToStopBike(token, username) {
-        const postData = JSON.stringify(username);
-        const response = await fetch(`${backendUrl}/bikes/return`, {
-            body: postData,
+        const postData = {
+            username: username,
+        };
+        const body = JSON.stringify(postData);
+        await fetch(`${backendUrl}/bikes/return`, {
+            body: body,
             headers: {
                 Authorization: `Bearer ${token}`,
                 'content-type': 'application/json',
             },
             method: 'POST',
         });
-
-        const result = await response.json();
-        console.log('STOP BIKE', result);
-
-        return result.data;
     },
 };
 
