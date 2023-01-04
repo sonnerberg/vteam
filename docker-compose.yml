@@ -93,6 +93,23 @@ services:
     depends_on:
       - "user-api"
 
+  customer-production:
+    container_name: customer-production
+    build:
+      context: ./customerapp
+      dockerfile: ./Dockerfile.customerprod
+    working_dir: /code
+    ports:
+      - 5200:80
+    restart: on-failure
+    environment:
+      REACT_APP_GITHUB_CLIENT_ID: ${REACT_APP_GITHUB_CLIENT_ID}
+      REACT_APP_GITHUB_REDIRECT: ${REACT_APP_GITHUB_REDIRECT}
+    depends_on:
+      - "admin-api"
+      - "mariadb"
+      - "user-api"
+
   bike-brain:
     container_name: bike-brain2
     tty: true
@@ -105,5 +122,20 @@ services:
     depends_on:
       - "admin-api"
       - "mariadb"
-      - "customerapp"
-      - "react"
+      #   - "customerapp"
+      - "customer-production"
+      - "admin-production"
+  #      - "react"
+
+  admin-production:
+    container_name: admin-production
+    build:
+      context: ./react
+      dockerfile: ./Dockerfile.adminprod
+    working_dir: /code
+    ports:
+      - 5100:80
+    restart: on-failure
+    depends_on:
+      - "admin-api"
+      - "mariadb"
