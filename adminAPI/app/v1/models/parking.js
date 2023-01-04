@@ -1,53 +1,44 @@
 const { queryDatabase } = require('../../database/mariadb');
 const { sqlToGeoJson, parseCoordinates } = require('../utils');
 
-async function updateZone(req, res) {
+async function updateParking(req, res) {
     const { id } = req.params;
-    const { coordinates, type, speedLimit } = req.body;
+    const { coordinates } = req.body;
     const parsedCoordinates = parseCoordinates(coordinates);
-    const sql = 'CALL update_zone(?,?,?,?);';
-    const { affectedRows } = await queryDatabase(sql, [
-        id,
-        parsedCoordinates,
-        type,
-        speedLimit,
-    ]);
+    const sql = 'CALL update_parking(?,?);';
+    const { affectedRows } = await queryDatabase(sql, [id, parsedCoordinates]);
     if (affectedRows) {
         res.sendStatus(200);
     } else {
         res.sendStatus(400);
     }
 }
-async function insertZone(req, res) {
-    const { coordinates, type, speedLimit } = req.body;
+async function insertParking(req, res) {
+    const { coordinates } = req.body;
     const parsedCoordinates = parseCoordinates(coordinates);
-    const sql = 'CALL insert_zone(?, ?, ?);';
-    const { affectedRows } = await queryDatabase(sql, [
-        parsedCoordinates,
-        type,
-        speedLimit,
-    ]);
+    const sql = 'CALL insert_parking(?);';
+    const { affectedRows } = await queryDatabase(sql, [parsedCoordinates]);
     if (affectedRows) {
         res.sendStatus(200);
     } else {
         res.sendStatus(400);
     }
 }
-async function getAllZones(_, res) {
-    const sql = 'CALL get_all_zones();';
+async function getAllParkings(_, res) {
+    const sql = 'CALL get_all_parkings();';
     const { 0: data } = await queryDatabase(sql);
     res.json(sqlToGeoJson(data));
 }
-async function getZonesByid(req, res) {
+async function getParkingsByid(req, res) {
     const { id } = req.params;
-    const sql = 'CALL get_all_zones_by_id(?);';
+    const sql = 'CALL get_all_parkings_by_id(?);';
     const { 0: data } = await queryDatabase(sql, [id]);
     res.json(sqlToGeoJson(data));
 }
 
-async function deleteZoneByid(req, res) {
+async function deleteParkingByid(req, res) {
     const { id } = req.params;
-    const sql = 'CALL delete_zone_by_id(?);';
+    const sql = 'CALL delete_parking_by_id(?);';
     const { affectedRows } = await queryDatabase(sql, [id]);
     if (affectedRows) {
         res.sendStatus(200);
@@ -57,9 +48,9 @@ async function deleteZoneByid(req, res) {
 }
 
 module.exports = {
-    getAllZones,
-    getZonesByid,
-    insertZone,
-    updateZone,
-    deleteZoneByid,
+    getAllParkings,
+    getParkingsByid,
+    insertParking,
+    updateParking,
+    deleteParkingByid,
 };
