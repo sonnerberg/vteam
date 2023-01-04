@@ -14,24 +14,25 @@ const getFeatures = {
         return result.data;
     },
     getChargingStations: async function getChargingStations(token) {
-        const response = await fetch(`${backendUrl}/charging-stations`, {
+        const response = await fetch(`${backendUrl}/charging`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'content-type': 'application/json',
             },
         });
         const result = await response.json();
-        return result;
+        console.log('Charging', result);
+        return result.data;
     },
     getParkingLots: async function getParkingLots(token) {
-        const response = await fetch(`${backendUrl}/parking-lots`, {
+        const response = await fetch(`${backendUrl}/parking`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'content-type': 'application/json',
             },
         });
         const result = await response.json();
-        return result;
+        return result.data;
     },
     getWorkshops: async function getWorkshops(token) {
         const response = await fetch(`${backendUrl}/workshops`, {
@@ -44,7 +45,7 @@ const getFeatures = {
         return result;
     },
     getZones: async function getZones(token) {
-        const response = await fetch(`${backendUrl}/zones`, {
+        const response = await fetch(`${backendUrl}/zone`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'content-type': 'application/json',
