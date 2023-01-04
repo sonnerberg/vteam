@@ -46,6 +46,24 @@
   padding: 50px;
 }
 
+.payment-service-background {
+  justify-content: center;
+  padding: 50px;
+  margin: 100px;
+}
+
+.user-form-background {
+  justify-content: center;
+  padding: 50px;
+  margin: 100px;
+}
+
+.balance-form-background {
+  justify-content: center;
+  padding: 50px;
+  margin: 100px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
