@@ -10,5 +10,5 @@ function parseCoordinates(coordinates) {
 }
 
 module.exports = {
-    parseCoordinates
+    parseCoordinates,
 };
