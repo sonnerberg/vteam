@@ -5,6 +5,7 @@ import { TextField } from '@mui/material';
 import { useState } from 'react';
 import postFeatures from '../models/postFeatures';
 import LayerButton from '../components/LayerButton';
+import LayerCard from '../components/LayerCard';
 
 /**
  * A form for editing feature properties
@@ -23,7 +24,7 @@ const LayerNewFormCard = (props) => {
     // it looks like it contains an object with {id: 1, name:Eskilstuna}
     // I don't know where that comes from, its strange.
     for (const property in props.content.position?.properties) {
-        if (property !== 'featureType') {
+        if (property !== 'featureType' && property !== 'id') {
             rows.push({
                 name: property,
                 value: props.content.position.properties[property],
@@ -46,6 +47,8 @@ const LayerNewFormCard = (props) => {
             props.token
         );
         props.setShowFormCard(false);
+        console.log('New feature', newFeatureObject);
+        props.setCard(<LayerCard content={newFeatureObject} />);
         props.setTriggerRedraw(true);
         props.drawnItems.current.clearLayers();
     };
@@ -113,7 +116,7 @@ const LayerNewFormCard = (props) => {
             <CardActions>
                 <div>{cancelButton}</div>
                 <div>{saveButton}</div>
-                <div>{deleteButton}</div>
+                {/* <div>{deleteButton}</div> */}
             </CardActions>
         </Card>
     );

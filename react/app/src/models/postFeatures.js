@@ -3,34 +3,35 @@ const backendUrl = 'http://localhost:8081/v1';
 
 const postFeatures = {
     postFeatures: async function postFeatures(data, token) {
-        const postData = JSON.stringify(data);
-        const body = JSON.stringify({
-            coordinates: data.position.geometry.coordinates,
-            name: data.position.properties.name,
-        });
-        console.log('POSTDATA IN BACKEND ', postData);
-        console.log(
-            'POSTDATA 2 IN BACKEND ',
-            data.position.geometry.coordinates
-        );
-        console.log('POSTDATA 3 IN BACKEND ', data.position.properties.name);
-
-        const response = await fetch(
-            `${backendUrl}/${data.position.properties.featureType}`,
-            {
-                body: body,
-                headers: {
-                    Authorization: `Bearer ${token}`,
-
-                    'content-type': 'application/json',
-                },
-                method: 'POST',
+        let dataToPost = {};
+        dataToPost.coordinates = data.position.geometry.coordinates;
+        for (const property in data.position.properties) {
+            if (property !== 'featureType' && property !== 'id') {
+                dataToPost[property] = data.position.properties[property];
             }
-        );
+        }
 
-        const result = await response.json();
+        // To get the correct route from the featureType
+        const routes = {
+            cities: 'cities',
+            'parking-lots': 'parking',
+            'charging-stations': 'charging',
+            zone: 'zone',
+        };
 
-        return result;
+        const route = routes[data.position.properties.featureType];
+
+        const body = JSON.stringify(dataToPost);
+
+        await fetch(`${backendUrl}/${route}`, {
+            body: body,
+            headers: {
+                Authorization: `Bearer ${token}`,
+
+                'content-type': 'application/json',
+            },
+            method: 'POST',
+        });
     },
     postToGetBikes: async function postToGetBikes(token, bboxAsGeoJson) {
         const postData = JSON.stringify(bboxAsGeoJson);
