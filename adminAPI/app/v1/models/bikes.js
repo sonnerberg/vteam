@@ -1,5 +1,5 @@
 const { queryDatabase } = require('../../database/mariadb');
-const { sqlToGeoJson } = require('../utils/');
+const { sqlToGeoJson, checkIfScooterIsInForbiddenZone } = require('../utils/');
 
 const insertNewBike = async (sql, placeholder) => {
     const data = await queryDatabase(sql, placeholder);
@@ -29,51 +29,78 @@ const insertANewBike = async (req, res) => {
 };
 
 const updateABike = async (req, res) => {
-    // TODO: Check if bike is rented
     const { body } = req;
     const { id } = req.params;
-    const { 0: { 0: { rented }, }, } = await queryDatabase('CALL check_if_scooter_is_rented(?)', [id]);
-    const allowedFields = {
-        coordinates: 'geometry',
-        charging: 'charging',
-        blocked: 'blocked',
-        whole: 'whole',
-        battery_warning: 'battery_warning',
-        battery_depleted: 'battery_depleted',
-    };
+    try {
+        const { 0: { 0: { rented }, }, } = await queryDatabase('CALL check_if_scooter_is_rented(?)', [id]);
+        let inForbiddenZone;
+        const allowedFields = {
+            coordinates: 'geometry',
+            charging: 'charging',
+            blocked: 'blocked',
+            whole: 'whole',
+            battery_warning: 'battery_warning',
+            battery_depleted: 'battery_depleted',
+        };
 
-    console.log('rented', rented);
-    let updateFields = [];
-    let params = [];
-    let sql = 'UPDATE bikes SET ';
-
-    for (const field in allowedFields) {
-        if (body[field] !== undefined) {
-            if (field === 'coordinates') {
-                if (rented) {
-                    updateFields.push(
-                        allowedFields[field] +
-                            ' = ST_PointFromText(CONCAT(\'POINT(\', ?, \' \', ?, \')\'))'
-                    );
-                    params.push(body[field][0], body[field][1]);
-                }
-            } else {
-                updateFields.push(allowedFields[field] + ' = ?');
-                params.push(body[field]);
+        if (rented) {
+            inForbiddenZone = await checkIfScooterIsInForbiddenZone(
+                JSON.stringify(body.coordinates)
+                    .replace(',', ' ')
+                    .replace(']', '')
+                    .replace('[', '')
+            );
+            if (inForbiddenZone) {
+                const sql = 'CALL set_scooter_returned_by_id(?);';
+                await queryDatabase(sql, [id]);
+                throw 'ScooterInForbiddenZone';
             }
         }
-    }
-    sql += updateFields.join(', ');
 
-    sql += ' WHERE id = ?';
+        let updateFields = [];
+        let params = [];
+        let sql = 'UPDATE bikes SET ';
 
-    params.push(id);
-    sql += ';';
-    const { affectedRows } = await queryDatabase(sql, params);
-    if (affectedRows) {
-        res.sendStatus(200);
-    } else {
-        res.sendStatus(404);
+        for (const field in allowedFields) {
+            if (body[field] !== undefined) {
+                if (field === 'coordinates') {
+                    if (rented) {
+                        updateFields.push(
+                            allowedFields[field] +
+                                ' = ST_PointFromText(CONCAT(\'POINT(\', ?, \' \', ?, \')\'))'
+                        );
+                        params.push(body[field][0], body[field][1]);
+                    }
+                } else {
+                    updateFields.push(allowedFields[field] + ' = ?');
+                    params.push(body[field]);
+                }
+            }
+        }
+        sql += updateFields.join(', ');
+
+        sql += ' WHERE id = ?';
+
+        params.push(id);
+        sql += ';';
+        const { affectedRows } = await queryDatabase(sql, params);
+        if (affectedRows) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (error) {
+        switch (error) {
+        case 'ScooterInForbiddenZone':
+            res.status(409).json({
+                error: `Scooter with id ${id} returned because it is inside a forbidden zone.`,
+            });
+            break;
+
+        default:
+            res.sendStatus(404);
+            break;
+        }
     }
 };
 const getAllBikes = async (_, res) => {
