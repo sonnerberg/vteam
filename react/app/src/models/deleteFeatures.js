@@ -8,6 +8,7 @@ const deleteFeatures = {
             'parking-lots': 'parking',
             'charging-stations': 'charging',
             zone: 'zone',
+            zones: 'zone',
         };
 
         const ids = {
@@ -15,6 +16,7 @@ const deleteFeatures = {
             'parking-lots': data.position.properties.id,
             'charging-stations': data.position.properties.id,
             zone: data.position.properties.id,
+            zones: data.position.properties.id,
         };
 
         const route = routes[data.position.properties.featureType];
