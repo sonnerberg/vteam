@@ -17,11 +17,24 @@ const UserFormCard = (props) => {
   //console.log('formcard props.content', props.content);
 
   for (const property in props.content) {
-    if (property !== "pass")
-      rows.push({
-        name: property,
-        value: props.content[property],
-      });
+    if (property === "klarna") {
+      if (props.content[property] === 0) {
+        rows.push({
+          name: property,
+          value: "Nej",
+        });
+      } else if (props.content[property] === 1)
+        rows.push({
+          name: property,
+          value: "Ja",
+        });
+    } else {
+      if (property !== "pass")
+        rows.push({
+          name: property,
+          value: props.content[property],
+        });
+    }
   }
 
   const cancelButton = (
@@ -60,27 +73,30 @@ const UserFormCard = (props) => {
             Ändra dina uppgifter
           </FormLabel>
 
-          {rows.map((row) => (
-            <TextField
-              disabled={
-                row.name === "username"
-                  ? true
-                  : row.name === "balance"
-                  ? true
-                  : row.name === "id"
-                  ? true
-                  : false
-              }
-              required={true}
-              variant="outlined"
-              key={row.name}
-              label={row.name}
-              name={row.name}
-              defaultValue={row.value}
-              onChange={changeHandler}
-              sx={{ m: 1 }}
-            />
-          ))}
+        {rows.map((row) => (
+          <TextField
+            disabled={
+              row.name === "username"
+                ? true
+                : row.name === "balance"
+                ? true
+                : row.name === "id"
+                ? true
+                : row.name === "klarna"
+                ? true
+                : false
+            }
+            required={true}
+            variant="outlined"
+            key={row.name}
+            label={row.name}
+            name={row.name}
+            defaultValue={row.value}
+            onChange={changeHandler}
+            sx={{ m: 1 }}
+          />
+        ))}
+
 
           <div>{cancelButton}</div>
           <div>{saveButton}</div>

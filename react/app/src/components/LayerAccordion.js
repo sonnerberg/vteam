@@ -51,6 +51,7 @@ const LayerAccordion = (props) => {
             const newFormCard = (
                 <LayerNewFormCard
                     content={dataNew}
+                    setFormCard={setFormCard}
                     setShowFormCard={setShowFormCard}
                     setCard={setCard}
                     cancelButton={utils.cancelButton}
@@ -85,10 +86,9 @@ const LayerAccordion = (props) => {
                 const handleClickStopBikeButton = async () => {
                     //setShowFormCard(true);
                     //props.setActivateDraw(true);
-                    console.log('TOKEN ', props.token);
                     const stopBike = await postFeatures.postToStopBike(
                         props.token,
-                        data.position.username
+                        data.position.properties.username
                     );
 
                     console.log('STOPBIKE', stopBike);
@@ -124,6 +124,7 @@ const LayerAccordion = (props) => {
                 const newFormCard = (
                     <LayerFormCard
                         content={data}
+                        setFormCard={setFormCard}
                         setShowFormCard={setShowFormCard}
                         setCard={setCard}
                         cancelButton={utils.cancelButton}

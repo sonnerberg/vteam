@@ -47,7 +47,6 @@ const LayerNewFormCard = (props) => {
             props.token
         );
         props.setShowFormCard(false);
-        console.log('New feature', newFeatureObject);
         props.setCard(<LayerCard content={newFeatureObject} />);
         props.setTriggerRedraw(true);
         props.drawnItems.current.clearLayers();
