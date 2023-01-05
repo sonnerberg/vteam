@@ -81,6 +81,54 @@ const getFeatures = {
         console.log('RESULT ', result);
         return result.data;
     },
+    getCityByName: async function getCityByName(token, name) {
+        const response = await fetch(`${backendUrl}/cities/${name}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+        });
+        console.log('RESPONSE GET ONE CITY', response);
+        const result = await response.json();
+        console.log('RESULT ', result);
+        return result.data;
+    },
+    getParkingById: async function getParkingById(token, id) {
+        const response = await fetch(`${backendUrl}/parking/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+        });
+        console.log('RESPONSE ', response);
+        const result = await response.json();
+        console.log('RESULT ', result);
+        return result.data;
+    },
+    getChargingStationById: async function getChargingStationById(token, id) {
+        const response = await fetch(`${backendUrl}/charging/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+        });
+        console.log('RESPONSE ', response);
+        const result = await response.json();
+        console.log('RESULT ', result);
+        return result.data;
+    },
+    getZoneById: async function getZoneById(token, id) {
+        const response = await fetch(`${backendUrl}/zone/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+        });
+        console.log('RESPONSE ', response);
+        const result = await response.json();
+        console.log('RESULT ', result);
+        return result.data;
+    },
 };
 
 export default getFeatures;
