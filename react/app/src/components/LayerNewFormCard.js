@@ -18,6 +18,8 @@ const LayerNewFormCard = (props) => {
 
     const [newFeatureObject, setNewFeatureObject] = useState(props.content);
 
+    console.log(newFeatureObject);
+
     // If not using optional chaining here, there is an
     // error Uncaught TypeError: props.content.position is undefined
     // when loading the app and it crashes. When inspecting  props.content
@@ -33,23 +35,42 @@ const LayerNewFormCard = (props) => {
     }
 
     const handleClickSaveButton = async () => {
-        const newGeoJson =
-            props.drawnItems.current.toGeoJSON().features[0].geometry;
+        console.log(props.dad);
+        if (props.dad !== 'scooter') {
+            const newGeoJson =
+                props.drawnItems.current.toGeoJSON().features[0].geometry;
 
-        await postFeatures.postFeatures(
-            {
-                ...newFeatureObject,
-                position: {
-                    ...newFeatureObject.position,
-                    geometry: newGeoJson,
+            await postFeatures.postFeatures(
+                {
+                    ...newFeatureObject,
+                    position: {
+                        ...newFeatureObject.position,
+                        geometry: newGeoJson,
+                    },
                 },
-            },
+                props.token
+            );
+            props.setShowFormCard(false);
+            props.setFormCard(null);
+            props.setCard(null);
+            props.setCard(<LayerCard content={newFeatureObject} />);
+            props.setTriggerRedraw(true);
+            props.drawnItems.current.clearLayers();
+
+            return;
+        }
+
+        // Create new scooters
+        await postFeatures.postBatchOfBikes(
+            newFeatureObject.position.properties.number,
+
             props.token
         );
+
         props.setShowFormCard(false);
-        props.setCard(<LayerCard content={newFeatureObject} />);
-        props.setTriggerRedraw(true);
-        props.drawnItems.current.clearLayers();
+        props.setCard(null);
+        /* props.setTriggerRedraw(true);
+        props.drawnItems.current.clearLayers(); */
     };
 
     const handleClickDeleteButton = async () => {

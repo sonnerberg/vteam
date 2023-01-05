@@ -2,6 +2,10 @@ import './App_layerstack.css';
 import { useEffect, useState, useRef } from 'react';
 import LayerStack from './components/LayerStack';
 import SearchBikeForm from './components/SearchBikeForm';
+import SearchCityForm from './components/SearchCityForm';
+import SearchChargingForm from './components/SearchChargingForm';
+import SearchZoneForm from './components/SearchZoneForm';
+import SearchParkingForm from './components/SearchParkingForm';
 import Map from './components/Map';
 import layerStackBuilder from './models/layerStackModel';
 //import LayerFormCard from './components/LayerFormCard';
@@ -31,6 +35,7 @@ function AppMap(props) {
     const [newObjectContainer, setNewObjectContainer] = useState(null);
     const [searchId, setSearchId] = useState();
     const [openSearchForm, setOpenSearchForm] = useState(false);
+    const [searchForFeature, setSearchForFeature] = useState('');
     const mapRef = useRef(null);
     const token = props.token;
 
@@ -62,6 +67,8 @@ function AppMap(props) {
             setNewObjectContainer: setNewObjectContainer,
             openSearchForm: openSearchForm,
             setOpenSearchForm: setOpenSearchForm,
+            searchForFeature: searchForFeature,
+            setSearchForFeature: setSearchForFeature,
             token: token,
         };
 
@@ -182,8 +189,36 @@ function AppMap(props) {
                         triggerCityRedraw={triggerCityRedraw}
                         setTriggerCityRedraw={setTriggerCityRedraw}
                     />
-                    {openSearchForm ? (
+                    {openSearchForm && searchForFeature === 'scooter' ? (
                         <SearchBikeForm
+                            openSearchForm={openSearchForm}
+                            setOpenSearchForm={setOpenSearchForm}
+                            token={props.token}
+                            mapRef={mapRef}
+                        />
+                    ) : openSearchForm && searchForFeature === 'stad' ? (
+                        <SearchCityForm
+                            openSearchForm={openSearchForm}
+                            setOpenSearchForm={setOpenSearchForm}
+                            token={props.token}
+                            mapRef={mapRef}
+                        />
+                    ) : openSearchForm && searchForFeature === 'parkering' ? (
+                        <SearchParkingForm
+                            openSearchForm={openSearchForm}
+                            setOpenSearchForm={setOpenSearchForm}
+                            token={props.token}
+                            mapRef={mapRef}
+                        />
+                    ) : openSearchForm && searchForFeature === 'ladd' ? (
+                        <SearchChargingForm
+                            openSearchForm={openSearchForm}
+                            setOpenSearchForm={setOpenSearchForm}
+                            token={props.token}
+                            mapRef={mapRef}
+                        />
+                    ) : openSearchForm && searchForFeature === 'zone' ? (
+                        <SearchZoneForm
                             openSearchForm={openSearchForm}
                             setOpenSearchForm={setOpenSearchForm}
                             token={props.token}
