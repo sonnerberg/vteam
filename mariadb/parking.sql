@@ -86,3 +86,21 @@ CREATE PROCEDURE delete_parking_by_id(
 ;;
 
 DELIMITER ;
+
+-- Procedure get_geometry_for_parkings()
+
+DROP PROCEDURE IF EXISTS get_geometry_for_parkings;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_geometry_for_parkings()
+ BEGIN
+
+   SELECT geometry
+     FROM parking;
+
+
+  END
+;;
+
+DELIMITER ;

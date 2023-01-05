@@ -137,6 +137,7 @@ CREATE TABLE IF NOT EXISTS `trips` (
 `endtime` DATETIME,
 `username` VARCHAR(50),
 `cost` FLOAT,
+`discount` INTEGER DEFAULT 0,
 FOREIGN KEY(`username`) REFERENCES `customer`(`username`),
 PRIMARY KEY (`id`))
 ENGINE = InnoDB
