@@ -16,7 +16,7 @@ const sqlToGeoJson = (sql) => {
             id: x.id,
             position: {
                 type: 'Feature',
-                geometry: x.position,
+                geometry: x.geometry,
                 properties: {
                     id: x.id,
                     type: x.type,
