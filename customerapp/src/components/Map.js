@@ -35,7 +35,10 @@ const Map = (props) => {
 
     allLayers.bikes.clearLayers();
     for (const bike of dataFromBackend.bikes) {
-      if (bike.position.properties.rented === 0) {
+      if (
+        bike.position.properties.rented === 0 &&
+        bike.position.properties.blocked === 0
+      ) {
         const newBike = L.geoJson(bike.position, {
           pointToLayer: function (feature, latlng) {
             return L.marker(latlng, mapStyles["scooter"]);
