@@ -51,6 +51,7 @@ const LayerAccordion = (props) => {
             const newFormCard = (
                 <LayerNewFormCard
                     content={dataNew}
+                    dad={props.dad}
                     setFormCard={setFormCard}
                     setShowFormCard={setShowFormCard}
                     setCard={setCard}
@@ -73,14 +74,19 @@ const LayerAccordion = (props) => {
 
     useEffect(() => {
         eventBus.on(props.event, (data) => {
+            console.log('Data', data);
             if (data) {
                 const handleClickChangeButton = () => {
                     setShowFormCard(true);
-                    props.setActivateDraw(true);
 
-                    props.drawnItems.current.addLayer(
-                        L.GeoJSON.geometryToLayer(data.position)
-                    );
+                    // Dont activate draw if clicked object is a bike
+                    if (data.position.properties.featureType !== 'bikes') {
+                        props.setActivateDraw(true);
+
+                        props.drawnItems.current.addLayer(
+                            L.GeoJSON.geometryToLayer(data.position)
+                        );
+                    }
                 };
 
                 const handleClickStopBikeButton = async () => {
@@ -115,8 +121,8 @@ const LayerAccordion = (props) => {
                     <LayerCard
                         content={data}
                         button={
-                            props.dad === 'scooter'
-                                ? [editButton, stopBikeButton]
+                            props.dad === 'scooter' // here we can activate the edit button for bikes if we want
+                                ? [stopBikeButton]
                                 : [editButton]
                         }
                     />
@@ -124,6 +130,7 @@ const LayerAccordion = (props) => {
                 const newFormCard = (
                     <LayerFormCard
                         content={data}
+                        dad={props.dad}
                         setFormCard={setFormCard}
                         setShowFormCard={setShowFormCard}
                         setCard={setCard}
