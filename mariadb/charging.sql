@@ -42,7 +42,7 @@ CREATE PROCEDURE insert_charging(
                 )
  BEGIN
 
-    INSERT INTO charging (geometry) VALUES (PointFromText(CONCAT('POINT(', some_coordinates, ')')));
+    INSERT INTO charging (geometry) VALUES (PolygonFromText(CONCAT('POLYGON((', some_coordinates, '))')));
 
 
   END
@@ -58,8 +58,7 @@ CREATE PROCEDURE update_charging(
 )
  BEGIN
 
-    UPDATE charging SET geometry = PointFromText(CONCAT('POINT(', some_coordinates, ')')) WHERE id = an_id;
-
+    UPDATE charging SET geometry = PolygonFromText(CONCAT('POLYGON((', some_coordinates, '))')) WHERE id = an_id;
 
   END
 ;;
