@@ -35,7 +35,10 @@ const Map = (props) => {
 
     allLayers.bikes.clearLayers();
     for (const bike of dataFromBackend.bikes) {
-      if (bike.position.properties.rented === 0) {
+      if (
+        bike.position.properties.rented === 0 &&
+        bike.position.properties.blocked === 0
+      ) {
         const newBike = L.geoJson(bike.position, {
           pointToLayer: function (feature, latlng) {
             return L.marker(latlng, mapStyles["scooter"]);
@@ -134,6 +137,7 @@ const Map = (props) => {
     //add eventlisteners for zoomend and moveend. pass current bounds to
     //scooterloader function to load
     //only scooters currently visible
+    mapRef.current.locate({ setView: true, watch: true });
     mapRef.current.on("zoomend", () => {
       const bounds = mapRef.current.getBounds();
       loadScooters(bounds);

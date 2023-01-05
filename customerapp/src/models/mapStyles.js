@@ -1,5 +1,5 @@
 import L from "leaflet";
-import scooterIconUrl from "../images/electric-scooter-green.png";
+import scooterIconUrl from "../images/electric-scooter-yellow.png";
 import scooterRentedIconUrl from "../images/electric-scooter-red.png";
 
 import chargerIconUrl from "../images/battery-status.png";

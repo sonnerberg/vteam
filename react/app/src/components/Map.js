@@ -112,7 +112,20 @@ const Map = (props) => {
             allLayers.bikes.clearLayers();
 
             for (const bike of bikes) {
-                if (bike.position.properties.rented === 0) {
+                if (bike.position.properties.blocked === 1) {
+                    const newBike = L.geoJson(bike.position, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(
+                                latlng,
+                                mapStyles['scooterBlocked']
+                            );
+                        },
+                    });
+
+                    markers.addLayer(newBike);
+
+                    allLayers.bikes.addLayer(markers);
+                } else if (bike.position.properties.rented === 1) {
                     const newBike = L.geoJson(bike.position, {
                         pointToLayer: function (feature, latlng) {
                             return L.marker(latlng, mapStyles['scooterRented']);

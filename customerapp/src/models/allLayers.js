@@ -8,10 +8,10 @@ const allLayers = {
     return layer.feature.properties.name;
   }),
   chargingStations: L.featureGroup().bindPopup(function (layer) {
-    return layer.feature.properties.name;
+    return layer.feature.properties.featureType;
   }),
   parkingLots: L.featureGroup().bindPopup(function (layer) {
-    return layer.feature.properties.type;
+    return layer.feature.properties.featureType;
   }),
   bikes: L.featureGroup().bindPopup(function (layer) {
     console.log(layer);
