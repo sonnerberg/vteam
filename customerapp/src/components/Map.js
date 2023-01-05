@@ -137,6 +137,7 @@ const Map = (props) => {
     //add eventlisteners for zoomend and moveend. pass current bounds to
     //scooterloader function to load
     //only scooters currently visible
+    mapRef.current.locate({ setView: true, watch: true });
     mapRef.current.on("zoomend", () => {
       const bounds = mapRef.current.getBounds();
       loadScooters(bounds);
