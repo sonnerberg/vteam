@@ -17,6 +17,7 @@ const layerStackBuilder = (props) => {
         const button = e.target;
         const container = button.closest('.MuiGrid-container');
         console.log('SÖKKNAPPEN SÄGER ', container.getAttribute('id'));
+        props.setSearchForFeature(container.getAttribute('id'));
         props.setOpenSearchForm(true);
     };
     const cityAccordion = (
