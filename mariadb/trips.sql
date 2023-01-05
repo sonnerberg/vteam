@@ -127,7 +127,6 @@ CREATE PROCEDURE check_if_free_parking_to_parking(
 )
  BEGIN
 
-  -- TODO: Check if startposition is free parking
      SELECT ST_Contains(ST_GeomFromText(CONCAT('MULTIPOLYGON((', a_list_of_coordinates, '))')), ST_GeomFromText(CONCAT('POINT(', startposition, ')'))) INTO @scooter_taken_from_within_parking;
      IF @scooter_taken_from_within_parking=false
       THEN
@@ -135,7 +134,6 @@ CREATE PROCEDURE check_if_free_parking_to_parking(
     ELSE
       SELECT false;
     END IF;
-  -- TODO: Check if endposition is parking
 
   END
 ;;
