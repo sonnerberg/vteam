@@ -2,6 +2,7 @@ const backendUrl = 'http://localhost:8081/v1';
 
 const putFeatures = {
     putFeatures: async function putFeatures(data, token) {
+        console.log('Featuretype', data.position.properties.featureType);
         let dataToPut = {};
         dataToPut.coordinates = data.position.geometry.coordinates;
         for (const property in data.position.properties) {
@@ -16,6 +17,8 @@ const putFeatures = {
             'parking-lots': 'parking',
             'charging-stations': 'charging',
             zone: 'zone',
+            zones: 'zone',
+            bikes: 'bikes',
         };
 
         const ids = {
@@ -23,6 +26,8 @@ const putFeatures = {
             'parking-lots': data.position.properties.id,
             'charging-stations': data.position.properties.id,
             zone: data.position.properties.id,
+            zones: data.position.properties.id,
+            bikes: data.position.properties.id,
         };
 
         const route = routes[data.position.properties.featureType];
