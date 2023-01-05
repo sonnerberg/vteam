@@ -22,7 +22,10 @@ const LayerCard = (props) => {
                     name: property,
                     value: 'Nej',
                 });
-            } else if (props.content.position.properties[property] === 1) {
+            } else if (
+                props.content.position.properties[property] === 1 &&
+                property !== 'id'
+            ) {
                 rows.push({
                     name: property,
                     value: 'Ja',
