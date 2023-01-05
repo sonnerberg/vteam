@@ -15,11 +15,32 @@ import TableRow from '@mui/material/TableRow';
 const LayerCard = (props) => {
     const rows = [];
 
-    for (const property in props.content.position.properties) {
-        rows.push({
-            name: property,
-            value: props.content.position.properties[property],
-        });
+    if (props.content.position.properties.featureType === 'bikes') {
+        for (const property in props.content.position.properties) {
+            if (props.content.position.properties[property] === 0) {
+                rows.push({
+                    name: property,
+                    value: 'Nej',
+                });
+            } else if (props.content.position.properties[property] === 1) {
+                rows.push({
+                    name: property,
+                    value: 'Ja',
+                });
+            } else {
+                rows.push({
+                    name: property,
+                    value: props.content.position.properties[property],
+                });
+            }
+        }
+    } else {
+        for (const property in props.content.position.properties) {
+            rows.push({
+                name: property,
+                value: props.content.position.properties[property],
+            });
+        }
     }
 
     return (
