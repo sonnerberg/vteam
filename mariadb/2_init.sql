@@ -66,7 +66,7 @@ COLLATE utf8_swedish_ci
 
 CREATE TABLE IF NOT EXISTS `charging` (
 `id` INT AUTO_INCREMENT,
-`geometry` POINT,
+`geometry` POLYGON,
 `type` VARCHAR(50) DEFAULT 'Feature',
 `feature_type` VARCHAR(50) DEFAULT 'charging-stations',
 PRIMARY KEY (`id`))
@@ -237,19 +237,19 @@ SET
 --
 -- Insert some charging stations.
 --
-LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/charging.csv'
-INTO TABLE charging
-CHARSET utf8
-FIELDS
-    TERMINATED BY ','
-    ENCLOSED BY '"'
-LINES
-    TERMINATED BY '\n'
-IGNORE 1 LINES
-(@col1)
-SET
-`geometry` = PointFromText(@col1)
-;
+-- LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/charging.csv'
+-- INTO TABLE charging
+-- CHARSET utf8
+-- FIELDS
+--     TERMINATED BY ','
+--     ENCLOSED BY '"'
+-- LINES
+--     TERMINATED BY '\n'
+-- IGNORE 1 LINES
+-- (@col1)
+-- SET
+-- `geometry` = PointFromText(@col1)
+-- ;
 
 --
 -- Insert some geodata.

@@ -4,6 +4,7 @@ import {
   FormLabel,
   RadioGroup,
   Radio,
+  Paper,
 } from "@mui/material";
 import { useState } from "react";
 import CardButton from "./CardButton";
@@ -44,32 +45,38 @@ const PrePaidForm = (props) => {
   }
 
   return (
-    <FormControl sx={{ margin: 2 }}>
-      <FormLabel
-        id="paymentservice-radio-buttons-group-label"
-        sx={{ fontSize: 18 }}
-      >
-        Välj betaltjänst
-      </FormLabel>
-      <RadioGroup
-        aria-labelledby="paymentservice-radio-buttons-group-label"
-        defaultValue="none"
-        name="radio-buttons-group"
-      >
-        <FormControlLabel
-          value="none"
-          control={<Radio onChange={changeHandler} />}
-          label="Ingen"
-        />
+    <Paper
+      variant="elevation"
+      elevation={2}
+      className="payment-service-background"
+    >
+      <FormControl sx={{ margin: 2 }}>
+        <FormLabel
+          id="paymentservice-radio-buttons-group-label"
+          sx={{ fontSize: 18 }}
+        >
+          Välj betaltjänst
+        </FormLabel>
+        <RadioGroup
+          aria-labelledby="paymentservice-radio-buttons-group-label"
+          defaultValue="none"
+          name="radio-buttons-group"
+        >
+          <FormControlLabel
+            value="none"
+            control={<Radio onChange={changeHandler} />}
+            label="Ingen"
+          />
 
-        <FormControlLabel
-          value="klarna"
-          control={<Radio onChange={changeHandler} />}
-          label="Klarna"
-        />
-      </RadioGroup>
-      {cancelButton} {saveButton}
-    </FormControl>
+          <FormControlLabel
+            value="klarna"
+            control={<Radio onChange={changeHandler} />}
+            label="Klarna"
+          />
+        </RadioGroup>
+        {cancelButton} {saveButton}
+      </FormControl>
+    </Paper>
   );
 };
 
