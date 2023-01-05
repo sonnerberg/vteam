@@ -1,4 +1,4 @@
-import { FormControl, FormLabel } from "@mui/material";
+import { FormControl, FormLabel, Paper } from "@mui/material";
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import CardButton from "./CardButton";
@@ -63,34 +63,40 @@ const BalanceForm = (props) => {
   }
 
   return (
-    <FormControl sx={{ margin: 2 }}>
-      <FormLabel id="balance-form-label" sx={{ fontSize: 18 }}>
-        Sätt in pengar på saldo
-      </FormLabel>
+    <Paper
+      variant="elevation"
+      elevation={2}
+      className="balance-form-background"
+    >
+      <FormControl sx={{ margin: 2 }}>
+        <FormLabel id="balance-form-label" sx={{ fontSize: 18 }}>
+          Sätt in pengar på saldo
+        </FormLabel>
 
-      {rows.map((row) => (
-        <TextField
-          error={
-            row.name === "credit card" && !errorCreditCard
-              ? false
-              : row.name === "amount" && !errorAmount
-              ? false
-              : true
-          }
-          required={true}
-          variant="outlined"
-          key={row.name}
-          label={row.name}
-          name={row.name}
-          defaultValue={row.value}
-          onChange={changeHandler}
-          sx={{ m: 1 }}
-        />
-      ))}
+        {rows.map((row) => (
+          <TextField
+            error={
+              row.name === "credit card" && !errorCreditCard
+                ? false
+                : row.name === "amount" && !errorAmount
+                ? false
+                : true
+            }
+            required={true}
+            variant="outlined"
+            key={row.name}
+            label={row.name}
+            name={row.name}
+            defaultValue={row.value}
+            onChange={changeHandler}
+            sx={{ m: 1 }}
+          />
+        ))}
 
-      <div>{cancelButton}</div>
-      <div>{saveButton}</div>
-    </FormControl>
+        <div>{cancelButton}</div>
+        <div>{saveButton}</div>
+      </FormControl>
+    </Paper>
   );
 };
 

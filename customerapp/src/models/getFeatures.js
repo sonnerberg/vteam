@@ -13,7 +13,7 @@ const getFeatures = {
     return result.cities;
   },
   getChargingStations: async function getChargingStations(token) {
-    const response = await fetch(`${backendUrl}charging-stations`, {
+    const response = await fetch(`${backendUrl}chargers`, {
       headers: {
         "x-access-token": token,
       },
@@ -23,7 +23,7 @@ const getFeatures = {
     return result.chargingStations;
   },
   getParkingLots: async function getParkingLots(token) {
-    const response = await fetch(`${backendUrl}parking-lots`, {
+    const response = await fetch(`${backendUrl}parking`, {
       headers: {
         "x-access-token": token,
       },

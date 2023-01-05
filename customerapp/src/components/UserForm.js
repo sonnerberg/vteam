@@ -1,4 +1,4 @@
-import { FormControl, FormLabel } from "@mui/material";
+import { FormControl, FormLabel, Paper } from "@mui/material";
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import CardButton from "./CardButton";
@@ -64,10 +64,14 @@ const UserFormCard = (props) => {
 
   return (
     <>
-      <FormControl sx={{ margin: 2 }}>
-        <FormLabel id="prepaid-radio-buttons-group-label" sx={{ fontSize: 18 }}>
-          Ändra dina uppgifter
-        </FormLabel>
+      <Paper variant="elevation" elevation={2} className="user-form-background">
+        <FormControl sx={{ margin: 2 }}>
+          <FormLabel
+            id="prepaid-radio-buttons-group-label"
+            sx={{ fontSize: 18 }}
+          >
+            Ändra dina uppgifter
+          </FormLabel>
 
         {rows.map((row) => (
           <TextField
@@ -93,9 +97,11 @@ const UserFormCard = (props) => {
           />
         ))}
 
-        <div>{cancelButton}</div>
-        <div>{saveButton}</div>
-      </FormControl>
+
+          <div>{cancelButton}</div>
+          <div>{saveButton}</div>
+        </FormControl>
+      </Paper>
     </>
   );
 };
