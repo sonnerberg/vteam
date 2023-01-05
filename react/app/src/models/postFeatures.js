@@ -18,11 +18,15 @@ const postFeatures = {
             'parking-lots': 'parking',
             'charging-stations': 'charging',
             zone: 'zone',
+            zones: 'zone',
+            bikes: 'bikes',
         };
 
         const route = routes[data.position.properties.featureType];
 
         const body = JSON.stringify(dataToPost);
+
+        console.log('Body', body);
 
         await fetch(`${backendUrl}/${route}`, {
             body: body,
@@ -55,6 +59,20 @@ const postFeatures = {
         };
         const body = JSON.stringify(postData);
         await fetch(`${backendUrl}/bikes/return`, {
+            body: body,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+            method: 'POST',
+        });
+    },
+    postBatchOfBikes: async function postBatchOfBikes(nrOfBikes, token) {
+        const postData = {
+            numberOfBikes: nrOfBikes,
+        };
+        const body = JSON.stringify(postData);
+        await fetch(`${backendUrl}/bikes/multiple`, {
             body: body,
             headers: {
                 Authorization: `Bearer ${token}`,
