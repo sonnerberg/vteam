@@ -122,7 +122,7 @@ const Map = (props) => {
                         },
                     });
 
-                    markers.addLayer(newBike);
+                    //markers.addLayer(newBike);
 
                     allLayers.bikes.addLayer(markers);
                 } else if (bike.position.properties.rented === 1) {
@@ -132,7 +132,8 @@ const Map = (props) => {
                         },
                     });
 
-                    markers.addLayer(newBike);
+                    //markers.addLayer(newBike);
+                    allLayers.bikes.addLayer(newBike);
 
                     allLayers.bikes.addLayer(markers);
                 } else {
@@ -142,7 +143,8 @@ const Map = (props) => {
                         },
                     });
 
-                    allLayers.bikes.addLayer(newBike);
+                    //allLayers.bikes.addLayer(newBike);
+                    markers.addLayer(newBike);
                 }
             }
         }
