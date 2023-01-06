@@ -122,9 +122,9 @@ const Map = (props) => {
                         },
                     });
 
-                    //markers.addLayer(newBike);
+                    allLayers.bikes.addLayer(newBike);
 
-                    allLayers.bikes.addLayer(markers);
+                    /* allLayers.bikes.addLayer(markers); */
                 } else if (bike.position.properties.rented === 1) {
                     const newBike = L.geoJson(bike.position, {
                         pointToLayer: function (feature, latlng) {
@@ -135,7 +135,7 @@ const Map = (props) => {
                     //markers.addLayer(newBike);
                     allLayers.bikes.addLayer(newBike);
 
-                    allLayers.bikes.addLayer(markers);
+                    /* allLayers.bikes.addLayer(markers); */
                 } else {
                     const newBike = L.geoJson(bike.position, {
                         pointToLayer: function (feature, latlng) {
@@ -147,6 +147,8 @@ const Map = (props) => {
                     markers.addLayer(newBike);
                 }
             }
+
+            allLayers.bikes.addLayer(markers);
         }
 
         const intervalId = setInterval(() => {
