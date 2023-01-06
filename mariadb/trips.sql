@@ -157,3 +157,23 @@ CREATE PROCEDURE give_discount(
 ;;
 
 DELIMITER ;
+
+-- Procedure charge_customer()
+
+DROP PROCEDURE IF EXISTS charge_customer;
+
+DELIMITER ;;
+
+CREATE PROCEDURE charge_customer(
+                    `a_username` VARCHAR(50)
+)
+ BEGIN
+
+    SELECT cost + discount FROM trips WHERE username = `a_username` ORDER BY id DESC LIMIT 1 INTO @total_cost;
+
+    UPDATE customer SET balance = IF(klarna IS TRUE, balance, balance - @total_cost) WHERE username = `a_username`;
+
+  END
+;;
+
+DELIMITER ;
