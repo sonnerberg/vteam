@@ -45,6 +45,7 @@ const updateABike = async (req, res) => {
             whole: 'whole',
             battery_warning: 'battery_warning',
             battery_depleted: 'battery_depleted',
+            speed: 'speed',
         };
 
         if (rented) {
