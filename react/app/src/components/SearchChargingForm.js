@@ -42,7 +42,7 @@ const SearchChargingForm = (props) => {
 
         //center = L.latLng(center);
 
-        props.mapRef.current.setView(center2, 8);
+        props.mapRef.current.setView(center2, 20);
         props.setOpenSearchForm(false);
 
         eventBus.dispatch('chargingStationClicked', {
