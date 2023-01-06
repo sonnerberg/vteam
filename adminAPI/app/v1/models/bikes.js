@@ -1,5 +1,9 @@
 const { queryDatabase } = require('../../database/mariadb');
-const { sqlToGeoJson, checkIfScooterIsInForbiddenZone } = require('../utils/');
+const {
+    checkIfScooterFromFreeParkingToParking,
+    sqlToGeoJson,
+    checkIfScooterIsInForbiddenZone,
+} = require('../utils/');
 
 const insertNewBike = async (sql, placeholder) => {
     const data = await queryDatabase(sql, placeholder);
@@ -134,6 +138,23 @@ const returnBike = async (req, res) => {
     const sql = 'CALL set_scooter_returned(?);';
     const { affectedRows } = await queryDatabase(sql, [username]);
     if (affectedRows) {
+        const sql2 = 'CALL get_startposition_and_endposition_of_last_trip(?)';
+        const {
+            0: {
+                0: {
+                    startposition: { coordinates: startposition },
+                    endposition: { coordinates: endposition },
+                },
+            },
+        } = await queryDatabase(sql2, [username]);
+        const giveDiscount = await checkIfScooterFromFreeParkingToParking(
+            startposition.toString().replace(',', ' '),
+            endposition.toString().replace(',', ' ')
+        );
+        if (giveDiscount) {
+            const sql3 = 'CALL give_discount(?)';
+            await queryDatabase(sql3, [username]);
+        }
         res.sendStatus(200);
     } else {
         res.sendStatus(204);

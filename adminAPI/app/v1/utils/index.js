@@ -4,6 +4,7 @@ const { scooterSchema } = require('./scooterSchema');
 const { sqlToGeoJson } = require('./sqlToGeoJson');
 const { parseCoordinates } = require('./parseCoordinates');
 const { checkIfScooterIsInForbiddenZone, } = require('./checkIfScooterIsInForbiddenZone');
+const { checkIfScooterFromFreeParkingToParking, } = require('./checkIfScooterFromFreeParkingToParking');
 
 module.exports = {
     getTokenFrom,
@@ -12,4 +13,5 @@ module.exports = {
     sqlToGeoJson,
     parseCoordinates,
     checkIfScooterIsInForbiddenZone,
+    checkIfScooterFromFreeParkingToParking,
 };

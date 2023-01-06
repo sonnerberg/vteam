@@ -68,7 +68,7 @@ CREATE PROCEDURE calculate_trip_cost(
 )
  BEGIN
     SELECT starttime, endtime INTO @starttime, @endtime FROM trips WHERE username = a_username ORDER BY id DESC LIMIT 1;
-    UPDATE trips SET cost = TIMESTAMPDIFF(SECOND, @starttime, @endtime) WHERE username = a_username ORDER BY id DESC LIMIT 1;
+    UPDATE trips SET cost = TIMESTAMPDIFF(SECOND, @starttime, @endtime) + 100 WHERE username = a_username ORDER BY id DESC LIMIT 1;
 
   END
 ;;
@@ -92,6 +92,68 @@ BEGIN
     CALL calculate_trip_cost(OLD.username);
  END IF;
 END;
+;;
+
+DELIMITER ;
+
+-- Procedure get_startposition_and_endposition_of_last_trip()
+
+DROP PROCEDURE IF EXISTS get_startposition_and_endposition_of_last_trip;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_startposition_and_endposition_of_last_trip(
+          `a_username` VARCHAR(50)
+)
+ BEGIN
+
+    SELECT startposition,endposition FROM trips WHERE username = `a_username` ORDER BY id DESC LIMIT 1;
+
+  END
+;;
+
+DELIMITER ;
+
+-- Procedure check_if_free_parking_to_parking()
+
+DROP PROCEDURE IF EXISTS check_if_free_parking_to_parking;
+
+DELIMITER ;;
+
+CREATE PROCEDURE check_if_free_parking_to_parking(
+    `a_list_of_coordinates` VARCHAR(5000),
+    `startposition` VARCHAR(100),
+    `endposition` VARCHAR(100)
+)
+ BEGIN
+
+     SELECT ST_Contains(ST_GeomFromText(CONCAT('MULTIPOLYGON((', a_list_of_coordinates, '))')), ST_GeomFromText(CONCAT('POINT(', startposition, ')'))) INTO @scooter_taken_from_within_parking;
+     IF @scooter_taken_from_within_parking=false
+      THEN
+      SELECT ST_Contains(ST_GeomFromText(CONCAT('MULTIPOLYGON((', a_list_of_coordinates, '))')), ST_GeomFromText(CONCAT('POINT(', endposition, ')'))) AS 'give_discount';
+    ELSE
+      SELECT false;
+    END IF;
+
+  END
+;;
+
+DELIMITER ;
+
+-- Procedure give_discount()
+
+DROP PROCEDURE IF EXISTS give_discount;
+
+DELIMITER ;;
+
+CREATE PROCEDURE give_discount(
+                    `a_username` VARCHAR(50)
+)
+ BEGIN
+
+    UPDATE trips SET discount = 50 WHERE username = `a_username` ORDER BY id DESC LIMIT 1;
+
+  END
 ;;
 
 DELIMITER ;
