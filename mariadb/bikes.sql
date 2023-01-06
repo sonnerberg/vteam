@@ -221,7 +221,7 @@ CREATE TRIGGER set_returned
 AFTER DELETE ON customer2bike
 FOR EACH ROW
 BEGIN
-    UPDATE bikes SET rented = false, username = null WHERE id = OLD.bike_id;
+    UPDATE bikes SET rented = false, username = null, speed = 0 WHERE id = OLD.bike_id;
 END;
 ;;
 
