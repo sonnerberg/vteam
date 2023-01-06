@@ -26,7 +26,7 @@ class Brain:
         self._is_warning_battery = position["properties"]["batteryWarning"]
         self._is_battery_depleted = position["properties"]["batteryDepleted"]
 
-        self._battery_decrease = 0.05
+        self._battery_decrease = 0.01
         self._breaking_probability = 1
 
         # These can be removed
