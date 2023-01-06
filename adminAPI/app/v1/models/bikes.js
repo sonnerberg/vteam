@@ -163,6 +163,8 @@ const returnBike = async (req, res) => {
             const sql3 = 'CALL give_discount(?)';
             await queryDatabase(sql3, [username]);
         }
+        const sql4 = 'CALL charge_customer(?);';
+        await queryDatabase(sql4, [username]);
         res.sendStatus(200);
     } else {
         res.sendStatus(204);
