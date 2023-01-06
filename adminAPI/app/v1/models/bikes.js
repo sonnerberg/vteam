@@ -77,8 +77,15 @@ const updateABike = async (req, res) => {
                         params.push(body[field][0], body[field][1]);
                     }
                 } else {
-                    updateFields.push(allowedFields[field] + ' = ?');
-                    params.push(body[field]);
+                    if (field === 'speed') {
+                        if (rented) {
+                            updateFields.push(allowedFields[field] + ' = ?');
+                            params.push(body[field]);
+                        }
+                    } else {
+                        updateFields.push(allowedFields[field] + ' = ?');
+                        params.push(body[field]);
+                    }
                 }
             }
         }
