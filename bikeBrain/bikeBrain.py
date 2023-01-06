@@ -205,7 +205,7 @@ class Brain:
             self.set_is_blocked(True)
             self.set_is_battery_depleted(True)
 
-        if randrange(1, 10000) <= self._breaking_probability:
+        if randrange(1, 5000) <= self._breaking_probability:
             # print("Breaking tyre")
             self.set_speed(0)
             self.set_is_blocked(True)
