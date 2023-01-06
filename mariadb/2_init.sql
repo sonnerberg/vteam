@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS `bikes` (
 `battery_warning` BOOLEAN DEFAULT 0,
 `battery_depleted` BOOLEAN DEFAULT 0,
 `rented` BOOLEAN DEFAULT 0,
+`speed` INT DEFAULT 0,
 `username` VARCHAR(50),
 `feature_type` VARCHAR(50) DEFAULT 'bikes',
 FOREIGN KEY(`username`) REFERENCES customer(`username`),
