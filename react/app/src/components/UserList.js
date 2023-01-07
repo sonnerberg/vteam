@@ -30,20 +30,23 @@ function renderRow(props) {
         data.setShowUserFormCard(null);
 
         const handleClickSaveButton = async (newUserObject) => {
+            console.log('new user', newUserObject);
             if (data.userType === 'administrators') {
                 await putUsers.putAdmin(newUserObject, data.token);
             } else if (data.userType === 'users') {
                 await putUsers.putUser(newUserObject, data.token);
             }
 
-            data.setDetailCard(null);
+            //data.setDetailCard(null);
 
-            data.setUserTrips(null);
+            //data.setUserTrips(null);
 
             data.setShowUserFormCard(false);
 
             // Get all users
             data.getUsers(data.token);
+
+            data.setDetailCard(<UserCard content={newUserObject} />);
         };
 
         const handleClickDeleteButton = async () => {
