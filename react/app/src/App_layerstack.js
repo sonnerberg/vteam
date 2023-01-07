@@ -126,9 +126,9 @@ function AppMap(props) {
                     lng: center.lat,
                 };
 
-                allLayers.chargingStations.addLayer(
-                    L.marker(center2, mapStyles['charger'])
-                );
+                const marker = L.marker(center2, mapStyles['charger']);
+                marker.position = charger.position;
+                allLayers.chargingStations.addLayer(marker);
             }
         })();
         setTriggerChargeRedraw(false);

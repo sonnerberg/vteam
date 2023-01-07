@@ -12,9 +12,10 @@ const allLayers = {
         });
     }),
     chargingStations: L.featureGroup().on('click', function (event) {
+        console.log('CLICK ON CHARGER ', event);
         eventBus.dispatch('chargingStationClicked', {
-            data: 'charging station',
-            position: { properties: { featureType: 'chargingStations' } },
+            id: event.propagatedFrom.position.properties.id,
+            position: event.propagatedFrom.position,
         });
     }),
     parkingLots: L.featureGroup().on('click', function (event) {
