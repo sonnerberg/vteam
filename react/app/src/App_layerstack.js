@@ -113,7 +113,6 @@ function AppMap(props) {
                 await getFeatures.getChargingStations(props.token);
 
             for (const charger of dataFromBackend.chargingStations) {
-                console.log('CHARGER ', charger);
                 const polygon = L.polygon(
                     charger.position.geometry.coordinates
                 );
