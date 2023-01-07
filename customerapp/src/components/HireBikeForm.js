@@ -54,8 +54,13 @@ const HireBikeForm = (props) => {
         props.userName,
         props.userToken
       );
+      const updatedUser = await getUserData.getUser(
+        props.userName,
+        props.userToken
+      );
       console.log("USERTRIPS ", updatedTrips);
       props.setUserTrips(updatedTrips);
+      props.setUserData(updatedUser);
     }
   };
 
