@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import L from 'leaflet';
 import eventBus from '../models/eventBus';
 
 import Button from '@mui/material/Button';
@@ -38,22 +37,6 @@ const SearchBikeForm = (props) => {
         eventBus.dispatch('bikeClicked', {
             position: returnstatement[0].position,
         });
-    };
-
-    const handleStop = async () => {
-        const returnstatement = await getFeatures.getBikeById(
-            props.token,
-            bikeId
-        );
-
-        props.mapRef.current.setView(
-            [
-                returnstatement[0].position.geometry.coordinates[1],
-                returnstatement[0].position.geometry.coordinates[0],
-            ],
-            16
-        );
-        props.setOpenSearchForm(false);
     };
 
     return (

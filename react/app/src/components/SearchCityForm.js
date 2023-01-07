@@ -54,22 +54,6 @@ const SearchCityForm = (props) => {
         });
     };
 
-    const handleStop = async () => {
-        const returnstatement = await getFeatures.getCityByName(
-            props.token,
-            cityName
-        );
-
-        props.mapRef.current.setView(
-            [
-                returnstatement[0].position.geometry.coordinates[1],
-                returnstatement[0].position.geometry.coordinates[0],
-            ],
-            16
-        );
-        props.setOpenSearchForm(false);
-    };
-
     return (
         <div>
             <Dialog open={props.openSearchForm} onClose={handleClose}>

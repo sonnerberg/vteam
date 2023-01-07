@@ -33,7 +33,6 @@ function AppMap(props) {
     const [triggerChargeRedraw, setTriggerChargeRedraw] = useState(false);
     const [triggerNewObject, setTriggerNewObject] = useState(false);
     const [newObjectContainer, setNewObjectContainer] = useState(null);
-    const [searchId, setSearchId] = useState();
     const [openSearchForm, setOpenSearchForm] = useState(false);
     const [searchForFeature, setSearchForFeature] = useState('');
     const mapRef = useRef(null);
