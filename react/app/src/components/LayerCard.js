@@ -14,10 +14,12 @@ import TableRow from '@mui/material/TableRow';
  */
 const LayerCard = (props) => {
     const rows = [];
-
     if (props.content.position.properties.featureType === 'bikes') {
         for (const property in props.content.position.properties) {
-            if (props.content.position.properties[property] === 0) {
+            if (
+                props.content.position.properties[property] === 0 &&
+                property !== 'speed'
+            ) {
                 rows.push({
                     name: property,
                     value: 'Nej',
