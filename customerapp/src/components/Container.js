@@ -166,6 +166,7 @@ const Container = (props) => {
       readyToHire={readyToHire}
       setReadyToHire={setReadyToHire}
       setUserTrips={setUserTrips}
+      setUserData={setUserData}
     />
   );
 
