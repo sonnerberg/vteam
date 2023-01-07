@@ -31,6 +31,26 @@ exports.returnBike = async (req, res) => {
         const sql = 'CALL set_scooter_returned(?);';
         const { affectedRows } = await queryDatabase(sql, [username]);
         if (affectedRows) {
+            const sql2 =
+                'CALL get_startposition_and_endposition_of_last_trip(?)';
+            const {
+                0: {
+                    0: {
+                        startposition: { coordinates: startposition },
+                        endposition: { coordinates: endposition },
+                    },
+                },
+            } = await queryDatabase(sql2, [username]);
+            const giveDiscount = await checkIfScooterFromFreeParkingToParking(
+                startposition.toString().replace(',', ' '),
+                endposition.toString().replace(',', ' ')
+            );
+            if (giveDiscount) {
+                const sql3 = 'CALL give_discount(?)';
+                await queryDatabase(sql3, [username]);
+            }
+            const sql4 = 'CALL charge_customer(?);';
+            await queryDatabase(sql4, [username]);
             res.sendStatus(200);
         } else {
             res.sendStatus(204);
@@ -65,3 +85,40 @@ const sqlToGeoJson = (sql) => {
         data: geoJson,
     };
 };
+
+const checkIfScooterFromFreeParkingToParking = async (
+    startposition,
+    endposition
+) => {
+    let parsedCoordinates = [];
+    const sql = 'CALL get_geometry_for_parkings();';
+
+    const response = await queryDatabase(sql);
+    response[0].forEach((zone) => {
+        parsedCoordinates.push(
+            `(${parseCoordinates(zone.geometry.coordinates)})`
+        );
+    });
+    const sql2 = 'CALL check_if_free_parking_to_parking(?,?,?);';
+
+    const { 0: { 0: { give_discount }, }, } = await queryDatabase(sql2, [
+        `${parsedCoordinates}`,
+        startposition,
+        endposition,
+    ]);
+    if (give_discount) {
+        return true;
+    }
+    return false;
+};
+
+function parseCoordinates(coordinates) {
+    let parsedCoordinates = '';
+
+    coordinates[0].forEach((coordinate) => {
+        parsedCoordinates += coordinate.toString().replace(',', ' ');
+        parsedCoordinates += ',';
+    });
+    parsedCoordinates = parsedCoordinates.slice(0, -1);
+    return parsedCoordinates;
+}
