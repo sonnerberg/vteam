@@ -1,7 +1,7 @@
 --
 -- Insert some scooters.
 --
-LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/bikes.csv'
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/bikesonparkings.csv'
 INTO TABLE bikes
 CHARSET utf8
 FIELDS
