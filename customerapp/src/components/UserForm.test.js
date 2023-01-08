@@ -55,6 +55,7 @@ test("saving form calls the save function", async () => {
     email: "john@somemail.com",
     balance: 1000,
     status: "online",
+    klarna: 1,
   };
 
   const handleClickSaveButton = jest.fn();
@@ -94,6 +95,7 @@ test("clicking cancel calls the cancel function", async () => {
     email: "john@somemail.com",
     balance: 1000,
     status: "online",
+    klarna: 0,
   };
 
   const handleClickSaveButton = jest.fn();
