@@ -33,9 +33,9 @@ class Brain:
         self._journey_log_start_position = position
         self._journey_log_start_time = 0.0
 
-        self._report_interval = 15
-        self._default_report_interval = 15
-        self._moving_report_interval = 2
+        self._report_interval = 120
+        self._default_report_interval = 120
+        self._moving_report_interval = 1
 
         self._current_user = position["properties"]["username"]
 
