@@ -1,3 +1,21 @@
+--
+-- Insert some chargers.
+--
+
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/charging.csv'
+INTO TABLE charging
+CHARSET utf8
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+     TERMINATED BY '\n'
+IGNORE 1 LINES
+(@col1)
+SET
+`geometry` = PointFromText(@col1)
+;
+
 -- Procedure get_all_chargings()
 
 DROP PROCEDURE IF EXISTS get_all_chargings;

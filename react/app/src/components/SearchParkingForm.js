@@ -42,10 +42,10 @@ const SearchParkingForm = (props) => {
 
         //center = L.latLng(center);
 
-        props.mapRef.current.setView(center2, 20);
+        props.mapRef.current.setView(center2, 14);
         props.setOpenSearchForm(false);
 
-        eventBus.dispatch('parkingClicked', {
+        eventBus.dispatch('parkingLotClicked', {
             position: returnstatement[0].position,
         });
     };
