@@ -74,13 +74,19 @@ const Map = (props) => {
       );
 
       for (const charger of dataFromBackend.chargingStations) {
-        allLayers.chargingStations.addLayer(
-          L.geoJson(charger.position, {
-            pointToLayer: function (feature, latlng) {
-              return L.marker(latlng, mapStyles["charger"]);
-            },
-          })
-        );
+        const polygon = L.polygon(charger.position.geometry.coordinates);
+
+        const center = polygon.getBounds().getCenter();
+
+        // Why do we have to switch lat and lng around?
+        const center2 = {
+          lat: center.lng,
+          lng: center.lat,
+        };
+
+        const marker = L.marker(center2, mapStyles["charger"]);
+        marker.position = charger.position;
+        allLayers.chargingStations.addLayer(marker);
       }
     })();
 
@@ -92,6 +98,8 @@ const Map = (props) => {
       dataFromBackend.parkingLots = await getFeatures.getParkingLots(
         props.userToken
       );
+
+      console.log("PARKINGLOTS ", dataFromBackend.parkingLots);
 
       for (const parking of dataFromBackend.parkingLots) {
         allLayers.parkingLots.addLayer(

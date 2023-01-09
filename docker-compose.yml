@@ -56,6 +56,7 @@ services:
     restart: always
     volumes:
       - ./mariadb/:/docker-entrypoint-initdb.d/
+      #- ./mariadb/production/:/docker-entrypoint-initdb.d/
     ports:
       - 8084:3306
     environment:

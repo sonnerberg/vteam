@@ -95,6 +95,8 @@ async def main():
 
             position = response.json()["data"][0]["position"]
 
+            start_time = time.time()
+
             # Create bike replace token when backend is ready for bike_token
             bikes.append(
                 bikeBrain.Brain(_id, session, admin_token, start_time, position)
@@ -104,6 +106,46 @@ async def main():
         # users get id:s from 1 -
         for i, travel_plan in enumerate(travel_plans):
             users.append(UserClass.User(i + 1, bikes[i], travel_plan))
+
+        # Create non moving bikes
+        with open("./parked/bikearrays.csv", "r", encoding="utf-8") as file:
+            parked_data = json.load(file)
+
+        coordinates = parked_data["coordinates"]
+
+        for i, coordinate in enumerate(coordinates):
+            # Post bike to db
+            latitude = coordinate[0]
+            longitude = coordinate[1]
+
+            # create header with admin token
+            headers = {"Authorization": f"Bearer {admin_token}"}
+            payload = {"latitude": latitude, "longitude": longitude}
+
+            response = requests.post(
+                "http://admin-api:3000/v1/bikes/new",
+                json=payload,
+                headers=headers,
+                timeout=100000,
+            )
+
+            json_response = response.json()
+
+            _id = json_response["data"]["id"]
+
+            # Get the new bike
+            response = requests.get(
+                f"http://admin-api:3000/v1/bikes/{_id}", headers=headers, timeout=100000
+            )
+
+            position = response.json()["data"][0]["position"]
+
+            bike_start_time = time.time()
+
+            # Create bike
+            bikes.append(
+                bikeBrain.Brain(_id, session, admin_token, bike_start_time, position)
+            )
 
         # Decides if program loop runs
         run = True
