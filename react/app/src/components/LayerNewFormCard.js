@@ -73,11 +73,6 @@ const LayerNewFormCard = (props) => {
         props.drawnItems.current.clearLayers(); */
     };
 
-    const handleClickDeleteButton = async () => {
-        props.setShowFormCard(false);
-        props.setCard(null);
-    };
-
     const handleClickCancelButton = () => {
         props.setCard(false);
     };
@@ -88,15 +83,6 @@ const LayerNewFormCard = (props) => {
             size={'small'}
             width={25}
             handleClick={handleClickSaveButton}
-        />
-    );
-
-    const deleteButton = (
-        <LayerButton
-            buttonText={'Ta bort'}
-            size={'small'}
-            width={25}
-            handleClick={handleClickDeleteButton}
         />
     );
 

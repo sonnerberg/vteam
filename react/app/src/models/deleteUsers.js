@@ -6,7 +6,7 @@ const deleteUsers = {
             username: username,
         };
         const bodyData = JSON.stringify(data);
-        const response = await fetch(`${baseUrl}customer/delete/${username}`, {
+        await fetch(`${baseUrl}customer/delete/${username}`, {
             body: bodyData,
             headers: {
                 'content-type': 'application/json',
