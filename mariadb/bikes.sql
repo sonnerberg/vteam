@@ -1,7 +1,7 @@
 --
 -- Insert some scooters.
 --
-/* LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/bikesonparkings.csv'
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/init_data/bikesonparkings.csv'
 INTO TABLE bikes
 CHARSET utf8
 FIELDS
@@ -13,7 +13,7 @@ IGNORE 1 LINES
 (@col1)
 SET
 `geometry` = PointFromText(@col1)
-; */
+;
 
 -- Procedure update_scooter_position()
 
