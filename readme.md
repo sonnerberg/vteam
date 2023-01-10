@@ -42,4 +42,6 @@
    ![User client](./images/eskilstuna-readme-client-small.png "User client")
 
 1. Misc
+   - [Admin API documentation @ postman](https://documenter.getpostman.com/view/24673940/2s8YzMXjsm)
+   - [User API documentation @ postman](https://documenter.getpostman.com/view/24625188/2s8YszN9tt)
    - [API documentation @ postman](https://www.postman.com/grey-desert-944094/workspace/vteam-8/collection/24625188-0cbaee60-493f-4d98-b655-87160d21dc98?action=share&creator=24625188)
