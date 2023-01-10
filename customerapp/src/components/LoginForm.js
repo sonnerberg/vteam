@@ -74,7 +74,7 @@ const LoginForm = (props) => {
               <Grid item>
                 <Grid container direction="column" spacing={2}>
                   <Grid item>
-                    <a href={fullRequest} target="_blank" rel="noreferrer">
+                    <a href={fullRequest} target="_self" rel="noreferrer">
                       <Button
                         variant="contained"
                         color="primary"
