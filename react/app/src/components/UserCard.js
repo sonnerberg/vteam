@@ -36,7 +36,7 @@ const UserCard = (props) => {
     }
 
     return (
-        <Card sx={{ minWidth: 200 }} sx={{ backgroundColor: 'primary.light' }}>
+        <Card sx={{ minWidth: 200 }}>
             <CardContent>
                 <Table sx={{ minWidth: 200 }} aria-label="simple table">
                     <TableBody>
