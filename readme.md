@@ -1,122 +1,47 @@
 # How to use this repository
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/virtuella-team/vteam/badges/quality-score.png?b=backend)](https://scrutinizer-ci.com/g/virtuella-team/vteam/?branch=backend)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/virtuella-team/vteam/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/virtuella-team/vteam/?branch=main)
 [![Build Status](https://scrutinizer-ci.com/g/virtuella-team/vteam/badges/build.png?b=main)](https://scrutinizer-ci.com/g/virtuella-team/vteam/build-status/main)
 
-## TODO
+## Getting started with the project
 
-- [x] Fix networking between containers
-- [ ] Add redis container
-- [ ] Add react native container
-- [ ] Login to mongo using a user other than root
+1. Clone the repo.
 
-## How to get started with pre-commit
+1. Create an .env in the root of the repo and copy the contents from .env.example
+   and fill in the blanks.
 
-1. Check your python version (you need 3.8 or higher)
+1. Create an .env in `customerapp/` and add your github client id for Oauth.
 
-    ```bash
-    python3.9 --version
-    Python 3.9.2
-    ```
-
-1. Create a virtual environment for python
-
-    ```bash
-    python3.9 -m venv .venv
-    ```
-
-1. Activate the virtual environment
-
-    ```bash
-    source .venv/bin/activate
-    ```
-
-1. Upgrade pip in the virtual environment
-
-    ```bash
-    pip install --upgrade pip
-    ```
-
-1. Install pre-commit dependencies (with the virtual environment activated)
-
-    ```bash
-    pip install pre-commit gitlint pymarkdown
-    ```
-
-1. Install pre-commit hooks (with the virtual environment activated)
-
-    ```bash
-    pre-commit install
-    ```
-
-1. From now on the pre-commit hooks will run after a commit. You do not have to
-have the virtual environment activated as the path to python in the virtual
-environment has been saved in the pre-commit hook in the `.git` folder.
-Here is an example of the expected output while making a commit to the repository:
-
-    ```bash
-    (.venv) ❱ git commit -m "Add final instruction"
-    trim trailing whitespace.................................................Passed
-    fix end of files.........................................................Passed
-    check yaml...........................................(no files to check)Skipped
-    check for added large files..............................................Passed
-    PyMarkdown...............................................................Passed
-    ```
-
-## Getting started with docker images
+   ```bash
+   REACT_APP_GITHUB_CLIENT_ID=
+   REACT_APP_GITHUB_REDIRECT=http://localhost:5200/
+   ```
 
 1. Start the docker images
 
-    ```bash
-    docker-compose up --build
-    ```
+   ```bash
+   docker-compose up --build
+   ```
 
-1. With the images running they are accessed by:
+1. With the images running the clients are accessed by:
 
-   - [FastAPI](http://localhost:8082)
-   - [Express](http://localhost:8081)
-   - [React](http://localhost:8083)
-   - The address of `mariadb` can be found by running
+   - Admin client [localhost:5100](http://localhost:5100)
+     - login with email@example.com
+     - password 12345678
+   - User client [localhost:5200](http://localhost:5200)
+     - login with github oauth
 
-     ```bash
-     docker inspect -f \
-     '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb
-     ```
+1. To start the simulation with 4500 scooters.
 
-     You can then connect to `mariadb` by running (change ip number accordingly):
+   ```bash
+   docker exec -it bike-brain2 bash -c "python3 main.py"
 
-     ```bash
-     mysql -h 172.21.0.5 -P 3306 --user=user --password
-     ```
+   ```
 
-     The password for the user `user` is specified in `docker-compose.yml`
+   ![Admin client](./images/eskilstuna-readme-small.png "Admin client")
+   ![User client](./images/eskilstuna-readme-client-small.png "User client")
 
-   - The address of `mongodb` can be found by running
-
-     ```bash
-     docker inspect -f \
-     '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mongodb
-     ```
-
-     You can then connect to `mongodb` by running (change ip number accordingly):
-
-     ```bash
-     mongosh --host 172.21.0.3 --username root --password
-     ```
-
-     The password for the user `root` is specified in `docker-compose.yml`
-
-   - The address of `postgres` can be found by running
-
-     ```bash
-     docker inspect -f \
-     '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres
-     ```
-
-     You can then connect to `postgres` by running (change ip number accordingly):
-
-     ```bash
-     psql -h 172.21.0.4 -p 5432 -U postgres
-     ```
-
-     The password for the user `postgres` is specified in `docker-compose.yml`
+1. Misc
+   - [Admin API documentation @ postman](https://documenter.getpostman.com/view/24673940/2s8YzMXjsm)
+   - [User API documentation @ postman](https://documenter.getpostman.com/view/24625188/2s8YszN9tt)
+   - [API documentation @ postman](https://www.postman.com/grey-desert-944094/workspace/vteam-8/collection/24625188-0cbaee60-493f-4d98-b655-87160d21dc98?action=share&creator=24625188)
